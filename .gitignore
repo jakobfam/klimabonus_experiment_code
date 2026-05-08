@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# oTree
+db.sqlite3
+*.otreezip
+.otree/
+_static_root/
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Heroku
+.env
+.env.*
+
+# NOTE: assignment.csv is currently TRACKED in git (overrides this rule
+# because it was added before the rule existed). This is intentional for
+# now: Heroku deploys from the GitHub repo, so the demo CSV must be in
+# git for the room flow to work. Demo-only data → no privacy issue.
+#
+# BEFORE adding real participant labels (~20.000 firm rows):
+#   1. git rm --cached klimabonus/data/assignment.csv
+#   2. Remove the file from git history (BFG / git filter-repo) or move
+#      to a fresh private repo, since Heroku needs no public mirror.
+#   3. Deploy real CSV to Heroku via heroku-files / S3 / config var.
+#
+# Until then, the rule below is dormant.
+klimabonus/data/assignment.csv
+!klimabonus/data/assignment.csv.example
+
+# Exports
+*.csv.bak
+exports/
