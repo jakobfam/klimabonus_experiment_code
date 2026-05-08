@@ -1,0 +1,28 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+
+<section class="content-block">
+    <div class="content-inner">
+        <span class="kicker">Ungültiger Zugangslink</span>
+        <h1>Dieser Link konnte nicht zugeordnet werden</h1>
+        <p class="lede">
+            Der von Ihnen aufgerufene Link ist nicht gültig oder bereits
+            abgelaufen. Bitte überprüfen Sie, ob Sie den Link aus dem Anschreiben
+            der Goethe-Universität vollständig kopiert haben.
+        </p>
+        <p>
+            Sollten Sie weiterhin Probleme haben, melden Sie sich gerne unter
+            <a href="mailto:klimabonus-studie@uni-frankfurt.de">klimabonus-studie@uni-frankfurt.de</a>.
+        </p>
+        <p>
+            Allgemeine Informationen zum Klimabonus der Stadt Frankfurt finden
+            Sie unter
+            <a href="https://frankfurt.de/themen/klima-und-energie/stadtklima/klimabonus"
+               target="_blank" rel="noopener">frankfurt.de/klimabonus</a>.
+        </p>
+    </div>
+</section>
+
+{% endblock %}

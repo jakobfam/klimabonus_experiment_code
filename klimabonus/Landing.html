@@ -1,0 +1,411 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{# ================================================================
+   Merged information + treatment page.
+
+   - Hero (identical across arms)
+   - Treatment block (varies by arm, ABOVE the fold)
+       Control : short neutral filler
+       T1 Stadt: stat-box, 3 numbers sourced to Klimareferat Stadt FFM
+       T2 Peer : peer photo+quote card + parallel stat-box where
+                 95% is sourced to Stadt and time/€ are sourced to peer firm
+   - Funding amounts (identical, compact)
+   - "So läuft der Antrag" (identical, collapsed by default)
+   - Contact with team photo (identical)
+   - Continue button
+   - Cookie consent banner (delayed 3s)
+
+   Numbers used:
+     95 %      Bewilligungsquote — both arms, Stadt Frankfurt
+     T1 time   20 Min            — Stadt Frankfurt average (PROXY)
+     T1 €      8.500 €           — Stadt Frankfurt average (PROXY)
+     T2 time   25 Min            — Peer firm specific (PROXY)
+     T2 €      11.400 €          — Peer firm specific (PROXY)
+   ================================================================ #}
+
+{% block content %}
+
+<section class="hero hero-compact">
+    <div class="hero-inner">
+        <div class="hero-text">
+            <span class="kicker">Information für Frankfurter Unternehmen</span>
+            <h1>Klimabonus der Stadt Frankfurt</h1>
+            <p class="lede">
+                Die Stadt Frankfurt unterstützt Unternehmen mit bis zu
+                100.000&nbsp;Euro je Maßnahme – für Solaranlagen,
+                Ladesäulen, Dachbegrünung, Regenwasserspeicher und mehr.
+            </p>
+        </div>
+    </div>
+</section>
+
+{# ============= TREATMENT BLOCK (varies by arm) ============= #}
+
+{% if is_t1 %}
+<section class="content-block treatment-block treatment-block-t1">
+    <div class="content-inner">
+        <span class="kicker">Wussten Sie schon?</span>
+        <h2>So läuft das Förderprogramm in der Praxis</h2>
+
+        <div class="stat-box stat-box-mono">
+            <div class="stat-row">
+                <div class="stat-figure">95&nbsp;%</div>
+                <div class="stat-label">der Anträge<br>werden bewilligt</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-figure">20&nbsp;Min.</div>
+                <div class="stat-label">durchschnittlich<br>für den Antrag</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-figure">8.500&nbsp;€</div>
+                <div class="stat-label">durchschnittlicher<br>Förderbetrag</div>
+            </div>
+        </div>
+        <p class="source-note">
+            Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
+            des Förderprogramms&nbsp;Klimabonus.
+        </p>
+    </div>
+</section>
+{% elif is_t2 and peer %}
+<section class="content-block treatment-block treatment-block-t2">
+    <div class="content-inner">
+        <span class="kicker">Erfahrung eines Frankfurter Unternehmens</span>
+        <h2>So lief der Klimabonus für {{ peer.firma }}</h2>
+
+        <div class="quote-card">
+            <div class="quote-photo" aria-label="Foto Geschäftsführung {{ peer.firma }}">
+                {% if peer.photo %}
+                    <img src="{% static 'klimabonus/' %}{{ peer.photo }}"
+                         alt="Geschäftsführung {{ peer.firma }}">
+                {% else %}
+                    <span>[PLATZHALTER: PEER_FOTO]</span>
+                {% endif %}
+            </div>
+            <div class="quote-body">
+                <blockquote>„{{ peer.quote }}"</blockquote>
+                <cite>
+                    — {{ peer.name }}, Geschäftsführung, {{ peer.firma }}
+                    <span class="cite-meta">{{ peer.branche }} · {{ peer.size_label }}</span>
+                </cite>
+            </div>
+        </div>
+
+        <div class="stat-box stat-box-dual">
+            <div class="stat-row">
+                <div class="stat-figure">95&nbsp;%</div>
+                <div class="stat-label">der Anträge<br>werden bewilligt</div>
+                <div class="stat-source">Stadt Frankfurt</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-figure">{{ peer.time_minutes }}&nbsp;Min.</div>
+                <div class="stat-label">für den Antrag<br>bei {{ peer.firma }}</div>
+                <div class="stat-source">{{ peer.firma }}</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-figure">{{ peer.amount_eur }}&nbsp;€</div>
+                <div class="stat-label">Förderung<br>für {{ peer.firma }}</div>
+                <div class="stat-source">{{ peer.firma }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="content-block treatment-block treatment-block-control">
+    <div class="content-inner">
+        <p class="control-note">
+            Klimaschutz und wirtschaftlich attraktive Investitionen lassen
+            sich verbinden. Der Klimabonus unterstützt Frankfurter
+            Unternehmen dabei, Maßnahmen umzusetzen, die finanzielle
+            Vorteile bringen und gleichzeitig den CO₂-Ausstoß reduzieren.
+        </p>
+    </div>
+</section>
+{% endif %}
+
+{# ============= WIRTSCHAFTLICHKEIT (identical across arms) ============= #}
+
+<section class="content-block">
+    <div class="content-inner">
+        <h2>Wirtschaftlich attraktiv für Ihr Unternehmen</h2>
+        <p class="muted">
+            Klimaschutzmaßnahmen lohnen sich nicht nur ökologisch –
+            sie senken Betriebskosten und schaffen langfristige
+            Planungssicherheit.
+        </p>
+        <div class="benefit-grid">
+            <div class="benefit-card">
+                <h3>Niedrigere Energiekosten</h3>
+                <p>
+                    Eigene PV-Erzeugung und energetische Maßnahmen reduzieren
+                    laufende Strom- und Wärmekosten dauerhaft.
+                </p>
+            </div>
+            <div class="benefit-card">
+                <h3>Schutz vor Preissteigerungen</h3>
+                <p>
+                    Wer einen Teil seines Energieverbrauchs selbst deckt, ist
+                    weniger abhängig von Strom- und Energiepreisen.
+                </p>
+            </div>
+            <div class="benefit-card">
+                <h3>Schnelle Amortisation</h3>
+                <p>
+                    Mit dem Klimabonus verkürzt sich die Amortisationszeit
+                    vieler Maßnahmen häufig auf wenige Jahre.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ============= FUNDING AMOUNTS (identical) ============= #}
+
+<section class="content-block content-block-light">
+    <div class="content-inner">
+        <h2>Was wird gefördert?</h2>
+        <p class="muted table-intro">
+            Die Stadt übernimmt einen Anteil der
+            <span class="tooltip-host">
+                <button type="button" class="tooltip-trigger"
+                        aria-expanded="false"
+                        aria-controls="tip-foerderfaehig">
+                    förderfähigen Kosten<span class="tooltip-icon" aria-hidden="true">?</span>
+                </button>
+                <span id="tip-foerderfaehig" class="tooltip-content" role="tooltip">
+                    Förderfähige Kosten umfassen alle direkten Aufwendungen
+                    für die Maßnahme – also <strong>Material und
+                    Handwerksleistungen</strong>.
+                </span>
+            </span>:
+        </p>
+        <table class="funding-table">
+            <thead>
+                <tr><th>Maßnahme</th><th>Anteil&nbsp;an&nbsp;den Kosten</th></tr>
+            </thead>
+            <tbody>
+                <tr><th>Solaranlagen (auch Erweiterung und Erneuerung)</th><td>20&nbsp;%</td></tr>
+                <tr><th>Solar-Gründächer</th><td>30&nbsp;%</td></tr>
+                <tr><th>Batteriespeicher (mit neuer PV)</th><td>20&nbsp;%</td></tr>
+                <tr><th>Ladesäulen</th><td>20&nbsp;%</td></tr>
+                <tr><th>Dach-, Fassaden- und Hofbegrünung</th><td>50&nbsp;%</td></tr>
+                <tr><th>Regenwasserspeicher</th><td>50&nbsp;%</td></tr>
+                <tr><th>Trinkbrunnen</th><td>50&nbsp;%</td></tr>
+            </tbody>
+        </table>
+        <p class="footnote">
+            Maximal 100.000&nbsp;€ je Maßnahme. Gemeinschaftsprojekte
+            erhalten zusätzlich 5&nbsp;Prozentpunkte. Kombinierbar mit
+            anderen Förderprogrammen.
+        </p>
+    </div>
+</section>
+
+{# ============= COLLAPSIBLE PROCESS (identical) ============= #}
+
+<section class="content-block">
+    <div class="content-inner">
+        <details class="process-accordion" id="process-accordion">
+            <summary>
+                <span class="accordion-title">So läuft der Antrag ab</span>
+                <span class="accordion-chevron" aria-hidden="true">▾</span>
+            </summary>
+            <ol class="process-steps">
+                <li>
+                    <span class="step-num">1</span>
+                    <div>
+                        <h3>Förderantrag online stellen</h3>
+                        <p>Mit E-Mail-Adresse registrieren und Antrag digital
+                           einreichen.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">2</span>
+                    <div>
+                        <h3>Zuwendungsbescheid abwarten</h3>
+                        <p>Erst nach Bescheid mit der Maßnahme beginnen
+                           (Umsetzungszeit 1 – 24&nbsp;Monate).</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">3</span>
+                    <div>
+                        <h3>Maßnahme umsetzen</h3>
+                        <p>Durchführung am Frankfurter Standort.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">4</span>
+                    <div>
+                        <h3>Auszahlung beantragen</h3>
+                        <p>Nach Abschluss Antrag auf Auszahlung einreichen,
+                           Auszahlung folgt nach Festsetzungsbescheid.</p>
+                    </div>
+                </li>
+            </ol>
+        </details>
+    </div>
+</section>
+
+{# ============= CONTACT WITH TEAM PHOTO (identical) ============= #}
+
+<section class="content-block content-block-contact">
+    <div class="content-inner">
+        <h2>Sie haben Fragen?</h2>
+        <p>
+            Das Klimareferat der Stadt Frankfurt beantwortet Ihre Fragen
+            zum Förderprogramm gerne. Auf Wunsch ruft das Team Sie auch
+            persönlich zurück.
+        </p>
+        <p class="contact-large">
+            <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
+        </p>
+        <p class="phone-info">
+            Bei kurzen Fragen erreichen Sie das Klimareferat auch
+            telefonisch unter
+            <strong>[PLATZHALTER: TELEFONNUMMER]</strong>.
+        </p>
+        <figure class="team-photo">
+            <img src="{% static 'klimabonus/klimareferat.jpg' %}"
+                 alt="Das Team des Klimareferats der Stadt Frankfurt">
+            <figcaption>
+                Das Team des Klimareferats berät Sie zu allen Fragen rund
+                um den Klimabonus.
+            </figcaption>
+        </figure>
+
+        <div class="next-step-hint" role="note">
+            <strong>Wie geht es weiter?</strong>
+            Auf der nächsten Seite folgen vier kurze Fragen.
+            Anschließend kommen Sie direkt zum Antragsportal der Stadt
+            Frankfurt.
+        </div>
+
+        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit">
+            <span class="btn-text">Ihre Meinung ist uns wichtig</span>
+            <span class="btn-subtitle">Dauert ca. 5&nbsp;Minuten</span>
+        </button>
+
+        <div class="alt-cta">
+            <span class="alt-cta-label">
+                Sie wissen schon, dass Sie beantragen möchten?
+            </span>
+            <a class="btn btn-ghost"
+               id="landing-portal-link"
+               href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
+               target="_blank" rel="noopener">
+                Direkt zum Antrag
+            </a>
+        </div>
+    </div>
+</section>
+
+{# ============= COOKIE CONSENT BANNER (delayed 3s) ============= #}
+
+<div id="consent-banner" class="consent-banner" role="dialog"
+     aria-labelledby="consent-title" aria-describedby="consent-desc"
+     hidden>
+    <div class="consent-banner-inner">
+        <div class="consent-text">
+            <strong id="consent-title">Hinweis zur Datenverarbeitung</strong>
+            <p id="consent-desc">
+                Diese Webseite wird von der Goethe-Universität Frankfurt im
+                Rahmen eines Forschungsprojekts zum Klimabonus betrieben.
+                Wir erfassen anonymisiert, wie Sie diese Seite nutzen, um das
+                Informationsangebot für Frankfurter Unternehmen zu
+                verbessern. Ihre Angaben werden nicht weitergegeben.
+            </p>
+        </div>
+        <div class="consent-actions">
+            <button type="button" class="btn btn-ghost" id="consent-decline">Ablehnen</button>
+            <button type="button" class="btn btn-primary" id="consent-accept">Akzeptieren</button>
+        </div>
+    </div>
+</div>
+
+{# Hidden fields populated by JS #}
+<input type="hidden" name="time_landing" id="time_landing" value="">
+<input type="hidden" name="scroll_landing" id="scroll_landing" value="">
+<input type="hidden" name="consent_analytics" id="consent_analytics" value="">
+<input type="hidden" name="consent_analytics_ts" id="consent_analytics_ts" value="">
+<input type="hidden" name="expanded_process" id="expanded_process" value="False">
+<input type="hidden" name="clicked_portal_landing" id="clicked_portal_landing" value="False">
+<input type="hidden" name="clicked_portal_landing_ts" id="clicked_portal_landing_ts" value="">
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    // ---- Time on page ----
+    const startTime = Date.now();
+    let maxScroll = 0;
+    function updateScroll() {
+        const h = document.documentElement;
+        const scrolled = (h.scrollTop + window.innerHeight) / h.scrollHeight;
+        const pct = Math.min(100, Math.round(scrolled * 100));
+        if (pct > maxScroll) maxScroll = pct;
+    }
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    updateScroll();
+
+    function commit() {
+        document.getElementById('time_landing').value =
+            ((Date.now() - startTime) / 1000).toFixed(2);
+        document.getElementById('scroll_landing').value = maxScroll;
+    }
+    window.addEventListener('beforeunload', commit);
+    document.getElementById('form').addEventListener('submit', commit);
+
+    // ---- Process accordion: track expansion ----
+    const acc = document.getElementById('process-accordion');
+    const expandedField = document.getElementById('expanded_process');
+    acc.addEventListener('toggle', () => {
+        if (acc.open) expandedField.value = 'True';
+    });
+
+    // ---- Cookie banner (delayed 3s) ----
+    const banner = document.getElementById('consent-banner');
+    const accept = document.getElementById('consent-accept');
+    const decline = document.getElementById('consent-decline');
+
+    // Delayed 8 s so the treatment block above the fold is read first.
+    setTimeout(() => { banner.hidden = false; }, 8000);
+
+    function recordConsent(value) {
+        document.getElementById('consent_analytics').value = value ? '1' : '0';
+        document.getElementById('consent_analytics_ts').value =
+            (Date.now() / 1000).toFixed(2);
+        banner.hidden = true;
+    }
+    accept.addEventListener('click', () => recordConsent(true));
+    decline.addEventListener('click', () => recordConsent(false));
+
+    // ---------- Direct-to-Antrag click tracking ----------
+    const portalLink = document.getElementById('landing-portal-link');
+    if (portalLink) {
+        portalLink.addEventListener('click', () => {
+            document.getElementById('clicked_portal_landing').value = 'True';
+            document.getElementById('clicked_portal_landing_ts').value =
+                (Date.now() / 1000).toFixed(2);
+        });
+    }
+
+    // ---------- Tooltips (click-toggle, mobile-friendly) ----------
+    const triggers = document.querySelectorAll('.tooltip-trigger');
+    function closeAll() {
+        triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
+    }
+    triggers.forEach(t => {
+        t.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wasOpen = t.getAttribute('aria-expanded') === 'true';
+            closeAll();
+            if (!wasOpen) t.setAttribute('aria-expanded', 'true');
+        });
+    });
+    document.addEventListener('click', closeAll);
+})();
+</script>
+{% endblock %}

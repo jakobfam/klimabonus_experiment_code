@@ -1,0 +1,257 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+
+<section class="content-block">
+    <div class="content-inner">
+        <span class="kicker">Ihre Einschätzung</span>
+        <h1>Wir würden uns über Ihre Rückmeldung freuen</h1>
+        <p class="lede">
+            Damit das Klimareferat besser auf die Anliegen Frankfurter
+            Unternehmen eingehen kann, freuen wir uns über drei kurze
+            Antworten.
+        </p>
+    </div>
+</section>
+
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Einwilligung zur Forschungsteilnahme</h2>
+        <p>
+            Diese Befragung wird im Rahmen einer Forschungsstudie der
+            Goethe-Universität Frankfurt durchgeführt. Ihre Antworten
+            werden anonymisiert ausgewertet und können in
+            wissenschaftlichen Veröffentlichungen verwendet werden. Es
+            werden keine personenbezogenen Daten an Dritte weitergegeben.
+        </p>
+        <label class="consent-checkbox">
+            <input type="checkbox" name="consent_research" value="True"
+                   id="consent_research_cb" required>
+            <span>
+                Ich willige in die Teilnahme an dieser Forschungsstudie
+                der Goethe-Universität Frankfurt ein und stimme der
+                anonymisierten wissenschaftlichen Auswertung meiner
+                Angaben zu. Diese Einwilligung kann ich jederzeit ohne
+                Angabe von Gründen widerrufen
+                (<a href="mailto:klimabonus-studie@uni-frankfurt.de">klimabonus-studie@uni-frankfurt.de</a>).
+            </span>
+        </label>
+        <input type="hidden" name="consent_research_ts" id="consent_research_ts" value="">
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Wie wahrscheinlich ist es, dass Sie in den nächsten 12&nbsp;Monaten einen Klimabonus-Antrag stellen?</h2>
+
+        <div class="slider-wrap">
+            <input type="range" min="0" max="10" step="1"
+                   name="application_likelihood" id="application_likelihood"
+                   value="5" class="slider" data-untouched="true"
+                   oninput="this.removeAttribute('data-untouched'); document.getElementById('application_likelihood_val').textContent = this.value;">
+            <div class="slider-scale">
+                <span>0<br><small>Sehr unwahrscheinlich</small></span>
+                <span class="slider-value-display">
+                    <strong id="application_likelihood_val">—</strong>
+                </span>
+                <span>10<br><small>Sehr wahrscheinlich</small></span>
+            </div>
+            <p class="slider-hint">Bitte bewegen Sie den Schieberegler, um zu antworten.</p>
+        </div>
+    </div>
+</section>
+
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Welche Maßnahmen kommen für Ihr Unternehmen grundsätzlich in Frage?</h2>
+        <p class="muted">Mehrfachauswahl möglich.</p>
+
+        <div class="checkbox-grid" id="measures-grid">
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_pv" data-key="pv">
+                <span class="checkbox-card-label">PV-Anlage</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_solar_thermal" data-key="solar_thermal">
+                <span class="checkbox-card-label">Solarthermie</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_battery" data-key="battery">
+                <span class="checkbox-card-label">Batteriespeicher</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_charging" data-key="charging">
+                <span class="checkbox-card-label">Ladeinfrastruktur</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_green_roof" data-key="green_roof">
+                <span class="checkbox-card-label">Dachbegrünung</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_facade_green" data-key="facade_green">
+                <span class="checkbox-card-label">Fassadenbegrünung</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_courtyard_green" data-key="courtyard_green">
+                <span class="checkbox-card-label">Hofbegrünung / Entsiegelung</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_rainwater" data-key="rainwater">
+                <span class="checkbox-card-label">Regenwasserspeicher</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_drinking_fountain" data-key="drinking_fountain">
+                <span class="checkbox-card-label">Trinkbrunnen</span>
+            </label>
+            <label class="checkbox-card checkbox-card-none">
+                <input type="checkbox" name="measure_none" data-key="none" id="measure_none">
+                <span class="checkbox-card-label">Keine davon</span>
+            </label>
+        </div>
+        <input type="hidden" name="measures_order" id="measures_order" value="">
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Was sind für Sie die größten Hindernisse bei der Beantragung von Fördermitteln?</h2>
+        <p class="muted">Mehrfachauswahl möglich.</p>
+
+        <div class="checkbox-grid" id="barriers-grid">
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_time" data-key="time">
+                <span class="checkbox-card-label">Zu hoher Zeitaufwand</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_complexity" data-key="complexity">
+                <span class="checkbox-card-label">Zu komplizierter Antrag</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_uncertainty" data-key="uncertainty">
+                <span class="checkbox-card-label">Unsicherheit, ob bewilligt wird</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_amount" data-key="amount">
+                <span class="checkbox-card-label">Fördersumme zu gering</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_property" data-key="property">
+                <span class="checkbox-card-label">Kein passendes Gebäude / Grundstück</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_priority" data-key="priority">
+                <span class="checkbox-card-label">Thema hat keine Priorität</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_other" data-key="other" id="barrier_other_cb">
+                <span class="checkbox-card-label">Sonstiges</span>
+            </label>
+        </div>
+        <input type="hidden" name="barriers_order" id="barriers_order" value="">
+
+        <div id="barrier_other_wrap" class="cond-input" hidden>
+            <label for="barrier_other_text">Welches Hindernis möchten Sie nennen?</label>
+            <input type="text" name="barrier_other_text" id="barrier_other_text"
+                   maxlength="200" class="text-input">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Weiter</button>
+    </div>
+</section>
+
+<aside class="contact-strip">
+    <img src="{% static 'klimabonus/klimareferat.jpg' %}"
+         alt="Klimareferat der Stadt Frankfurt"
+         class="contact-strip-img">
+    <div class="contact-strip-text">
+        <strong>Klimareferat der Stadt Frankfurt</strong>
+        <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
+        <span class="contact-strip-note">Bei Fragen ruft das Team Sie gerne zurück.</span>
+    </div>
+</aside>
+
+<input type="hidden" name="time_outcomes" id="time_outcomes" value="">
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    // ---- Time on page ----
+    const startTime = Date.now();
+    function commit() {
+        document.getElementById('time_outcomes').value =
+            ((Date.now() - startTime) / 1000).toFixed(2);
+    }
+    window.addEventListener('beforeunload', commit);
+
+    // ---- Stamp consent_research timestamp when ticked ----
+    const consentCb = document.getElementById('consent_research_cb');
+    if (consentCb) {
+        consentCb.addEventListener('change', () => {
+            document.getElementById('consent_research_ts').value =
+                consentCb.checked ? (Date.now() / 1000).toFixed(2) : '';
+        });
+    }
+
+    // ---- Block submit if any slider is still untouched ----
+    document.getElementById('form').addEventListener('submit', (e) => {
+        const untouched = document.querySelectorAll('.slider[data-untouched]');
+        if (untouched.length > 0) {
+            e.preventDefault();
+            untouched[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const hint = untouched[0].closest('.slider-wrap').querySelector('.slider-hint');
+            if (hint) hint.classList.add('slider-hint-error');
+            return;
+        }
+        commit();
+    });
+
+    // ---- Randomize checkbox display order; record the chosen order ----
+    function shuffleChildren(container) {
+        const items = Array.from(container.children);
+        for (let i = items.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            container.insertBefore(items[j], items[i]);
+            // swap so we don't pick j again
+            const tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+        }
+    }
+    function captureOrder(container) {
+        return Array.from(container.querySelectorAll('input[type=checkbox]'))
+            .map(el => el.dataset.key).join(',');
+    }
+    const measuresGrid = document.getElementById('measures-grid');
+    const barriersGrid = document.getElementById('barriers-grid');
+    // Keep "Keine davon" pinned at the end of measures
+    const noneCard = document.getElementById('measure_none').closest('.checkbox-card');
+    noneCard.remove();
+    shuffleChildren(measuresGrid);
+    measuresGrid.appendChild(noneCard);
+    document.getElementById('measures_order').value = captureOrder(measuresGrid);
+
+    // Keep "Sonstiges" pinned at end of barriers
+    const otherCard = document.getElementById('barrier_other_cb').closest('.checkbox-card');
+    otherCard.remove();
+    shuffleChildren(barriersGrid);
+    barriersGrid.appendChild(otherCard);
+    document.getElementById('barriers_order').value = captureOrder(barriersGrid);
+
+    // ---- "Keine davon" clears the rest ----
+    const noneCb = document.getElementById('measure_none');
+    const otherMeasures = measuresGrid.querySelectorAll('input[type=checkbox]:not(#measure_none)');
+    noneCb.addEventListener('change', () => {
+        if (noneCb.checked) otherMeasures.forEach(cb => { cb.checked = false; });
+    });
+    otherMeasures.forEach(cb => {
+        cb.addEventListener('change', () => { if (cb.checked) noneCb.checked = false; });
+    });
+
+    // ---- Conditional "Sonstiges" text field ----
+    const otherCb = document.getElementById('barrier_other_cb');
+    const otherWrap = document.getElementById('barrier_other_wrap');
+    otherCb.addEventListener('change', () => { otherWrap.hidden = !otherCb.checked; });
+})();
+</script>
+{% endblock %}

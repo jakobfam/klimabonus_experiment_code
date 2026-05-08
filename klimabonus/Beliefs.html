@@ -1,0 +1,167 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+
+<section class="content-block">
+    <div class="content-inner">
+        <span class="kicker">Ihre Einschätzung zum Antragsprozess</span>
+        <h1>Vier kurze Fragen zum Klimabonus</h1>
+        <p class="lede">
+            Wie schätzen Sie das Förderprogramm aus heutiger Sicht ein? Es gibt
+            keine richtigen oder falschen Antworten – uns interessiert Ihre
+            persönliche Einschätzung.
+        </p>
+    </div>
+</section>
+
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Was schätzen Sie: Wie viel Prozent der eingereichten Klimabonus-Anträge werden bewilligt?</h2>
+
+        <div class="slider-wrap">
+            <input type="range" min="0" max="100" step="1"
+                   name="belief_approval_rate" id="belief_approval_rate"
+                   value="50" class="slider" data-untouched="true"
+                   oninput="this.removeAttribute('data-untouched'); document.getElementById('belief_approval_rate_val').textContent = this.value;">
+            <div class="slider-scale">
+                <span>0&nbsp;%</span>
+                <span class="slider-value-display">
+                    <strong id="belief_approval_rate_val">—</strong>
+                </span>
+                <span>100&nbsp;%</span>
+            </div>
+            <p class="slider-hint">Bitte bewegen Sie den Schieberegler, um zu antworten.</p>
+        </div>
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Wie lange dauert Ihrer Einschätzung nach die Bearbeitung eines Klimabonus-Antrags?</h2>
+
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="1" required>
+                <span>Weniger als 2&nbsp;Wochen</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="2">
+                <span>2 – 4&nbsp;Wochen</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="3">
+                <span>1 – 3&nbsp;Monate</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="4">
+                <span>3 – 6&nbsp;Monate</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="5">
+                <span>Mehr als 6&nbsp;Monate</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Wie hoch schätzen Sie den zeitlichen Aufwand für das Ausfüllen des Antrags?</h2>
+
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="belief_effort" value="1" required>
+                <span>Weniger als 30&nbsp;Minuten</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_effort" value="2">
+                <span>30&nbsp;Minuten bis 1&nbsp;Stunde</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_effort" value="3">
+                <span>1 – 3&nbsp;Stunden</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_effort" value="4">
+                <span>3 – 8&nbsp;Stunden</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_effort" value="5">
+                <span>Mehr als 1&nbsp;Arbeitstag</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Und wie hoch schätzen Sie den bürokratischen Aufwand <em>nach</em> der Bewilligung – also für Nachweise und den Antrag auf Auszahlung?</h2>
+
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="belief_payout_effort" value="1" required>
+                <span>Weniger als 30&nbsp;Minuten</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_payout_effort" value="2">
+                <span>30&nbsp;Minuten bis 1&nbsp;Stunde</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_payout_effort" value="3">
+                <span>1 – 3&nbsp;Stunden</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_payout_effort" value="4">
+                <span>3 – 8&nbsp;Stunden</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_payout_effort" value="5">
+                <span>Mehr als 1&nbsp;Arbeitstag</span>
+            </label>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Weiter</button>
+    </div>
+</section>
+
+<aside class="contact-strip">
+    <img src="{% static 'klimabonus/klimareferat.jpg' %}"
+         alt="Klimareferat der Stadt Frankfurt"
+         class="contact-strip-img">
+    <div class="contact-strip-text">
+        <strong>Klimareferat der Stadt Frankfurt</strong>
+        <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
+        <span class="contact-strip-note">Bei Fragen ruft das Team Sie gerne zurück.</span>
+    </div>
+</aside>
+
+<input type="hidden" name="time_beliefs" id="time_beliefs" value="">
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const startTime = Date.now();
+    function commit() {
+        document.getElementById('time_beliefs').value =
+            ((Date.now() - startTime) / 1000).toFixed(2);
+    }
+    window.addEventListener('beforeunload', commit);
+
+    // Block submit if the approval-rate slider is still untouched.
+    document.getElementById('form').addEventListener('submit', (e) => {
+        const untouched = document.querySelectorAll('.slider[data-untouched]');
+        if (untouched.length > 0) {
+            e.preventDefault();
+            untouched[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const hint = untouched[0].closest('.slider-wrap').querySelector('.slider-hint');
+            if (hint) hint.classList.add('slider-hint-error');
+            return;
+        }
+        commit();
+    });
+})();
+</script>
+{% endblock %}

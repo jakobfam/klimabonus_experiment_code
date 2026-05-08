@@ -1,0 +1,112 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+
+<section class="content-block">
+    <div class="content-inner">
+        <span class="kicker">Vielen Dank!</span>
+        <h1>Danke für Ihr Interesse am Klimabonus</h1>
+        <p class="lede">
+            Wir hoffen, die Informationen waren hilfreich. Wenn Sie eine Förderung
+            beantragen möchten, können Sie das direkt online tun.
+        </p>
+
+        <div class="cta-card">
+            <h2>Direkt zum Antrag</h2>
+            <p>Der Antrag läuft komplett digital. Sie registrieren sich mit Ihrer
+               E-Mail-Adresse und werden Schritt für Schritt durch das Formular geführt.</p>
+            <a class="btn btn-primary btn-large"
+               id="portal-link"
+               href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
+               target="_blank" rel="noopener">
+                Jetzt Klimabonus beantragen
+            </a>
+            <p class="cta-note">
+                Externer Link – Sie werden zur Antragsplattform der Stadt Frankfurt
+                weitergeleitet.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="content-block content-block-light">
+    <div class="content-inner">
+        <h2>Sie haben Fragen?</h2>
+        <p>
+            Das Klimareferat der Stadt Frankfurt beantwortet Ihre Fragen
+            jederzeit gerne. Auf Wunsch ruft das Team Sie auch persönlich
+            zurück.
+        </p>
+        <p class="contact-large">
+            <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
+        </p>
+        <figure class="team-photo">
+            <img src="{% static 'klimabonus/klimareferat.jpg' %}"
+                 alt="Das Team des Klimareferats der Stadt Frankfurt">
+            <figcaption>
+                Das Team des Klimareferats berät Sie zu allen Fragen rund
+                um den Klimabonus.
+            </figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Einwilligung zur Kontaktaufnahme</h2>
+        <p>
+            Falls Sie auf der vorherigen Seite eine E-Mail-Adresse oder
+            Telefonnummer angegeben haben, benötigen wir Ihre Einwilligung,
+            um Sie kontaktieren zu dürfen.
+        </p>
+        <label class="consent-checkbox">
+            <input type="checkbox" name="consent_contact" value="True" id="consent_contact_cb">
+            <span>
+                Ich willige ein, dass die Goethe-Universität Frankfurt meine
+                Angaben (E-Mail-Adresse und/oder Telefonnummer) zum Zweck der
+                Zusendung weiterer Informationen zum Klimabonus an das
+                Klimareferat der Stadt Frankfurt weitergibt. Diese Einwilligung
+                kann ich jederzeit widerrufen
+                (<a href="mailto:klimabonus-studie@uni-frankfurt.de">klimabonus-studie@uni-frankfurt.de</a>).
+            </span>
+        </label>
+
+        <button class="btn btn-primary" type="submit">Abschließen</button>
+    </div>
+</section>
+
+<input type="hidden" name="time_abschluss" id="time_abschluss" value="">
+<input type="hidden" name="clicked_application_portal" id="clicked_application_portal" value="False">
+<input type="hidden" name="clicked_application_portal_ts" id="clicked_application_portal_ts" value="">
+<input type="hidden" name="consent_contact_ts" id="consent_contact_ts" value="">
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const startTime = Date.now();
+    function commit() {
+        document.getElementById('time_abschluss').value =
+            ((Date.now() - startTime) / 1000).toFixed(2);
+    }
+    window.addEventListener('beforeunload', commit);
+    document.getElementById('form').addEventListener('submit', commit);
+
+    // Track click on Antragsportal
+    document.getElementById('portal-link').addEventListener('click', () => {
+        document.getElementById('clicked_application_portal').value = 'True';
+        document.getElementById('clicked_application_portal_ts').value =
+            (Date.now() / 1000).toFixed(2);
+    });
+
+    // Stamp consent timestamp when checkbox is toggled
+    const cb = document.getElementById('consent_contact_cb');
+    cb.addEventListener('change', () => {
+        document.getElementById('consent_contact_ts').value =
+            cb.checked ? (Date.now() / 1000).toFixed(2) : '';
+    });
+})();
+</script>
+{% endblock %}

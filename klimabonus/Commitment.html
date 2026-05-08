@@ -1,0 +1,134 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+
+<section class="content-block">
+    <div class="content-inner">
+        <span class="kicker">Weitere Informationen erhalten</span>
+        <h1>Möchten Sie zum Klimabonus auf dem Laufenden bleiben?</h1>
+        <p class="lede">
+            Falls Sie das Förderprogramm interessiert, schicken wir Ihnen gerne
+            weitere Informationen zu. Sie entscheiden, was für Ihr Unternehmen
+            passt.
+        </p>
+    </div>
+</section>
+
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Informationen per E-Mail</h2>
+        <p>
+            Möchten Sie eine kurze Zusammenfassung der Klimabonus-Informationen –
+            inklusive direktem Link zum Antrag – per E-Mail erhalten?
+        </p>
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="wants_email" value="True" required class="js-wants-email">
+                <span>Ja, gerne</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="wants_email" value="False" class="js-wants-email">
+                <span>Nein, danke</span>
+            </label>
+        </div>
+
+        <div id="email_wrap" class="cond-input" hidden>
+            <label for="email_address">Ihre E-Mail-Adresse</label>
+            <input type="email" name="email_address" id="email_address"
+                   maxlength="200" class="text-input"
+                   placeholder="name@unternehmen.de">
+        </div>
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Informationsveranstaltung</h2>
+        <p>
+            Das Klimareferat der Stadt Frankfurt bietet regelmäßig
+            Informationsveranstaltungen zum Klimabonus an. Möchten Sie zu einer
+            der nächsten Veranstaltungen eingeladen werden?
+        </p>
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="wants_event" value="True" required>
+                <span>Ja, gerne</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="wants_event" value="False">
+                <span>Nein, danke</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Persönlicher Rückruf</h2>
+        <p>
+            Falls Sie individuelle Fragen zu Ihrer Situation haben, ruft Sie das
+            Klimareferat gerne persönlich zurück.
+        </p>
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="wants_callback" value="True" required class="js-wants-callback">
+                <span>Ja, gerne</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="wants_callback" value="False" class="js-wants-callback">
+                <span>Nein, danke</span>
+            </label>
+        </div>
+
+        <div id="phone_wrap" class="cond-input" hidden>
+            <label for="phone_number">Ihre Telefonnummer</label>
+            <input type="tel" name="phone_number" id="phone_number"
+                   maxlength="40" class="text-input"
+                   placeholder="z.B. 069 1234567">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Weiter</button>
+    </div>
+</section>
+
+<aside class="contact-strip">
+    <img src="{% static 'klimabonus/klimareferat.jpg' %}"
+         alt="Klimareferat der Stadt Frankfurt"
+         class="contact-strip-img">
+    <div class="contact-strip-text">
+        <strong>Klimareferat der Stadt Frankfurt</strong>
+        <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
+        <span class="contact-strip-note">Bei Fragen ruft das Team Sie gerne zurück.</span>
+    </div>
+</aside>
+
+<input type="hidden" name="time_commitment" id="time_commitment" value="">
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const startTime = Date.now();
+    function commit() {
+        document.getElementById('time_commitment').value =
+            ((Date.now() - startTime) / 1000).toFixed(2);
+    }
+    window.addEventListener('beforeunload', commit);
+    document.getElementById('form').addEventListener('submit', commit);
+
+    // Conditional reveal for email + phone
+    function bindToggle(radioClass, wrapId, expectedValue) {
+        const wrap = document.getElementById(wrapId);
+        document.querySelectorAll('.' + radioClass).forEach(el => {
+            el.addEventListener('change', () => {
+                wrap.hidden = (el.value !== expectedValue || !el.checked);
+            });
+        });
+    }
+    bindToggle('js-wants-email', 'email_wrap', 'True');
+    bindToggle('js-wants-callback', 'phone_wrap', 'True');
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klimabonus Frankfurt – Goethe-Universität</title>
+    <style>
+        :root {
+            --gu-blue: #003865;
+            --gu-blue-dark: #002344;
+            --accent: #b69b5e;
+        }
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0; padding: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #1d2733;
+            background: #f9fbfd;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .splash {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+        .brand-logo {
+            width: 56px; height: 56px;
+            border-radius: 10px;
+            background: var(--gu-blue);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            text-align: left;
+        }
+        .brand-line1 { font-weight: 700; font-size: 18px; color: var(--gu-blue-dark); }
+        .brand-line2 { font-size: 14px; color: #5a6573; }
+
+        .loader {
+            width: 36px; height: 36px;
+            border: 3px solid #d9dee5;
+            border-top-color: var(--gu-blue);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .splash-text {
+            color: #5a6573;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        /* Fallback Start button shown only if JS is disabled or auto-submit fails */
+        .fallback-form { margin-top: 24px; display: none; }
+        noscript .fallback-form,
+        .fallback-visible { display: block !important; }
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 999px;
+            font-size: 16px;
+            font-weight: 600;
+            background: var(--gu-blue);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:hover { background: var(--gu-blue-dark); }
+        .err {
+            display: none;
+            color: #b00020;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash">
+        <div class="brand">
+            <span class="brand-logo" aria-hidden="true">GU</span>
+            <div class="brand-text">
+                <span class="brand-line1">Goethe-Universität</span>
+                <span class="brand-line2">Frankfurt am Main</span>
+            </div>
+        </div>
+
+        <div class="loader" aria-hidden="true"></div>
+        <p class="splash-text">Informationsportal Klimabonus wird geladen …</p>
+
+        <noscript>
+            <p class="splash-text" style="margin-top:24px;">
+                Bitte aktivieren Sie JavaScript, um die Seite zu laden.
+            </p>
+        </noscript>
+
+        <form class="fallback-form" id="fallback-form">
+            <button type="submit" class="btn">Weiter</button>
+            <p id="err" class="err"></p>
+        </form>
+    </div>
+
+    <script>
+    (function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // If we already came back with welcome_page_ok=1, do nothing — oTree
+        // will forward to the experiment via WebSocket.
+        if (urlParams.get('welcome_page_ok') === '1') return;
+
+        function proceed() {
+            urlParams.set('welcome_page_ok', '1');
+            window.location.href = window.location.pathname + '?' + urlParams.toString();
+        }
+
+        // Show the fallback button if auto-redirect doesn't fire within ~3s.
+        const fallback = document.getElementById('fallback-form');
+        const fallbackTimer = setTimeout(() => {
+            fallback.classList.add('fallback-visible');
+        }, 3000);
+
+        fallback.addEventListener('submit', (e) => {
+            e.preventDefault();
+            proceed();
+        });
+
+        // Auto-proceed immediately. The tiny delay (50ms) lets the browser
+        // paint the splash so users with very fast connections still see the
+        // brand for a moment instead of an empty flash.
+        setTimeout(() => {
+            clearTimeout(fallbackTimer);
+            proceed();
+        }, 50);
+    })();
+    </script>
+</body>
+</html>

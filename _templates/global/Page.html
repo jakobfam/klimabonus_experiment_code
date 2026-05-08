@@ -1,0 +1,59 @@
+{% load otree static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>{% block title %}Klimabonus Frankfurt – Goethe-Universität{% endblock %}</title>
+
+    {# No oTree default CSS / progress bar — we render a plain website #}
+    <link rel="stylesheet" href="{% static 'klimabonus/style.css' %}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <div class="brand">
+                <span class="brand-logo" aria-hidden="true">GU</span>
+                <span class="brand-text">
+                    <span class="brand-line1">Goethe-Universität</span>
+                    <span class="brand-line2">Frankfurt am Main</span>
+                </span>
+            </div>
+            <nav class="site-nav" aria-label="Hauptnavigation">
+                <span class="nav-pill">Informationsportal Klimabonus</span>
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <form class="otree-form" id="form" method="post" autocomplete="off" role="form">
+            <script src="{% static 'otree/js/formInputs.js' %}"></script>
+            {% block content %}{% endblock %}
+        </form>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <div class="footer-col">
+                <strong>Goethe-Universität Frankfurt</strong><br>
+                Theodor-W.-Adorno-Platz 1<br>
+                60629 Frankfurt am Main
+            </div>
+            <div class="footer-col">
+                <strong>Klimabonus der Stadt Frankfurt</strong><br>
+                <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a><br>
+                <a href="https://frankfurt.de/themen/klima-und-energie/stadtklima/klimabonus" target="_blank" rel="noopener">frankfurt.de/klimabonus</a>
+            </div>
+            <div class="footer-col footer-meta">
+                <a href="#" class="footer-link">Impressum</a>
+                <a href="#" class="footer-link">Datenschutz</a>
+                <a href="#" class="footer-link">Kontakt</a>
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
