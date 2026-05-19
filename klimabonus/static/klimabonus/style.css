@@ -1050,5 +1050,5 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     .cta-card { padding: 28px 20px; }
     .site-header-inner { padding: 14px 16px; }
     .site-nav { display: none; }
-    .brand-logo { width: 40px; height: 40px; font-size: 16px; }
+    .brand-img { height: 42px; padding: 4px 8px; }
 }
