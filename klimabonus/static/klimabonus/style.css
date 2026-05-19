@@ -46,7 +46,7 @@ nav.navbar, .otree-body, .progress { display: none !important; }
 .site-header {
     background: var(--gu-blue);
     color: #fff;
-    border-bottom: 4px solid var(--accent);
+    border-bottom: 2px solid var(--gu-blue-dark);
 }
 .site-header-inner {
     max-width: var(--maxw);
@@ -56,19 +56,21 @@ nav.navbar, .otree-body, .progress { display: none !important; }
     justify-content: space-between;
     padding: 18px 24px;
 }
-.brand { display: flex; align-items: center; gap: 14px; }
-.brand-logo {
-    width: 48px; height: 48px;
-    border-radius: 8px;
-    background: #fff;
-    color: var(--gu-blue);
-    display: inline-flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 20px;
-    letter-spacing: -0.5px;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
 }
-.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-.brand-line1 { font-weight: 700; font-size: 16px; }
-.brand-line2 { font-size: 13px; opacity: 0.85; }
+.brand-img {
+    display: block;
+    height: 56px;
+    width: auto;
+    background: #fff;
+    border-radius: 6px;
+    padding: 6px 12px;
+    box-sizing: content-box;
+}
 .site-nav .nav-pill {
     background: rgba(255,255,255,0.12);
     padding: 6px 14px;
@@ -114,12 +116,12 @@ nav.navbar, .otree-body, .progress { display: none !important; }
 }
 .hero-text .kicker {
     display: inline-block;
-    color: var(--gu-blue);
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 10px;
 }
 .hero h1 {
     font-size: 44px;
@@ -157,10 +159,10 @@ nav.navbar, .otree-body, .progress { display: none !important; }
     border-color: var(--gu-blue);
 }
 .hero-card-figure {
-    font-size: 34px;
-    font-weight: 800;
+    font-size: 32px;
+    font-weight: 600;
     color: var(--gu-blue);
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
 }
 .hero-card-alt .hero-card-figure { color: #fff; }
 .hero-card-label { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
@@ -183,12 +185,12 @@ h2 { font-size: 26px; margin: 0 0 16px; color: var(--gu-blue-dark); font-weight:
 h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 600; }
 .kicker {
     display: inline-block;
-    color: var(--gu-blue);
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 10px;
 }
 .muted { color: var(--text-muted); }
 .footnote {
@@ -403,11 +405,10 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 .benefit-card {
     background: #fff;
     border: 1px solid var(--border);
-    border-left: 4px solid var(--accent);
     border-radius: var(--radius);
     padding: 22px 22px 20px;
     box-shadow: var(--shadow-sm);
-    transition: transform 0.1s, box-shadow 0.15s;
+    transition: box-shadow 0.15s;
 }
 .benefit-card:hover {
     transform: translateY(-2px);
@@ -454,8 +455,8 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 
 /* Vorab-Hinweis before the continue button */
 .next-step-hint {
-    background: var(--bg-tint);
-    border-left: 4px solid var(--gu-blue);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 14px 18px;
     margin: 24px 0 16px;
@@ -564,10 +565,10 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 .funding-table thead th {
     background: var(--bg-soft);
     color: var(--text-muted);
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
     padding: 10px 18px;
 }
 .funding-table thead th:last-child { text-align: right; }
@@ -587,12 +588,13 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 
 .treatment-block-control .control-note {
     font-size: 17px;
+    line-height: 1.6;
     color: var(--text);
     margin: 0;
-    padding: 24px 28px;
-    background: var(--bg-soft);
-    border-left: 4px solid var(--gu-blue-light);
-    border-radius: var(--radius);
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
 }
 
 .source-note {
@@ -607,10 +609,10 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 .stat-box-dual .stat-row { position: relative; }
 .stat-source {
     margin-top: 10px;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-muted);
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     border-top: 1px solid var(--border);
     padding-top: 8px;
 }
@@ -685,11 +687,11 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 
 /* ================ Treatment-specific blocks ================ */
 .stat-box {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-left: 6px solid var(--gu-blue);
+    background: #f1f5fa;
+    border: 1px solid #d5e0ed;
+    border-left: 3px solid var(--gu-blue);
     border-radius: var(--radius);
-    padding: 28px;
+    padding: 32px 28px;
     box-shadow: var(--shadow-md);
     margin: 24px 0;
     display: grid;
@@ -698,11 +700,11 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 }
 .stat-row { text-align: center; }
 .stat-figure {
-    font-size: 36px;
-    font-weight: 800;
+    font-size: 38px;
+    font-weight: 700;
     color: var(--gu-blue);
-    line-height: 1.1;
-    letter-spacing: -1px;
+    line-height: 1.05;
+    letter-spacing: -0.8px;
 }
 .stat-label {
     color: var(--text-muted);
@@ -712,18 +714,19 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 
 .quote-card {
     display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 24px;
-    background: #fff;
-    border: 1px solid var(--border);
+    grid-template-columns: 160px 1fr;
+    gap: 28px;
+    background: #f1f5fa;
+    border: 1px solid #d5e0ed;
+    border-left: 3px solid var(--gu-blue);
     border-radius: var(--radius);
-    padding: 28px;
+    padding: 32px;
     box-shadow: var(--shadow-md);
     margin: 24px 0;
     align-items: center;
 }
 .quote-photo {
-    width: 140px; height: 140px;
+    width: 160px; height: 160px;
     border-radius: 50%;
     background: var(--bg-tint);
     border: 2px dashed var(--border);
@@ -737,7 +740,7 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     flex-shrink: 0;
 }
 .quote-photo:has(img) {
-    border: 3px solid var(--accent);
+    border: 2px solid #fff;
     padding: 0;
     background: #fff;
     box-shadow: var(--shadow-md);
@@ -749,13 +752,14 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     display: block;
 }
 .quote-body blockquote {
-    font-size: 20px;
+    font-size: 21px;
     font-style: italic;
     line-height: 1.5;
-    margin: 0 0 12px;
-    color: var(--text);
-    border-left: 4px solid var(--accent);
-    padding-left: 16px;
+    margin: 0 0 14px;
+    color: var(--gu-blue-dark);
+    border-left: none;
+    padding-left: 0;
+    font-weight: 500;
 }
 .quote-body cite {
     font-style: normal;
@@ -907,7 +911,7 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     padding: 16px;
     background: var(--bg-soft);
     border-radius: var(--radius);
-    border-left: 4px solid var(--gu-blue);
+    border: 1px solid var(--border);
 }
 .cond-input label {
     display: block;
@@ -928,6 +932,12 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     outline: none;
     border-color: var(--gu-blue);
     box-shadow: 0 0 0 3px rgba(0,56,101,0.12);
+}
+.feedback-textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
 }
 
 .consent-checkbox {
@@ -950,12 +960,12 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 
 /* ================ CTA card (Abschluss) ================ */
 .cta-card {
-    background: linear-gradient(135deg, var(--gu-blue) 0%, var(--gu-blue-light) 100%);
+    background: var(--gu-blue);
     color: #fff;
-    border-radius: var(--radius-lg);
-    padding: 40px;
+    border-radius: var(--radius);
+    padding: 36px 28px;
     margin: 24px 0;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
     text-align: center;
 }
 .cta-card h2 { color: #fff; margin-bottom: 12px; }
@@ -973,8 +983,8 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     position: fixed;
     bottom: 0; left: 0; right: 0;
     background: #fff;
-    border-top: 4px solid var(--gu-blue);
-    box-shadow: 0 -8px 24px rgba(0,0,0,0.12);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
     z-index: 1000;
     animation: slideUp 0.4s ease-out;
     max-height: 40vh;

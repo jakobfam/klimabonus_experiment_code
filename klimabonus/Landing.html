@@ -6,22 +6,22 @@
 
    - Hero (identical across arms)
    - Treatment block (varies by arm, ABOVE the fold)
-       Control : short neutral filler
-       T1 Stadt: stat-box, 3 numbers sourced to Klimareferat Stadt FFM
-       T2 Peer : peer photo+quote card + parallel stat-box where
-                 95% is sourced to Stadt and time/€ are sourced to peer firm
+       Control : short neutral text (no box)
+       T1 Stadt: stat-box, official city averages sourced to Klimareferat
+       T2 Peer : peer photo + qualitative quote card, followed by the
+                 SAME stat-box as T1 (same official numbers, same source).
+                 Only the quote text + face vary across peers — numbers
+                 are constant across all 6 peers and identical to T1.
    - Funding amounts (identical, compact)
    - "So läuft der Antrag" (identical, collapsed by default)
    - Contact with team photo (identical)
    - Continue button
-   - Cookie consent banner (delayed 3s)
+   - Cookie consent banner (delayed 8 s)
 
-   Numbers used:
-     95 %      Bewilligungsquote — both arms, Stadt Frankfurt
-     T1 time   20 Min            — Stadt Frankfurt average (PROXY)
-     T1 €      8.500 €           — Stadt Frankfurt average (PROXY)
-     T2 time   25 Min            — Peer firm specific (PROXY)
-     T2 €      11.400 €          — Peer firm specific (PROXY)
+   Numbers shown (identical in T1 and T2 — real official values):
+     95 %      Bewilligungsquote  — Klimareferat Stadt Frankfurt
+     30 Min.   Antragsdauer       — Klimareferat Stadt Frankfurt
+     9.487 €   Förderbetrag (mean)— Klimareferat Stadt Frankfurt
    ================================================================ #}
 
 {% block content %}
@@ -55,11 +55,11 @@
                 <div class="stat-label">der Anträge<br>werden bewilligt</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">20&nbsp;Min.</div>
+                <div class="stat-figure">30&nbsp;Min.</div>
                 <div class="stat-label">durchschnittlich<br>für den Antrag</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">8.500&nbsp;€</div>
+                <div class="stat-figure">9.487&nbsp;€</div>
                 <div class="stat-label">durchschnittlicher<br>Förderbetrag</div>
             </div>
         </div>
@@ -93,23 +93,24 @@
             </div>
         </div>
 
-        <div class="stat-box stat-box-dual">
+        <div class="stat-box stat-box-mono">
             <div class="stat-row">
                 <div class="stat-figure">95&nbsp;%</div>
                 <div class="stat-label">der Anträge<br>werden bewilligt</div>
-                <div class="stat-source">Stadt Frankfurt</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">{{ peer.time_minutes }}&nbsp;Min.</div>
-                <div class="stat-label">für den Antrag<br>bei {{ peer.firma }}</div>
-                <div class="stat-source">{{ peer.firma }}</div>
+                <div class="stat-figure">30&nbsp;Min.</div>
+                <div class="stat-label">durchschnittlich<br>für den Antrag</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">{{ peer.amount_eur }}&nbsp;€</div>
-                <div class="stat-label">Förderung<br>für {{ peer.firma }}</div>
-                <div class="stat-source">{{ peer.firma }}</div>
+                <div class="stat-figure">9.487&nbsp;€</div>
+                <div class="stat-label">durchschnittlicher<br>Förderbetrag</div>
             </div>
         </div>
+        <p class="source-note">
+            Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
+            des Förderprogramms&nbsp;Klimabonus.
+        </p>
     </div>
 </section>
 {% else %}
@@ -196,9 +197,8 @@
             </tbody>
         </table>
         <p class="footnote">
-            Maximal 100.000&nbsp;€ je Maßnahme. Gemeinschaftsprojekte
-            erhalten zusätzlich 5&nbsp;Prozentpunkte. Kombinierbar mit
-            anderen Förderprogrammen.
+            Maximal 100.000&nbsp;€ je Maßnahme. Kombinierbar mit anderen
+            Förderprogrammen.
         </p>
     </div>
 </section>

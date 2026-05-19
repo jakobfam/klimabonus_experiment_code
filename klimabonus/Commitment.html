@@ -17,6 +17,45 @@
 
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
+        <h2>Welche Position haben Sie in Ihrem Unternehmen?</h2>
+        <p class="muted">Eine kurze Angabe genügt.</p>
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="respondent_position" value="gf" required>
+                <span>Geschäftsführung / Inhaber:in</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_position" value="leitung">
+                <span>Bereichs- / Abteilungsleitung</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_position" value="kfm">
+                <span>Kaufmännische Leitung / Verwaltung</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_position" value="tech">
+                <span>Technische Leitung / Energiebeauftragte:r</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_position" value="mitarbeiter">
+                <span>Mitarbeiter:in</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_position" value="sonstiges" id="position-sonstiges">
+                <span>Sonstige Position</span>
+            </label>
+        </div>
+        <div id="position_other_wrap" class="cond-input" hidden>
+            <label for="respondent_position_other">Bitte angeben</label>
+            <input type="text" name="respondent_position_other"
+                   id="respondent_position_other"
+                   maxlength="100" class="text-input">
+        </div>
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
         <h2>Informationen per E-Mail</h2>
         <p>
             Möchten Sie eine kurze Zusammenfassung der Klimabonus-Informationen –
@@ -42,7 +81,7 @@
     </div>
 </section>
 
-<section class="content-block">
+<section class="content-block content-block-light">
     <div class="content-inner form-section">
         <h2>Informationsveranstaltung</h2>
         <p>
@@ -63,7 +102,7 @@
     </div>
 </section>
 
-<section class="content-block content-block-light">
+<section class="content-block">
     <div class="content-inner form-section">
         <h2>Persönlicher Rückruf</h2>
         <p>
@@ -129,6 +168,14 @@
     }
     bindToggle('js-wants-email', 'email_wrap', 'True');
     bindToggle('js-wants-callback', 'phone_wrap', 'True');
+
+    // Conditional reveal for "Sonstige Position" text input
+    const posOtherWrap = document.getElementById('position_other_wrap');
+    document.querySelectorAll('input[name="respondent_position"]').forEach(el => {
+        el.addEventListener('change', () => {
+            posOtherWrap.hidden = (el.value !== 'sonstiges' || !el.checked);
+        });
+    });
 })();
 </script>
 {% endblock %}

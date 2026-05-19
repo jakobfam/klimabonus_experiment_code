@@ -6,15 +6,19 @@ peer_id (1-6) in the assignment CSV, based on offline matching by industry
 and firm size (done in R/Stata at the time of label generation, NOT in
 this app). The Landing template renders the matching peer's profile.
 
-ALL CONTENT IN THIS FILE IS PLACEHOLDER ("Firma 1" through "Firma 6")
-and must be replaced with the real peer firm content before fielding:
-- name, firma, branche, size_label, photo, quote: real peer data
-- time_minutes, amount_eur: each peer's actually reported numbers
+Design note (post-2026-05-16 review): the T2 arm shows the SAME official
+Stadt-Frankfurt averages as T1 (95 % / 30 Min / 9.487 €). The peer's
+role is to ADD a personal testimonial — a face + a short qualitative
+experience report — that humanises the same numerical facts. The peer
+quotes should therefore NOT contradict the city averages with their own
+numbers; they should add colour, context, or narrative.
 
-The numbers below are PROXIES that bracket the T1 city averages
-(20 Min, 8.500 €) with realistic spread, so the prototype renders
-cleanly. They will be replaced with the real reported values before
-fielding.
+ALL CONTENT IN THIS FILE IS PLACEHOLDER ("Firma 1" through "Firma 6")
+and must be replaced with real peer content before fielding:
+- name, firma, branche, size_label, photo: real peer firm data
+- quote: real peer testimonial (qualitative, ideally in the peer's own
+  words). Each peer should have a slightly different angle so the
+  within-T2 variation is natural.
 """
 
 PEERS = {
@@ -25,12 +29,11 @@ PEERS = {
         size_label='[Mitarbeitendenzahl Firma 1]',
         photo=None,         # set to e.g. 'peer_1.jpg' when uploaded
         quote=(
-            'Bei uns hat das Ausfüllen des Antrags rund 22 Minuten '
-            'gedauert. Am Ende haben wir 8.400 Euro Förderung erhalten – '
-            'unkompliziert, wie wir das nicht erwartet hätten.'
+            'Wir hatten den Aufwand für den Antrag völlig überschätzt. '
+            'Tatsächlich war das in einer halben Stunde erledigt – '
+            'und die Förderung war ein echter Gewinn für unsere '
+            'Investition.'
         ),
-        time_minutes=22,
-        amount_eur=8400,
     ),
     2: dict(
         name='[Vorname Nachname Firma 2]',
@@ -39,12 +42,10 @@ PEERS = {
         size_label='[Mitarbeitendenzahl Firma 2]',
         photo=None,
         quote=(
-            'Wir haben für unsere PV-Anlage etwa eine halbe Stunde in den '
-            'Antrag investiert. 11.200 Euro vom Klimabonus haben sich '
-            'definitiv gelohnt.'
+            'Wir hatten Bedenken wegen der Bürokratie. Im Nachhinein war '
+            'der Klimabonus für uns einer der unkompliziertesten '
+            'Förderprozesse, mit denen wir bisher zu tun hatten.'
         ),
-        time_minutes=28,
-        amount_eur=11200,
     ),
     3: dict(
         name='[Vorname Nachname Firma 3]',
@@ -53,12 +54,10 @@ PEERS = {
         size_label='[Mitarbeitendenzahl Firma 3]',
         photo=None,
         quote=(
-            'Den Antrag hatte ich in unter 20 Minuten online ausgefüllt. '
-            'Nach wenigen Wochen kam der Bescheid – 12.800 Euro für '
-            'unser Projekt.'
+            'Was uns überrascht hat: Das Klimareferat war bei '
+            'Rückfragen schnell erreichbar und hat uns unkompliziert '
+            'weitergeholfen. Klare Empfehlung.'
         ),
-        time_minutes=19,
-        amount_eur=12800,
     ),
     4: dict(
         name='[Vorname Nachname Firma 4]',
@@ -67,12 +66,10 @@ PEERS = {
         size_label='[Mitarbeitendenzahl Firma 4]',
         photo=None,
         quote=(
-            'Wir haben rund 25 Minuten für den Antrag gebraucht und '
-            '9.500 Euro Förderung bekommen. Hat genauso geklappt, wie '
-            'es auf der Webseite beschrieben war.'
+            'Wir hatten die Förderung gar nicht auf dem Schirm. Mit dem '
+            'Klimabonus konnten wir unsere Maßnahme deutlich schneller '
+            'umsetzen als ursprünglich geplant.'
         ),
-        time_minutes=25,
-        amount_eur=9500,
     ),
     5: dict(
         name='[Vorname Nachname Firma 5]',
@@ -81,12 +78,10 @@ PEERS = {
         size_label='[Mitarbeitendenzahl Firma 5]',
         photo=None,
         quote=(
-            'Mit etwa einer halben Stunde Aufwand für den Antrag haben '
-            'wir 13.500 Euro für unser Vorhaben erhalten – ein klar '
-            'kalkulierbarer Schritt für uns.'
+            'Die Förderung hat für uns den entscheidenden Anstoß '
+            'gegeben, mit der Maßnahme jetzt zu starten – und nicht '
+            'erst in ein paar Jahren.'
         ),
-        time_minutes=30,
-        amount_eur=13500,
     ),
     6: dict(
         name='[Vorname Nachname Firma 6]',
@@ -95,12 +90,10 @@ PEERS = {
         size_label='[Mitarbeitendenzahl Firma 6]',
         photo=None,
         quote=(
-            'Der Antrag war in gut 20 Minuten erledigt. 7.500 Euro '
-            'Förderung – damit haben wir nicht gerechnet, dass es so '
-            'einfach geht.'
+            'Was uns positiv überrascht hat: Der gesamte Ablauf läuft '
+            'online und ist klar strukturiert. Wer den Antrag einmal '
+            'beim Mittagessen ausfüllt, ist fertig.'
         ),
-        time_minutes=21,
-        amount_eur=7500,
     ),
 }
 

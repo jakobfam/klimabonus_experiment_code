@@ -14,13 +14,14 @@
 <body>
     <header class="site-header">
         <div class="site-header-inner">
-            <div class="brand">
-                <span class="brand-logo" aria-hidden="true">GU</span>
-                <span class="brand-text">
-                    <span class="brand-line1">Goethe-Universität</span>
-                    <span class="brand-line2">Frankfurt am Main</span>
-                </span>
-            </div>
+            <a href="https://www.uni-frankfurt.de"
+               class="brand"
+               target="_blank" rel="noopener"
+               aria-label="Goethe-Universität Frankfurt am Main">
+                <img class="brand-img"
+                     src="{% static 'klimabonus/goethe_uni_logo.png' %}"
+                     alt="Goethe-Universität Frankfurt am Main">
+            </a>
             <nav class="site-nav" aria-label="Hauptnavigation">
                 <span class="nav-pill">Informationsportal Klimabonus</span>
             </nav>

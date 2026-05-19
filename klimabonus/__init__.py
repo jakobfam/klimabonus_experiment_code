@@ -92,15 +92,14 @@ class Player(BasePlayer):
     application_likelihood = models.IntegerField(min=0, max=10)
 
     # ---- Outcome 2: relevant measures ----
-    measure_pv = models.BooleanField(blank=True, initial=False)
-    measure_solar_thermal = models.BooleanField(blank=True, initial=False)
-    measure_battery = models.BooleanField(blank=True, initial=False)
-    measure_charging = models.BooleanField(blank=True, initial=False)
-    measure_green_roof = models.BooleanField(blank=True, initial=False)
-    measure_facade_green = models.BooleanField(blank=True, initial=False)
-    measure_courtyard_green = models.BooleanField(blank=True, initial=False)
-    measure_rainwater = models.BooleanField(blank=True, initial=False)
-    measure_drinking_fountain = models.BooleanField(blank=True, initial=False)
+    # Categories mirror the 7 funding-table rows on Landing exactly.
+    measure_solar = models.BooleanField(blank=True, initial=False)             # PV / Solarthermie
+    measure_solar_green_roof = models.BooleanField(blank=True, initial=False)  # Solar-Gründächer
+    measure_battery = models.BooleanField(blank=True, initial=False)           # Batteriespeicher (mit neuer PV)
+    measure_charging = models.BooleanField(blank=True, initial=False)          # Ladesäulen
+    measure_greening = models.BooleanField(blank=True, initial=False)          # Dach-/Fassaden-/Hofbegrünung
+    measure_rainwater = models.BooleanField(blank=True, initial=False)         # Regenwasserspeicher
+    measure_drinking_fountain = models.BooleanField(blank=True, initial=False) # Trinkbrunnen
     measure_none = models.BooleanField(blank=True, initial=False)
 
     # Randomized display order of measure checkboxes (comma-separated keys)
@@ -148,6 +147,20 @@ class Player(BasePlayer):
         label='Bürokratischer Aufwand nach Bewilligung (Nachweise, Auszahlungsantrag)',
     )
 
+    # ---- Respondent role (covariate) ----
+    respondent_position = models.StringField(
+        blank=True,
+        choices=[
+            ['gf',          'Geschäftsführung / Inhaber:in'],
+            ['leitung',     'Bereichs- / Abteilungsleitung'],
+            ['kfm',         'Kaufmännische Leitung / Verwaltung'],
+            ['tech',        'Technische Leitung / Energiebeauftragte:r'],
+            ['mitarbeiter', 'Mitarbeiter:in'],
+            ['sonstiges',   'Sonstige Position'],
+        ],
+    )
+    respondent_position_other = models.StringField(blank=True)
+
     # ---- Commitment ladder (revealed actions) ----
     wants_email = models.BooleanField(
         choices=[[True, 'Ja, gerne'], [False, 'Nein, danke']],
@@ -171,6 +184,9 @@ class Player(BasePlayer):
 
     clicked_application_portal = models.BooleanField(blank=True, initial=False)
     clicked_application_portal_ts = models.FloatField(blank=True)
+
+    # ---- Final free-text feedback (Abschluss page) ----
+    feedback_subsidies = models.LongStringField(blank=True)
 
 
 # ------------------------------------------------------------------ #
@@ -289,9 +305,9 @@ class Outcomes(Page):
     form_fields = [
         'consent_research', 'consent_research_ts',
         'application_likelihood',
-        'measure_pv', 'measure_solar_thermal', 'measure_battery',
-        'measure_charging', 'measure_green_roof', 'measure_facade_green',
-        'measure_courtyard_green', 'measure_rainwater', 'measure_drinking_fountain',
+        'measure_solar', 'measure_solar_green_roof', 'measure_battery',
+        'measure_charging', 'measure_greening',
+        'measure_rainwater', 'measure_drinking_fountain',
         'measure_none',
         'barrier_time', 'barrier_complexity', 'barrier_uncertainty',
         'barrier_amount', 'barrier_property', 'barrier_priority',
@@ -335,6 +351,7 @@ class Beliefs(Page):
 class Commitment(Page):
     form_model = 'player'
     form_fields = [
+        'respondent_position', 'respondent_position_other',
         'wants_email', 'email_address',
         'wants_event',
         'wants_callback', 'phone_number',
@@ -360,6 +377,7 @@ class Commitment(Page):
 class Abschluss(Page):
     form_model = 'player'
     form_fields = [
+        'feedback_subsidies',
         'consent_contact', 'consent_contact_ts',
         'clicked_application_portal', 'clicked_application_portal_ts',
         'time_abschluss',
@@ -401,18 +419,20 @@ def custom_export(players):
         'time_commitment', 'time_abschluss',
         'scroll_landing', 'expanded_process',
         'application_likelihood',
-        'measure_pv', 'measure_solar_thermal', 'measure_battery',
-        'measure_charging', 'measure_green_roof', 'measure_facade_green',
-        'measure_courtyard_green', 'measure_rainwater',
-        'measure_drinking_fountain', 'measure_none', 'measures_order',
+        'measure_solar', 'measure_solar_green_roof', 'measure_battery',
+        'measure_charging', 'measure_greening',
+        'measure_rainwater', 'measure_drinking_fountain',
+        'measure_none', 'measures_order',
         'barrier_time', 'barrier_complexity', 'barrier_uncertainty',
         'barrier_amount', 'barrier_property', 'barrier_priority',
         'barrier_other', 'barrier_other_text', 'barriers_order',
         'belief_approval_rate', 'belief_processing_time',
         'belief_effort', 'belief_payout_effort',
+        'respondent_position', 'respondent_position_other',
         'wants_email', 'email_address',
         'wants_event',
         'wants_callback', 'phone_number',
+        'feedback_subsidies',
         'clicked_portal_landing', 'clicked_portal_landing_ts',
         'clicked_application_portal', 'clicked_application_portal_ts',
     ]
@@ -439,10 +459,10 @@ def custom_export(players):
             p.field_maybe_none('scroll_landing'),
             p.field_maybe_none('expanded_process'),
             p.field_maybe_none('application_likelihood'),
-            p.measure_pv, p.measure_solar_thermal, p.measure_battery,
-            p.measure_charging, p.measure_green_roof, p.measure_facade_green,
-            p.measure_courtyard_green, p.measure_rainwater,
-            p.measure_drinking_fountain, p.measure_none,
+            p.measure_solar, p.measure_solar_green_roof, p.measure_battery,
+            p.measure_charging, p.measure_greening,
+            p.measure_rainwater, p.measure_drinking_fountain,
+            p.measure_none,
             p.field_maybe_none('measures_order') or '',
             p.barrier_time, p.barrier_complexity, p.barrier_uncertainty,
             p.barrier_amount, p.barrier_property, p.barrier_priority,
@@ -453,11 +473,14 @@ def custom_export(players):
             p.field_maybe_none('belief_processing_time'),
             p.field_maybe_none('belief_effort'),
             p.field_maybe_none('belief_payout_effort'),
+            p.field_maybe_none('respondent_position') or '',
+            p.field_maybe_none('respondent_position_other') or '',
             p.field_maybe_none('wants_email'),
             p.field_maybe_none('email_address') or '',
             p.field_maybe_none('wants_event'),
             p.field_maybe_none('wants_callback'),
             p.field_maybe_none('phone_number') or '',
+            p.field_maybe_none('feedback_subsidies') or '',
             p.clicked_portal_landing,
             p.field_maybe_none('clicked_portal_landing_ts'),
             p.clicked_application_portal,
