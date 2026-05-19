@@ -2,26 +2,23 @@
 {% load otree static %}
 
 {# ================================================================
-   Merged information + treatment page.
+   Final page after Abschluss. Mirrors Landing.html (hero + treatment
+   block + Wirtschaftlichkeit + funding table + process accordion +
+   contact) so the participant can re-read the treatment-relevant
+   info as long as they wish.
 
-   - Hero (identical across arms)
-   - Treatment block (varies by arm, ABOVE the fold)
-       Control : short neutral text (no box)
-       T1 Stadt: stat-box, official city averages sourced to Klimareferat
-       T2 Peer : peer photo + qualitative quote card, followed by the
-                 SAME stat-box as T1 (same official numbers, same source).
-                 Only the quote text + face vary across peers — numbers
-                 are constant across all 6 peers and identical to T1.
-   - Funding amounts (identical, compact)
-   - "So läuft der Antrag" (identical, collapsed by default)
-   - Contact with team photo (identical)
-   - Continue button
-   - Cookie consent banner (delayed 8 s)
+   Removed vs Landing:
+   - Vorab-Hinweis ("Wie geht es weiter? …")
+   - Survey-CTA button ("Ihre Meinung ist uns wichtig")
+   - Cookie banner (already consented on Landing)
+   - liveSend / time-tracking / scroll-tracking JS (page has no form)
 
-   Numbers shown (identical in T1 and T2 — real official values):
-     95 %      Bewilligungsquote  — Klimareferat Stadt Frankfurt
-     30 Min.   Antragsdauer       — Klimareferat Stadt Frankfurt
-     9.487 €   Förderbetrag (mean)— Klimareferat Stadt Frankfurt
+   Kept vs Landing:
+   - All identical body sections (treatment block by arm, funding, etc.)
+   - Antragsportal CTA at bottom (so re-reading can still convert to
+     application) — same href as Landing's alt-CTA.
+
+   No form_fields. No live_method. Static read-only page.
    ================================================================ #}
 
 {% block content %}
@@ -41,7 +38,7 @@
     </div>
 </section>
 
-{# ============= TREATMENT BLOCK (varies by arm) ============= #}
+{# ============= TREATMENT BLOCK (varies by arm — same as Landing) ============= #}
 
 {% if is_t1 %}
 <section class="content-block treatment-block treatment-block-t1">
@@ -162,7 +159,7 @@
     </div>
 </section>
 
-{# ============= FUNDING AMOUNTS (identical) ============= #}
+{# ============= FUNDING AMOUNTS ============= #}
 
 <section class="content-block content-block-light">
     <div class="content-inner">
@@ -203,11 +200,11 @@
     </div>
 </section>
 
-{# ============= COLLAPSIBLE PROCESS (identical) ============= #}
+{# ============= COLLAPSIBLE PROCESS ============= #}
 
 <section class="content-block">
     <div class="content-inner">
-        <details class="process-accordion" id="process-accordion">
+        <details class="process-accordion">
             <summary>
                 <span class="accordion-title">So läuft der Antrag ab</span>
                 <span class="accordion-chevron" aria-hidden="true">▾</span>
@@ -249,7 +246,7 @@
     </div>
 </section>
 
-{# ============= CONTACT WITH TEAM PHOTO (identical) ============= #}
+{# ============= CONTACT + ANTRAGSPORTAL ============= #}
 
 <section class="content-block content-block-contact">
     <div class="content-inner">
@@ -276,24 +273,11 @@
             </figcaption>
         </figure>
 
-        <div class="next-step-hint" role="note">
-            <strong>Wie geht es weiter?</strong>
-            Auf den nächsten Seiten folgen ein paar kurze Fragen.
-            Anschließend kommen Sie direkt zum Antragsportal der Stadt
-            Frankfurt.
-        </div>
-
-        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit">
-            <span class="btn-text">Ihre Meinung ist uns wichtig</span>
-            <span class="btn-subtitle">Dauert ca. 5&nbsp;Minuten</span>
-        </button>
-
         <div class="alt-cta">
             <span class="alt-cta-label">
-                Sie wissen schon, dass Sie beantragen möchten?
+                Möchten Sie den Klimabonus jetzt beantragen?
             </span>
             <a class="btn btn-ghost"
-               id="landing-portal-link"
                href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
                target="_blank" rel="noopener">
                 Direkt zum Antrag
@@ -302,108 +286,12 @@
     </div>
 </section>
 
-{# ============= COOKIE CONSENT BANNER (delayed 3s) ============= #}
-
-<div id="consent-banner" class="consent-banner" role="dialog"
-     aria-labelledby="consent-title" aria-describedby="consent-desc"
-     hidden>
-    <div class="consent-banner-inner">
-        <div class="consent-text">
-            <strong id="consent-title">Hinweis zur Datenverarbeitung</strong>
-            <p id="consent-desc">
-                Diese Webseite wird von der Goethe-Universität Frankfurt im
-                Rahmen eines Forschungsprojekts zum Klimabonus betrieben.
-                Wir erfassen anonymisiert, wie Sie diese Seite nutzen, um das
-                Informationsangebot für Frankfurter Unternehmen zu
-                verbessern. Ihre Angaben werden nicht weitergegeben.
-            </p>
-        </div>
-        <div class="consent-actions">
-            <button type="button" class="btn btn-ghost" id="consent-decline">Ablehnen</button>
-            <button type="button" class="btn btn-primary" id="consent-accept">Akzeptieren</button>
-        </div>
-    </div>
-</div>
-
-{# Hidden fields submitted with the form (only timing/scroll — the
-   remaining consent/click/accordion events are sent immediately via
-   live_method, see scripts block). #}
-<input type="hidden" name="time_landing" id="time_landing" value="">
-<input type="hidden" name="scroll_landing" id="scroll_landing" value="">
-
 {% endblock %}
 
 {% block scripts %}
 <script>
 (function () {
-    // ---- Time on page ----
-    const startTime = Date.now();
-    let maxScroll = 0;
-    function updateScroll() {
-        const h = document.documentElement;
-        const scrolled = (h.scrollTop + window.innerHeight) / h.scrollHeight;
-        const pct = Math.min(100, Math.round(scrolled * 100));
-        if (pct > maxScroll) maxScroll = pct;
-    }
-    window.addEventListener('scroll', updateScroll, { passive: true });
-    updateScroll();
-
-    function commit() {
-        document.getElementById('time_landing').value =
-            ((Date.now() - startTime) / 1000).toFixed(2);
-        document.getElementById('scroll_landing').value = maxScroll;
-    }
-    window.addEventListener('beforeunload', commit);
-    document.getElementById('form').addEventListener('submit', commit);
-
-    // ---- liveSend wrapper (fire-and-forget, safe if channel not ready) ----
-    function fireEvent(payload) {
-        try {
-            if (typeof liveSend === 'function') {
-                liveSend(payload);
-            }
-        } catch (e) {
-            // Channel not yet open or network issue: we tolerate the loss,
-            // since these events are best-effort and the design accepts
-            // a small fraction of missing events as the price for
-            // capturing drop-off-after-click participants.
-            console.warn('liveSend failed', e);
-        }
-    }
-    function nowSec() {
-        return Date.now() / 1000;
-    }
-
-    // ---- Process accordion: track expansion ----
-    const acc = document.getElementById('process-accordion');
-    acc.addEventListener('toggle', () => {
-        if (acc.open) fireEvent({ event: 'process_expand', ts: nowSec() });
-    });
-
-    // ---- Cookie banner (delayed 8s) ----
-    const banner = document.getElementById('consent-banner');
-    const accept = document.getElementById('consent-accept');
-    const decline = document.getElementById('consent-decline');
-
-    // Delayed 8 s so the treatment block above the fold is read first.
-    setTimeout(() => { banner.hidden = false; }, 8000);
-
-    function recordConsent(value) {
-        fireEvent({ event: 'consent_analytics', value: value, ts: nowSec() });
-        banner.hidden = true;
-    }
-    accept.addEventListener('click', () => recordConsent(true));
-    decline.addEventListener('click', () => recordConsent(false));
-
-    // ---------- Direct-to-Antrag click tracking ----------
-    const portalLink = document.getElementById('landing-portal-link');
-    if (portalLink) {
-        portalLink.addEventListener('click', () => {
-            fireEvent({ event: 'portal_click', ts: nowSec() });
-        });
-    }
-
-    // ---------- Tooltips (click-toggle, mobile-friendly) ----------
+    // Tooltip toggle (mobile-friendly) — same behaviour as on Landing.
     const triggers = document.querySelectorAll('.tooltip-trigger');
     function closeAll() {
         triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));

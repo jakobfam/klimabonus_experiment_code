@@ -270,17 +270,51 @@ class Landing(Page):
     minimised.
     """
     form_model = 'player'
+    # NOTE: only the two passive fields are saved via form submit.
+    # All click / consent / accordion events go through live_method below
+    # so they persist immediately even if the participant never submits
+    # the Landing page (e.g. clicks "Direkt zum Antrag" and never comes
+    # back). Putting them in form_fields would risk overwriting the
+    # live-saved values with empty defaults on form submit.
     form_fields = [
         'time_landing', 'scroll_landing',
-        'consent_analytics', 'consent_analytics_ts',
-        'expanded_process',
-        'clicked_portal_landing', 'clicked_portal_landing_ts',
     ]
 
     @staticmethod
     def is_displayed(player: Player):
         assign_player_from_label(player)
         return player.field_maybe_none('label_valid') is True
+
+    @staticmethod
+    def live_method(player: Player, data):
+        """Receive fire-and-forget click events from the Landing page.
+
+        Expected payload from JS liveSend(): { event: <str>, ts: <float>,
+        value?: <bool> }. Events handled:
+          - 'consent_analytics'  → consent_analytics + ts
+              (data.value carries True for accept, False for decline)
+          - 'portal_click'       → clicked_portal_landing + ts
+          - 'process_expand'     → expanded_process = True
+        Returns empty dict (no client-side response needed).
+        """
+        event = (data or {}).get('event')
+        ts = (data or {}).get('ts')
+        try:
+            ts = float(ts) if ts is not None else None
+        except (TypeError, ValueError):
+            ts = None
+
+        if event == 'consent_analytics':
+            player.consent_analytics = bool(data.get('value'))
+            if ts is not None:
+                player.consent_analytics_ts = ts
+        elif event == 'portal_click':
+            player.clicked_portal_landing = True
+            if ts is not None:
+                player.clicked_portal_landing_ts = ts
+        elif event == 'process_expand':
+            player.expanded_process = True
+        return {}
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -364,8 +398,14 @@ class Commitment(Page):
 
     @staticmethod
     def error_message(player: Player, values):
-        if values.get('wants_email') and not (values.get('email_address') or '').strip():
+        email = (values.get('email_address') or '').strip()
+        if values.get('wants_email') and not email:
             return 'Bitte geben Sie eine E-Mail-Adresse an oder wählen Sie "Nein, danke".'
+        # Event invitation also requires an email address — independent of
+        # whether the participant said "Ja" to the email summary above.
+        if values.get('wants_event') and not email:
+            return ('Damit wir Sie zur Informationsveranstaltung einladen '
+                    'können, benötigen wir Ihre E-Mail-Adresse.')
         if values.get('wants_callback') and not (values.get('phone_number') or '').strip():
             return 'Bitte geben Sie eine Telefonnummer an oder wählen Sie "Nein, danke".'
 
@@ -393,6 +433,30 @@ class Abschluss(Page):
         player.completed = True
 
 
+class EndPage(Page):
+    """Final page after Abschluss: re-displays the same information as
+    Landing (treatment block included), but without the survey CTA, the
+    cookie banner, or the Vorab-Hinweis. Lets participants re-read the
+    treatment-relevant information for as long as they want.
+    No form, no further submission."""
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.field_maybe_none('label_valid') is True
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        t = player.field_maybe_none('treatment')
+        peer = get_peer(player.field_maybe_none('peer_id')) if t == 3 else None
+        return dict(
+            treatment=t,
+            is_control=(t == 1),
+            is_t1=(t == 2),
+            is_t2=(t == 3),
+            peer=peer,
+        )
+
+
 page_sequence = [
     InvalidLink,
     Landing,
@@ -400,6 +464,7 @@ page_sequence = [
     Beliefs,
     Commitment,
     Abschluss,
+    EndPage,
 ]
 
 

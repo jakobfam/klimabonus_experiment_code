@@ -56,5 +56,17 @@
     </footer>
 
     {% block scripts %}{% endblock %}
+
+    {# oTree live channel — auto-activates when the Page class has a
+       live_method. Provides the global liveSend() function used by
+       Landing.html to fire-and-forget consent/click events directly to
+       the server, independent of form submit. #}
+    {% block live %}
+      {% if has_live_method %}
+        <form id="liveform"></form>
+        <script src="{% static 'otree/js/live.js' %}" id="otree-live"
+                data-socket-url="{{ view.live_url() }}"></script>
+      {% endif %}
+    {% endblock %}
 </body>
 </html>

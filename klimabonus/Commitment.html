@@ -73,7 +73,11 @@
         </div>
 
         <div id="email_wrap" class="cond-input" hidden>
-            <label for="email_address">Ihre E-Mail-Adresse</label>
+            <label id="email_label" for="email_address">Ihre E-Mail-Adresse</label>
+            <p id="email_hint" class="muted" style="display: none; margin: -4px 0 8px; font-size: 13px;">
+                Damit wir Sie zur Informationsveranstaltung einladen
+                können, benötigen wir Ihre E-Mail-Adresse.
+            </p>
             <input type="email" name="email_address" id="email_address"
                    maxlength="200" class="text-input"
                    placeholder="name@unternehmen.de">
@@ -157,7 +161,7 @@
     window.addEventListener('beforeunload', commit);
     document.getElementById('form').addEventListener('submit', commit);
 
-    // Conditional reveal for email + phone
+    // Conditional reveal for callback / phone
     function bindToggle(radioClass, wrapId, expectedValue) {
         const wrap = document.getElementById(wrapId);
         document.querySelectorAll('.' + radioClass).forEach(el => {
@@ -166,8 +170,33 @@
             });
         });
     }
-    bindToggle('js-wants-email', 'email_wrap', 'True');
     bindToggle('js-wants-callback', 'phone_wrap', 'True');
+
+    // Email input shows if EITHER answer requires it: "Ja" zu E-Mail-Info
+    // ODER "Ja" zur Veranstaltung. Label + hint adapt to context.
+    const emailWrap  = document.getElementById('email_wrap');
+    const emailLabel = document.getElementById('email_label');
+    const emailHint  = document.getElementById('email_hint');
+    function selectedRadio(name) {
+        const el = document.querySelector('input[name="' + name + '"]:checked');
+        return el ? el.value : null;
+    }
+    function updateEmailVisibility() {
+        const wantsEmail = selectedRadio('wants_email') === 'True';
+        const wantsEvent = selectedRadio('wants_event') === 'True';
+        const needEmail  = wantsEmail || wantsEvent;
+        emailWrap.hidden = !needEmail;
+        if (wantsEmail) {
+            emailLabel.textContent = 'Ihre E-Mail-Adresse';
+            emailHint.style.display = 'none';
+        } else if (wantsEvent) {
+            emailLabel.textContent = 'Ihre E-Mail-Adresse für die Einladung';
+            emailHint.style.display = 'block';
+        }
+    }
+    document.querySelectorAll('input[name="wants_email"], input[name="wants_event"]').forEach(el => {
+        el.addEventListener('change', updateEmailVisibility);
+    });
 
     // Conditional reveal for "Sonstige Position" text input
     const posOtherWrap = document.getElementById('position_other_wrap');
