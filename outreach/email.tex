@@ -1,0 +1,132 @@
+% =====================================================================
+%  E-Mail-Entwurf an Frankfurter Unternehmen — Klimabonus-Studie
+%  Goethe-Universität Frankfurt × Klimareferat der Stadt Frankfurt
+%  Absender: Prof. Dr. Guido Friebel
+%
+%  Dieser LaTeX-File dient zur Ansicht / Review.
+%  Versendet wird als HTML/Plain-Text aus dem E-Mail-Client.
+%  TREATMENT-NEUTRAL.
+%
+%  Per-Empfänger zu ersetzen:
+%    [FIRM_ID]        in der URL (klimabonus-frankfurt.de/<FIRM_ID>)
+%
+%  Kompilation:
+%    pdflatex email.tex
+% =====================================================================
+
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[a4paper, margin=2.2cm]{geometry}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{tcolorbox}
+
+\definecolor{gublue}{HTML}{003865}
+\definecolor{gublued}{HTML}{002344}
+\definecolor{gugrey}{HTML}{5a6573}
+\definecolor{gubg}{HTML}{f4f6f9}
+\hypersetup{colorlinks=true, urlcolor=gublue}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.65em}
+
+\newcommand{\meta}[2]{%
+    \makebox[2.1cm][l]{\color{gugrey}#1}\textbf{#2}\\
+}
+
+\newcommand{\firmid}{[FIRM\_ID]}
+\newcommand{\persURL}{klimabonus-frankfurt.de/\firmid}
+
+\begin{document}
+
+% ====================== E-MAIL-KOPFZEILE ======================
+
+\begin{tcolorbox}[
+    colback=gubg,
+    colframe=gubg,
+    arc=4pt,
+    boxsep=8pt,
+    left=10pt, right=10pt, top=4pt, bottom=4pt,
+]
+\meta{Von:}{Prof. Dr.~Guido Friebel \textcolor{gugrey}{\textless klimabonus-studie@uni-frankfurt.de\textgreater}}
+\meta{An:}{[E-Mail Empfänger]}
+\meta{Betreff:}{Klimabonus der Stadt Frankfurt --- Ihre Einschätzung in 3 Minuten}
+\end{tcolorbox}
+
+\vspace{0.6em}
+
+% ====================== E-MAIL-INHALT =========================
+
+Sehr geehrte Damen und Herren,
+
+mit dem \textbf{Klimabonus} unterstützt die Stadt Frankfurt Unternehmen
+bei Klimaschutz-Investitionen mit \textbf{bis zu 100.000~EUR pro Maßnahme}
+--- für Solaranlagen, Dach- und Fassadenbegrünung, Regenwasserspeicher
+und mehr. Eine Förderchance, die ausschließlich Frankfurter Unternehmen
+offensteht.
+
+In einer gemeinsamen Studie der \textbf{Goethe-Universität Frankfurt} und
+des \textbf{Klimareferats der Stadt Frankfurt} untersuchen wir, wie
+Frankfurter Unternehmen das Förderangebot wahrnehmen. Ihre Einschätzung
+ist für uns besonders wertvoll --- unabhängig davon, ob Sie den
+Klimabonus bereits kennen oder zum ersten Mal davon hören.
+
+Wir bitten Sie um etwa \textbf{3 Minuten} Ihrer Zeit:
+
+\vspace{0.2em}
+
+\begin{center}
+\colorbox{gublue}{\color{white}\strut\hspace{1.3em}\Large\textbf{\href{https://\persURL}{\color{white}Zur kurzen Befragung}}\hspace{1.3em}\strut}
+\end{center}
+
+\vspace{-0.2em}
+
+{\small\textcolor{gugrey}{Falls der Button nicht funktioniert, kopieren Sie
+diesen Link in Ihren Browser:}\\
+\href{https://\persURL}{\persURL}}
+
+{\small\textbf{Hinweis zur Datenverarbeitung.}
+Mit dem Aufruf der Seite werden anonymisierte Nutzungsdaten zu
+Forschungszwecken erhoben. Eine Weitergabe Ihrer personenbezogenen Daten
+an Dritte erfolgt nicht. Datenschutzerklärung auf der Seite.}
+
+Vielen Dank im Voraus für Ihre Zeit.
+
+\medskip
+
+Mit freundlichen Grüßen,
+
+\textbf{Prof. Dr. Guido Friebel}\\
+{\small Lehrstuhl für [Lehrstuhlbezeichnung]\\
+Goethe-Universität Frankfurt am Main\\
+\href{mailto:klimabonus-studie@uni-frankfurt.de}{klimabonus-studie@uni-frankfurt.de}}
+
+% ====================== HINWEISE FÜR DEN VERSAND ==============
+
+\vspace{2em}
+\hrule
+\vspace{0.6em}
+
+{\footnotesize\color{gugrey}
+\textbf{Hinweise für den Versand} (nicht Teil der E-Mail):
+
+\begin{itemize}\setlength{\itemsep}{0pt}
+    \item \textbf{Betreffzeilen-Alternativen} (für A/B-Test falls gewünscht):
+    \begin{itemize}\setlength{\itemsep}{-3pt}
+        \item ``Klimabonus der Stadt Frankfurt --- Ihre Einschätzung in 3 Minuten''
+        \item ``3 Minuten für ein besseres Förderangebot in Frankfurt''
+        \item ``Goethe-Uni + Stadt Frankfurt: Studie zum Klimabonus''
+    \end{itemize}
+    \item \textbf{Versandzeit}: Di--Do, 10:00--11:30 Uhr (höchste Öffnungsraten im B2B).
+    \item \textbf{Reply-To}: \texttt{klimabonus-studie@uni-frankfurt.de}.
+    \item \textbf{HTML + Plain Text} parallel (multipart/alternative) für Zustellbarkeit.
+\end{itemize}
+}
+
+\end{document}

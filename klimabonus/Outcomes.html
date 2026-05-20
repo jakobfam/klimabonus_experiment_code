@@ -81,10 +81,6 @@
                 <span class="checkbox-card-label">Batteriespeicher (mit neuer PV)</span>
             </label>
             <label class="checkbox-card">
-                <input type="checkbox" name="measure_charging" data-key="charging">
-                <span class="checkbox-card-label">Ladesäulen</span>
-            </label>
-            <label class="checkbox-card">
                 <input type="checkbox" name="measure_greening" data-key="greening">
                 <span class="checkbox-card-label">Dach-, Fassaden- und Hofbegrünung</span>
             </label>
@@ -96,12 +92,26 @@
                 <input type="checkbox" name="measure_drinking_fountain" data-key="drinking_fountain">
                 <span class="checkbox-card-label">Trinkbrunnen</span>
             </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_already_done" data-key="already_done">
+                <span class="checkbox-card-label">Ähnliche Maßnahmen bereits umgesetzt</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="measure_other" data-key="other" id="measure_other_cb">
+                <span class="checkbox-card-label">Sonstiges</span>
+            </label>
             <label class="checkbox-card checkbox-card-none">
                 <input type="checkbox" name="measure_none" data-key="none" id="measure_none">
                 <span class="checkbox-card-label">Keine davon</span>
             </label>
         </div>
         <input type="hidden" name="measures_order" id="measures_order" value="">
+
+        <div id="measure_other_wrap" class="cond-input" hidden>
+            <label for="measure_other_text">Welche Maßnahme möchten Sie nennen?</label>
+            <input type="text" name="measure_other_text" id="measure_other_text"
+                   maxlength="200" class="text-input">
+        </div>
     </div>
 </section>
 
@@ -134,6 +144,10 @@
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_priority" data-key="priority">
                 <span class="checkbox-card-label">Thema hat keine Priorität</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_already_applied" data-key="already_applied">
+                <span class="checkbox-card-label">Fördermittel bereits beantragt bzw. in Anspruch genommen</span>
             </label>
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_other" data-key="other" id="barrier_other_cb">
@@ -216,10 +230,13 @@
     }
     const measuresGrid = document.getElementById('measures-grid');
     const barriersGrid = document.getElementById('barriers-grid');
-    // Keep "Keine davon" pinned at the end of measures
+    // Keep "Sonstiges" + "Keine davon" pinned at the end of measures
+    const measureOtherCard = document.getElementById('measure_other_cb').closest('.checkbox-card');
     const noneCard = document.getElementById('measure_none').closest('.checkbox-card');
+    measureOtherCard.remove();
     noneCard.remove();
     shuffleChildren(measuresGrid);
+    measuresGrid.appendChild(measureOtherCard);
     measuresGrid.appendChild(noneCard);
     document.getElementById('measures_order').value = captureOrder(measuresGrid);
 
@@ -240,10 +257,17 @@
         cb.addEventListener('change', () => { if (cb.checked) noneCb.checked = false; });
     });
 
-    // ---- Conditional "Sonstiges" text field ----
+    // ---- Conditional text field: "Sonstiges" barriers ----
     const otherCb = document.getElementById('barrier_other_cb');
     const otherWrap = document.getElementById('barrier_other_wrap');
     otherCb.addEventListener('change', () => { otherWrap.hidden = !otherCb.checked; });
+
+    // ---- Conditional text field: "Sonstiges" measures ----
+    const measureOtherCb = document.getElementById('measure_other_cb');
+    const measureOtherWrap = document.getElementById('measure_other_wrap');
+    measureOtherCb.addEventListener('change', () => {
+        measureOtherWrap.hidden = !measureOtherCb.checked;
+    });
 })();
 </script>
 {% endblock %}

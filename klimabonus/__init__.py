@@ -84,6 +84,11 @@ class Player(BasePlayer):
     # Did the user expand the "So läuft der Antrag" accordion? (JS-tracked)
     expanded_process = models.BooleanField(blank=True, initial=False)
 
+    # 2-min survey-prompt modal on Landing (shows after long passive read).
+    prompt_shown_ts = models.FloatField(blank=True)
+    prompt_used = models.BooleanField(blank=True, initial=False)
+    prompt_dismissed_ts = models.FloatField(blank=True)
+
     # ---- Drop-off tracking ----
     page_reached = models.IntegerField(initial=0)
     completed = models.BooleanField(initial=False)
@@ -100,6 +105,9 @@ class Player(BasePlayer):
     measure_greening = models.BooleanField(blank=True, initial=False)          # Dach-/Fassaden-/Hofbegrünung
     measure_rainwater = models.BooleanField(blank=True, initial=False)         # Regenwasserspeicher
     measure_drinking_fountain = models.BooleanField(blank=True, initial=False) # Trinkbrunnen
+    measure_already_done = models.BooleanField(blank=True, initial=False)      # bereits ähnliche Maßnahmen umgesetzt
+    measure_other = models.BooleanField(blank=True, initial=False)             # Sonstiges (mit Freitext)
+    measure_other_text = models.StringField(blank=True)
     measure_none = models.BooleanField(blank=True, initial=False)
 
     # Randomized display order of measure checkboxes (comma-separated keys)
@@ -112,6 +120,7 @@ class Player(BasePlayer):
     barrier_amount = models.BooleanField(blank=True, initial=False)
     barrier_property = models.BooleanField(blank=True, initial=False)
     barrier_priority = models.BooleanField(blank=True, initial=False)
+    barrier_already_applied = models.BooleanField(blank=True, initial=False)  # Fördermittel bereits beantragt / genutzt
     barrier_other = models.BooleanField(blank=True, initial=False)
     barrier_other_text = models.StringField(blank=True)
     barriers_order = models.StringField(blank=True)
@@ -295,6 +304,12 @@ class Landing(Page):
               (data.value carries True for accept, False for decline)
           - 'portal_click'       → clicked_portal_landing + ts
           - 'process_expand'     → expanded_process = True
+          - 'prompt_shown'       → prompt_shown_ts (2-min survey-prompt
+              modal appeared)
+          - 'prompt_dismissed'   → prompt_dismissed_ts (user closed modal
+              without clicking the CTA inside it)
+          - 'prompt_used'        → prompt_used = True (user clicked the
+              CTA inside the modal — fires just before form submit)
         Returns empty dict (no client-side response needed).
         """
         event = (data or {}).get('event')
@@ -314,6 +329,14 @@ class Landing(Page):
                 player.clicked_portal_landing_ts = ts
         elif event == 'process_expand':
             player.expanded_process = True
+        elif event == 'prompt_shown':
+            if ts is not None:
+                player.prompt_shown_ts = ts
+        elif event == 'prompt_dismissed':
+            if ts is not None:
+                player.prompt_dismissed_ts = ts
+        elif event == 'prompt_used':
+            player.prompt_used = True
         return {}
 
     @staticmethod
@@ -340,11 +363,14 @@ class Outcomes(Page):
         'consent_research', 'consent_research_ts',
         'application_likelihood',
         'measure_solar', 'measure_solar_green_roof', 'measure_battery',
-        'measure_charging', 'measure_greening',
+        'measure_greening',
         'measure_rainwater', 'measure_drinking_fountain',
+        'measure_already_done',
+        'measure_other', 'measure_other_text',
         'measure_none',
         'barrier_time', 'barrier_complexity', 'barrier_uncertainty',
         'barrier_amount', 'barrier_property', 'barrier_priority',
+        'barrier_already_applied',
         'barrier_other', 'barrier_other_text',
         'measures_order', 'barriers_order',
         'time_outcomes',
@@ -483,13 +509,16 @@ def custom_export(players):
         'time_landing', 'time_outcomes', 'time_beliefs',
         'time_commitment', 'time_abschluss',
         'scroll_landing', 'expanded_process',
+        'prompt_shown_ts', 'prompt_used', 'prompt_dismissed_ts',
         'application_likelihood',
         'measure_solar', 'measure_solar_green_roof', 'measure_battery',
-        'measure_charging', 'measure_greening',
+        'measure_greening',
         'measure_rainwater', 'measure_drinking_fountain',
+        'measure_already_done', 'measure_other', 'measure_other_text',
         'measure_none', 'measures_order',
         'barrier_time', 'barrier_complexity', 'barrier_uncertainty',
         'barrier_amount', 'barrier_property', 'barrier_priority',
+        'barrier_already_applied',
         'barrier_other', 'barrier_other_text', 'barriers_order',
         'belief_approval_rate', 'belief_processing_time',
         'belief_effort', 'belief_payout_effort',
@@ -523,14 +552,20 @@ def custom_export(players):
             p.field_maybe_none('time_abschluss'),
             p.field_maybe_none('scroll_landing'),
             p.field_maybe_none('expanded_process'),
+            p.field_maybe_none('prompt_shown_ts'),
+            p.field_maybe_none('prompt_used'),
+            p.field_maybe_none('prompt_dismissed_ts'),
             p.field_maybe_none('application_likelihood'),
             p.measure_solar, p.measure_solar_green_roof, p.measure_battery,
-            p.measure_charging, p.measure_greening,
+            p.measure_greening,
             p.measure_rainwater, p.measure_drinking_fountain,
+            p.measure_already_done, p.measure_other,
+            p.field_maybe_none('measure_other_text') or '',
             p.measure_none,
             p.field_maybe_none('measures_order') or '',
             p.barrier_time, p.barrier_complexity, p.barrier_uncertainty,
             p.barrier_amount, p.barrier_property, p.barrier_priority,
+            p.barrier_already_applied,
             p.barrier_other,
             p.field_maybe_none('barrier_other_text') or '',
             p.field_maybe_none('barriers_order') or '',

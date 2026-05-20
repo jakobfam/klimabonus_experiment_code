@@ -7,7 +7,7 @@ and firm size (done in R/Stata at the time of label generation, NOT in
 this app). The Landing template renders the matching peer's profile.
 
 Design note (post-2026-05-16 review): the T2 arm shows the SAME official
-Stadt-Frankfurt averages as T1 (95 % / 30 Min / 9.487 €). The peer's
+Stadt-Frankfurt averages as T1 (96 % / 15 Min / 7.883,75 €). The peer's
 role is to ADD a personal testimonial — a face + a short qualitative
 experience report — that humanises the same numerical facts. The peer
 quotes should therefore NOT contradict the city averages with their own

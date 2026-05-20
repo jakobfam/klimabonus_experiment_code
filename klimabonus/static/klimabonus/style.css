@@ -332,6 +332,15 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     font-style: italic;
 }
 
+/* Klimabonus-Logo im Kontaktbereich (Landing + EndPage) */
+.klimabonus-logo {
+    display: block;
+    max-width: 180px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 24px;
+}
+
 /* Real team photo block (Landing + Abschluss) */
 .team-photo {
     margin: 24px 0;
@@ -426,7 +435,7 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     line-height: 1.5;
 }
 
-/* Button with two-line subtitle (e.g. "ca. 5 Minuten") */
+/* Button with two-line subtitle (e.g. "ca. 3 Minuten") */
 .btn-with-subtitle {
     display: inline-flex;
     flex-direction: column;
@@ -576,6 +585,10 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 /* ================ Compact hero (merged Landing) ================ */
 .hero-compact .hero-inner {
     grid-template-columns: 1fr;
+    /* Match max-width of .content-inner (880 px) so hero text is bündig
+       with the body sections below — same vertical left edge across the
+       whole page. */
+    max-width: 880px;
     padding: 48px 24px 28px;
     gap: 0;
 }
@@ -602,6 +615,19 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     color: var(--text-muted);
     margin: 12px 0 0;
     text-align: right;
+}
+
+/* Sekundäre Stats (Bearbeitungszeiten) — eine Zeile, deutlich kleiner als
+   die Stat-Box-Hauptzahlen, aber gleicher visueller Platz in T1 und T2. */
+.stat-secondary {
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: var(--text);
+    text-align: center;
+}
+.stat-secondary strong {
+    color: var(--gu-blue-dark);
+    font-variant-numeric: tabular-nums;
 }
 
 /* Dual-source stat-box (T2): each stat carries its own source label */
@@ -977,6 +1003,80 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 }
 .cta-card .btn-primary:hover { background: var(--bg-soft); }
 .cta-note { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 8px; }
+
+/* ================ Survey-prompt modal (2-min nudge) ================ */
+.survey-prompt[hidden] { display: none; }
+.survey-prompt {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.survey-prompt-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+}
+.survey-prompt-modal {
+    position: relative;
+    background: #fff;
+    padding: 32px 28px 28px;
+    border-radius: var(--radius-lg);
+    max-width: 460px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    animation: promptIn 0.25s ease-out;
+}
+@keyframes promptIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+.survey-prompt-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.survey-prompt-close:hover {
+    background: var(--bg-soft);
+    color: var(--text);
+}
+.survey-prompt-modal h3 {
+    font-size: 22px;
+    margin: 0 0 12px;
+    color: var(--gu-blue-dark);
+}
+.survey-prompt-modal > p {
+    margin: 0 0 22px;
+    color: var(--text);
+    font-size: 15.5px;
+    line-height: 1.5;
+}
+.survey-prompt-meta {
+    margin: 10px 0 0 !important;
+    font-size: 13px;
+    color: var(--text-muted) !important;
+}
+@media (max-width: 480px) {
+    .survey-prompt-modal { padding: 28px 22px 22px; }
+    .survey-prompt-modal h3 { font-size: 20px; }
+}
 
 /* ================ Cookie consent banner ================ */
 .consent-banner {

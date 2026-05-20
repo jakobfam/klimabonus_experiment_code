@@ -1,0 +1,144 @@
+% =====================================================================
+%  Anschreiben an Frankfurter Unternehmen — Klimabonus-Studie
+%  Goethe-Universität Frankfurt × Klimareferat der Stadt Frankfurt
+%  Absender: Prof. Dr. Guido Friebel
+%
+%  ONE-PAGE LAYOUT.  Brief passt sauber auf eine DIN-A4-Seite.
+%  TREATMENT-NEUTRAL.  Keine experimentellen Manipulations-Inhalte.
+%
+%  Per-Empfänger zu ersetzen (Mail-Merge):
+%    [FIRMA] [STRASSE] [PLZ ORT]  in der Adresszeile
+%    [FIRM_ID]                    in URL + QR-Code-Dateiname
+%    qr/[FIRM_ID].png             pro Empfänger generierter QR-PNG
+%
+%  Domain-Annahme:
+%    klimabonus-frankfurt.de/<FIRM_ID>
+%    -> redirect zu der Heroku-Roomforwarding-URL mit
+%       ?participant_label=<FIRM_ID>
+%
+%  Kompilation:
+%    pdflatex letter.tex
+% =====================================================================
+
+\documentclass[
+    fontsize=11pt,
+    paper=A4,
+    DIN,
+    parskip=half-,
+    pagenumber=false,
+    foldmarks=true,
+    backaddress=plain,
+    enlargefirstpage=true,
+]{scrlttr2}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\definecolor{gublue}{HTML}{003865}
+\hypersetup{colorlinks=true, urlcolor=gublue, linkcolor=gublue}
+
+% Reduce vertical whitespace to fit on one page
+\@setplength{firstheadvpos}{14mm}
+\@setplength{firstheadwidth}{0.95\paperwidth}
+\@setplength{toaddrvpos}{45mm}
+\@setplength{refvpos}{95mm}
+\@setplength{sigbeforevskip}{1.5em}
+
+\setkomavar{fromname}{Prof. Dr. Guido Friebel}
+\setkomavar{fromaddress}{%
+    Goethe-Universität Frankfurt am Main\\
+    Fachbereich Wirtschaftswissenschaften\\
+    Theodor-W.-Adorno-Platz 4\\
+    60629 Frankfurt am Main
+}
+\setkomavar{fromemail}{klimabonus-studie@uni-frankfurt.de}
+\setkomavar{place}{Frankfurt am Main}
+\setkomavar{date}{\today}
+\setkomavar{subject}{Förderprogramm Klimabonus der Stadt Frankfurt — Ihre Einschätzung gefragt}
+\setkomavar{signature}{%
+    Prof. Dr. Guido Friebel\\
+    {\small Lehrstuhl für [Lehrstuhlbezeichnung]}\\
+    {\small Goethe-Universität Frankfurt am Main}
+}
+
+% Logo (optional)
+% \setkomavar{fromlogo}{\includegraphics[height=16mm]{goethe_uni_logo.png}}
+
+\KOMAoptions{%
+    fromalign=right,
+    fromrule=afteraddress,
+    subject=titled,
+    backaddress=plain,
+}
+
+% Helper: short personalised URL (klimabonus-frankfurt.de/<FIRM_ID>)
+\newcommand{\firmid}{[FIRM\_ID]}
+\newcommand{\persURL}{klimabonus-frankfurt.de/\firmid}
+% QR-Bild (auto-fallback wenn Datei fehlt)
+\newcommand{\qrcode}{%
+    \IfFileExists{qr/\firmid.png}{%
+        \includegraphics[width=30mm]{qr/\firmid.png}%
+    }{%
+        \fbox{\parbox[c][28mm][c]{28mm}{\centering\footnotesize\color{gray}QR-Code}}%
+    }%
+}
+
+\begin{document}
+
+\begin{letter}{%
+    \textbf{[FIRMA]}\\
+    [STRASSE]\\
+    [PLZ ORT]%
+}
+
+\opening{Sehr geehrte Damen und Herren,}
+
+mit dem \textbf{Klimabonus} unterstützt die Stadt Frankfurt Unternehmen
+bei Klimaschutz-Investitionen mit \textbf{bis zu 100.000~EUR pro Maßnahme}
+--- für Solaranlagen, Dach- und Fassadenbegrünung, Regenwasserspeicher
+und mehr. Eine Förderchance, die ausschließlich Frankfurter Unternehmen
+offensteht.
+
+In einer gemeinsamen Studie der \textbf{Goethe-Universität Frankfurt} und
+des \textbf{Klimareferats der Stadt Frankfurt} untersuchen wir, wie
+Frankfurter Unternehmen das Förderangebot wahrnehmen. Ihre Einschätzung
+ist für uns besonders wertvoll --- unabhängig davon, ob Sie den
+Klimabonus bereits kennen oder zum ersten Mal davon hören.
+
+\medskip
+
+\noindent
+\fbox{%
+\begin{minipage}[c]{0.95\textwidth}
+\begin{minipage}[c]{36mm}\centering\qrcode\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.72\linewidth}
+\textbf{\large Ihre Sicht in rund 3 Minuten:}\\[4pt]
+{\large\color{gublue}\href{https://\persURL}{\persURL}}\\[6pt]
+{\footnotesize QR-Code scannen oder den Link in Ihren Browser eingeben.}
+\end{minipage}
+\end{minipage}%
+}
+
+\medskip
+
+Auf der Seite finden Sie kompakte Informationen zum Klimabonus und
+können uns anschließend Ihre Einschätzung mitteilen.
+
+{\small\textbf{Hinweis zur Datenverarbeitung.}
+Mit dem Aufruf der Seite werden anonymisierte Nutzungsdaten zu
+Forschungszwecken erhoben. Eine Weitergabe Ihrer personenbezogenen Daten
+an Dritte erfolgt nicht. Datenschutzerklärung auf der Seite. Rückfragen:
+\href{mailto:klimabonus-studie@uni-frankfurt.de}{klimabonus-studie@uni-frankfurt.de}.}
+
+\closing{Vielen Dank für Ihre Zeit. Mit freundlichen Grüßen,}
+
+\end{letter}
+
+\end{document}
