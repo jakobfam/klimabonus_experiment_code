@@ -29,10 +29,11 @@ PEERS = {
         size_label='[Mitarbeitendenzahl Firma 1]',
         photo=None,         # set to e.g. 'peer_1.jpg' when uploaded
         quote=(
-            'Wir hatten den Aufwand für den Antrag völlig überschätzt. '
-            'Tatsächlich war das in einer halben Stunde erledigt – '
-            'und die Förderung war ein echter Gewinn für unsere '
-            'Investition.'
+            'Wir hatten den Aufwand über- und den wirtschaftlichen Effekt '
+            'unterschätzt. Es war eine gute Entscheidung, den Antrag im '
+            'Rahmen des Klimabonus einzureichen. Der Prozess war absolut '
+            'frustfrei, direkt und unkompliziert. Kann ich jedem '
+            'Unternehmen nur empfehlen.'
         ),
     ),
     2: dict(

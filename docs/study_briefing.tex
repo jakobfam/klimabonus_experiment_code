@@ -1,0 +1,509 @@
+% =====================================================================
+%  Klimabonus Frankfurt — Feldexperiment
+%  Studien-Briefing für die Pre-Registrierung
+%
+%  Zweck: Dieses Dokument fasst Design, erfasste Variablen und erste
+%  Hypothesen-Skizze für die Pre-Reg-Vorbereitung durch die Co-Autoren
+%  zusammen. Es ist kein finaler Pre-Analysis-Plan, sondern eine
+%  strukturierte Übersicht.
+%
+%  Kompilation:  pdflatex study_briefing.tex
+% =====================================================================
+
+\documentclass[11pt, a4paper]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+
+\definecolor{gublue}{HTML}{003865}
+\definecolor{gugrey}{HTML}{5a6573}
+\hypersetup{colorlinks=true, urlcolor=gublue, linkcolor=gublue, citecolor=gublue}
+\setlist{noitemsep, topsep=2pt}
+
+\setkomafont{title}{\color{gublue}\bfseries}
+\setkomafont{section}{\color{gublue}\Large\bfseries}
+\setkomafont{subsection}{\color{gublue}\large\bfseries}
+
+\renewcommand{\arraystretch}{1.15}
+\newcommand{\var}[1]{\texttt{\small #1}}
+
+\title{Klimabonus Frankfurt --- Feldexperiment\\
+\Large Studien-Briefing für die Pre-Registrierung}
+\author{Goethe-Universität Frankfurt \(\cdot\) ZEW Mannheim \(\cdot\)
+        Klimareferat Stadt Frankfurt}
+\date{Stand: \today}
+
+\begin{document}
+\maketitle
+
+% =====================================================================
+\section*{Executive Summary}
+% =====================================================================
+
+Drei-armiges randomisiertes Feldexperiment zum Förderprogramm
+\emph{Klimabonus} der Stadt Frankfurt. Etwa 20.000 Frankfurter Unternehmen
+erhalten einen \textbf{treatment-neutralen Brief} (Goethe-Universität in
+Kooperation mit dem Klimareferat) mit personalisiertem Link. Treatment-
+Zuweisung erfolgt \textbf{conditional auf Klick} (Average Treatment Effect
+on the Treated): jeder Klicker wird randomisiert einem von drei Arme der
+Informations-Webseite zugewiesen --- Kontrollgruppe (basale Programminfo),
+Stadt-Arm (zusätzlich offizielle Statistik) oder Peer-Arm (zusätzlich
+Erfahrungsbericht eines branchen- und größenmatched Peer-Unternehmens).
+Outcomes werden auf der Webseite, durch Klick-Tracking sowie über
+nachgelagerte Verknüpfung mit den Antrags-Daten der Stadt und dem
+Mannheimer Unternehmenspanel erhoben.
+
+% =====================================================================
+\section{Stichprobe und Anschreiben}
+% =====================================================================
+
+\paragraph{Stichprobenrahmen.} Etwa 20.000 Frankfurter Unternehmen,
+gezogen aus dem Mannheimer Unternehmenspanel; ausgeschlossen werden
+Unternehmen, die bereits einen Klimabonus-Antrag gestellt haben (nach
+Stadt-Admin-Daten).
+
+\paragraph{Anschreiben.} Identischer, treatment-neutraler Brief
+(KOMA-Script Vorlage in \var{outreach/letter.tex}) und parallele E-Mail-
+Version (\var{outreach/email.tex}). Inhaltlich werden lediglich die
+Existenz des Programms und die Eckdaten (bis zu 100.000~EUR pro Maßnahme,
+21 Mio Budget, Liste der geförderten Maßnahmen ohne Statistik) genannt.
+Studie wird als gemeinsames Forschungsprojekt der Goethe-Universität und
+des Klimareferats deklariert; eine kurze Datenschutzklausel weist auf die
+Forschungsnutzung hin. Brief und E-Mail enthalten einen \textbf{QR-Code
+und einen Kurzlink} (z.\,B. \texttt{klimabonus-frankfurt.de/[ID]}), der
+unternehmens-individuell ist.
+
+\paragraph{Erwartete Klickrate.} Konservativ angenommen rund
+\textbf{10\,\% Response} $\Rightarrow$ ca.~2.000 Klicker $\Rightarrow$
+ca.~660 Beobachtungen pro Treatment-Arm.
+
+\paragraph{Identifikationsstrategie.} ATT, nicht ITT. Die Treatment-
+Variation existiert erst nach dem Klick. Wir argumentieren auf der
+Population der \emph{marginal-engagierten Unternehmen} --- diejenigen,
+die durch Informationsinterventionen erreichbar sind. Ein Stage-1-Modell
+\(P(\text{click} \mid \text{MUP-Kovariaten})\) charakterisiert die Klicker
+gegen die Frankfurter SME-Population (externe Validität).
+
+% =====================================================================
+\section{Treatment-Arme}
+% =====================================================================
+
+Alle Arme zeigen die identische Webseite mit Ausnahme einer einzelnen
+oberen Sektion (\enquote{Treatment Block}). Alle übrigen Seitenbestandteile
+(Hero, Wirtschaftlichkeits-Karten, Förderhöhen-Tabelle, Antragsablauf-
+Akkordeon, Kontaktbereich, Anschreiben-Logos) sind \textbf{strikt identisch}
+über alle drei Arme.
+
+\subsection*{Arm 1 --- Control (Basisinformation)}
+Kurzer neutraler Absatz, der die Komplementarität von Klimaschutz und
+wirtschaftlicher Investition skizziert. Keine Statistiken, kein
+Erfahrungsbericht.
+
+\subsection*{Arm 2 --- City (T1, offizielle Statistik)}
+Stat-Box mit drei prominent dargestellten Zahlen, attribuiert dem
+Klimareferat der Stadt Frankfurt:
+\begin{itemize}
+    \item \textbf{96\,\%} der Anträge werden bewilligt
+    \item \textbf{15~Min.} durchschnittlich für den Antrag
+    \item \textbf{7.883,75~\euro} durchschnittliche Förderzusage je Antrag
+\end{itemize}
+Darunter sekundäre Stats: ø~11~Tage Bearbeitungszeit Förderantrag,
+ø~32~Tage Bearbeitungszeit Auszahlungsantrag.
+
+\subsection*{Arm 3 --- Peer (T2, peer-bundled testimonial)}
+Identische Stat-Box wie in Arm~2 \textbf{plus} darüber eine Peer-Quote-Card:
+Foto, Zitat in der Ich-Form, Name, Branche, Größenklasse eines
+\emph{vergleichbaren} Frankfurter Unternehmens. Sechs Peer-Profile sind in
+\var{klimabonus/peers.py} angelegt; das Matching Empfänger~$\rightarrow$~Peer
+erfolgt offline (R/Stata) entlang Branche $\times$ Größenklasse und wird
+in der \var{assignment.csv} kodiert (Variable \var{peer\_id}~$\in \{1,\ldots,6\}$).
+
+\paragraph{Methodische Einschränkung.} Der Peer-Arm bündelt eine
+Quellenverschiebung (City $\rightarrow$ Peer) mit einer Format-Erweiterung
+(Foto $+$ Zitat). Wir interpretieren den Peer-vs-City-Vergleich daher als
+marginale Wirkung eines \emph{peer-bundled testimonial} gegenüber einer
+Aggregat-Statistik. Diese Bündelung entspricht der ökologisch validen Form,
+in der Peer-Information in Praxis kommuniziert wird.
+
+% =====================================================================
+\section{Webseiten-Ablauf}
+% =====================================================================
+
+Nach Klick auf den personalisierten Link durchläuft die/der
+Teilnehmer:in einen festen, treatment-konstanten Seitenablauf:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Welcome-Splash} --- automatisches Forwarding,
+        Cobranding-Logo, ca.~50~ms sichtbar.
+    \item \textbf{Landing-Page} --- enthält den Treatment-Block sowie alle
+        identischen Sektionen (Hero, Wirtschaftlichkeits-Karten,
+        Förderhöhen-Tabelle, Antragsablauf-Akkordeon, Kontaktbereich,
+        Survey-CTA, Direkt-Antrag-CTA). Cookie-Banner erscheint nach 8~Sek;
+        Survey-Prompt-Modal nach 2~Min, falls die Person noch keinen
+        Survey-CTA geklickt hat.
+    \item \textbf{Outcomes-Page} --- Forschungs-Einwilligung (\textbf{required}),
+        Bewerbungs-Likelihood-Slider, Checkbox-Grid relevanter
+        Fördermaßnahmen, Checkbox-Grid wahrgenommener Hindernisse.
+    \item \textbf{Beliefs-Page} --- sieben Items (siehe Variablenliste).
+        Alle Beliefs sind \textbf{self-referent} formuliert (\enquote{Ihr
+        Antrag / Ihr Unternehmen}). Schließt mit einer Meta-Frage zur
+        Confidence in den eigenen Einschätzungen.
+    \item \textbf{Commitment-Page} --- Position in der Firma, Wunsch nach
+        Folgekontakt (E-Mail, Veranstaltung, Rückruf) und Einwilligung zur
+        Datenweitergabe an das Klimareferat (nur sichtbar, wenn
+        mindestens ein Kontaktwunsch \enquote{Ja} ist).
+    \item \textbf{Abschluss-Page} --- Antragsportal-CTA (extern, in neuem
+        Tab), Freitext für Feedback zu städtischen Förderungen allgemein,
+        Submit-Button.
+    \item \textbf{End-Page} --- identische Darstellung wie Landing
+        (mit demselben Treatment-Block), aber ohne Survey-CTA. Erlaubt
+        Wiederlesen der Informationen unbegrenzt.
+\end{enumerate}
+
+% =====================================================================
+\section{Variablenliste}
+% =====================================================================
+
+Vollständige Liste aller erhobenen Felder, gegliedert nach Klassen.
+Alle Felder werden im \var{custom\_export}-CSV exportiert (oTree Admin
+\(\rightarrow\) Export \(\rightarrow\) Custom export). Variablen-Namen
+entsprechen den Spaltennamen im Export.
+
+\subsection{Treatment-Zuweisung und Sample-Identifikation}
+
+\begin{longtable}{@{}p{3.6cm} p{2.0cm} p{9.5cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Typ} & \textbf{Beschreibung} \\
+\midrule
+\endhead
+\var{session\_code}           & str  & oTree Session-Identifier \\
+\var{participant\_code}       & str  & oTree-interner Teilnehmer-Code \\
+\var{participant\_label}      & str  & Personalisierter Identifier aus dem Brief (z.\,B. \var{FIRM\_12345}) \\
+\var{treatment}               & int  & 1 = Control, 2 = City (T1), 3 = Peer (T2) \\
+\var{treatment\_label}        & str  & Klartext-Label des Treatments \\
+\var{peer\_id}                & int  & Peer-Firma 1--6, nur bei T2; offline-gematcht \\
+\var{stratum}                 & str  & Stratifizierungslabel (z.\,B. \var{handwerk\_klein}) \\
+\var{label\_valid}            & bool & \var{True}, wenn \var{participant\_label} in \var{assignment.csv} gefunden wurde \\
+\bottomrule
+\end{longtable}
+
+\subsection{Einwilligungen}
+
+\begin{longtable}{@{}p{3.6cm} p{2.0cm} p{9.5cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Typ} & \textbf{Beschreibung} \\
+\midrule
+\endhead
+\var{consent\_analytics}      & bool  & Cookie-Banner: Zustimmung zu Nutzungsdaten-Erhebung \\
+\var{consent\_analytics\_ts}  & float & Unix-Zeitstempel des Klicks \\
+\var{consent\_research}       & bool  & Outcomes-Seite: Forschungs-Teilnahmeerklärung (Submit-blockierend) \\
+\var{consent\_research\_ts}   & float & Unix-Zeitstempel des Klicks \\
+\var{consent\_contact}        & bool  & Commitment-Seite: Erlaubnis zur Datenweitergabe an Klimareferat \\
+\var{consent\_contact\_ts}    & float & Unix-Zeitstempel des Klicks \\
+\bottomrule
+\end{longtable}
+
+\subsection{Passive Engagement / Aufmerksamkeit}
+
+\begin{longtable}{@{}p{3.6cm} p{2.0cm} p{9.5cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Typ} & \textbf{Beschreibung} \\
+\midrule
+\endhead
+\var{time\_landing}           & float & Sekunden auf Landing-Seite \\
+\var{time\_outcomes}          & float & Sekunden auf Outcomes-Seite \\
+\var{time\_beliefs}           & float & Sekunden auf Beliefs-Seite \\
+\var{time\_commitment}        & float & Sekunden auf Commitment-Seite \\
+\var{time\_abschluss}         & float & Sekunden auf Abschluss-Seite \\
+\var{scroll\_landing}         & int   & Maximaler Scroll-Anteil auf Landing (Prozent) \\
+\var{expanded\_process}       & bool  & \enquote{So läuft der Antrag ab}-Akkordeon geöffnet (Klimareferat-Beratung sichtbar gemacht) \\
+\var{prompt\_shown\_ts}       & float & Zeitstempel: Survey-Prompt-Modal erschienen (nach 2~Min Lesezeit) \\
+\var{prompt\_used}            & bool  & Modal-CTA \enquote{Zur Befragung} geklickt \\
+\var{prompt\_dismissed\_ts}   & float & Zeitstempel: Modal weggeklickt (X / Backdrop / Esc) \\
+\var{page\_reached}           & int   & Höchste erreichte Page-Nummer (Drop-off-Indikator) \\
+\var{completed}               & bool  & Studie vollständig abgeschlossen \\
+\bottomrule
+\end{longtable}
+
+\subsection{Hauptoutcomes (Self-Report, Outcomes-Page)}
+
+\begin{longtable}{@{}p{3.6cm} p{2.0cm} p{9.5cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Typ} & \textbf{Beschreibung} \\
+\midrule
+\endhead
+\var{application\_likelihood} & int 0--10  & \enquote{Wie wahrscheinlich ist es, dass Sie in den nächsten 12~Monaten einen Klimabonus-Antrag stellen?} (Slider) \\
+\midrule
+\multicolumn{3}{@{}l@{}}{\textbf{Relevante Maßnahmen (Mehrfachauswahl, randomisierte Reihenfolge)}} \\
+\var{measure\_solar}              & bool & Photovoltaik / Solarthermie \\
+\var{measure\_solar\_green\_roof} & bool & Solar-Gründächer \\
+\var{measure\_battery}            & bool & Batteriespeicher (mit neuer PV) \\
+\var{measure\_greening}           & bool & Dach-, Fassaden- und Hofbegrünung \\
+\var{measure\_rainwater}          & bool & Regenwasserspeicher \\
+\var{measure\_drinking\_fountain} & bool & Trinkbrunnen \\
+\var{measure\_already\_done}      & bool & Ähnliche Maßnahmen bereits umgesetzt (Pioneer-Indikator) \\
+\var{measure\_other}              & bool & Sonstiges \\
+\var{measure\_other\_text}        & str  & Freitext zu \enquote{Sonstiges} \\
+\var{measure\_none}               & bool & Keine davon \\
+\var{measures\_order}             & str  & Anzeigereihenfolge (Komma-getrennt) \\
+\midrule
+\multicolumn{3}{@{}l@{}}{\textbf{Hindernisse (Mehrfachauswahl, randomisierte Reihenfolge)}} \\
+\var{barrier\_time}               & bool & Zu hoher Zeitaufwand \\
+\var{barrier\_complexity}         & bool & Zu komplizierter Antrag \\
+\var{barrier\_uncertainty}        & bool & Unsicherheit, ob bewilligt \\
+\var{barrier\_amount}             & bool & Fördersumme zu gering \\
+\var{barrier\_property}           & bool & Kein passendes Gebäude / Grundstück \\
+\var{barrier\_priority}           & bool & Thema hat keine Priorität \\
+\var{barrier\_already\_applied}   & bool & Fördermittel bereits beantragt / genutzt (Screening, kein Hindernis i.\,e.\,S.) \\
+\var{barrier\_other}              & bool & Sonstiges \\
+\var{barrier\_other\_text}        & str  & Freitext zu \enquote{Sonstiges} \\
+\var{barriers\_order}             & str  & Anzeigereihenfolge \\
+\bottomrule
+\end{longtable}
+
+\subsection{Beliefs (Beliefs-Page, alle self-referent)}
+
+\begin{longtable}{@{}p{3.8cm} p{2.0cm} p{9.3cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Typ} & \textbf{Beschreibung} \\
+\midrule
+\endhead
+\var{belief\_approval\_rate}      & int 0--100   & \enquote{Wie wahrscheinlich ist es, dass Ihr Klimabonus-Antrag bewilligt würde?} (Prozent-Slider) \\
+\var{belief\_funding\_amount}     & int (EUR)    & \enquote{Wie hoch wäre die Förderung für Ihr Unternehmen?} (Freie Zahleneingabe, 0--100.000) \\
+\var{belief\_effort}              & ord. 1--5    & Zeitaufwand für das Ausfüllen Ihres Antrags ($<\!30\,$min bis $>\!1\,$Arbeitstag) \\
+\var{belief\_processing\_time}    & ord. 1--5    & Zeit bis Bescheid Ihres Antrags ($<\!2\,$W bis $>\!6\,$M) \\
+\var{belief\_payout\_effort}      & ord. 1--5    & Aufwand für Nachweis-Einreichung nach Umsetzung ($<\!30\,$min bis $>\!1\,$AT) \\
+\var{belief\_hassle}              & ord. 1--5    & Erwartete Gesamtbelastung des Antragsprozesses (\enquote{Wie belastend\ldots}) \\
+\var{belief\_confidence}          & int 1--10    & Meta-Frage am Ende: Sicherheit in den eigenen obigen Einschätzungen (Posterior-Precision-Proxy) \\
+\bottomrule
+\end{longtable}
+
+\subsection{Befragte:r-Charakteristik, Commitment-Ladder, Feedback}
+
+\begin{longtable}{@{}p{3.6cm} p{2.0cm} p{9.5cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Typ} & \textbf{Beschreibung} \\
+\midrule
+\endhead
+\var{respondent\_position}        & cat. & Position in der Firma (Geschäftsführung, Bereichsleitung, kaufm., techn., MA, Sonstige) \\
+\var{respondent\_position\_other} & str  & Freitext bei \enquote{Sonstige Position} \\
+\var{wants\_email}                & bool & Wunsch nach Info-E-Mail \\
+\var{email\_address}              & str  & E-Mail (bedingt erforderlich, wenn \var{wants\_email} oder \var{wants\_event}) \\
+\var{wants\_event}                & bool & Wunsch nach Einladung zur Klimabonus-Veranstaltung \\
+\var{wants\_callback}             & bool & Wunsch nach Rückruf vom Klimareferat \\
+\var{phone\_number}               & str  & Telefonnummer (bedingt erforderlich) \\
+\var{feedback\_subsidies}         & str  & Freitext-Feedback zu städtischen Förderungen allgemein \\
+\bottomrule
+\end{longtable}
+
+\subsection{Revealed Actions (Klick-Tracking)}
+
+\begin{longtable}{@{}p{3.8cm} p{2.0cm} p{9.3cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Typ} & \textbf{Beschreibung} \\
+\midrule
+\endhead
+\var{clicked\_portal\_landing}        & bool  & \enquote{Direkt zum Antrag}-Link auf der Landing-Seite geklickt (Fast Path, vor Survey) \\
+\var{clicked\_portal\_landing\_ts}    & float & Unix-Zeitstempel des Klicks \\
+\var{clicked\_application\_portal}    & bool  & \enquote{Jetzt Klimabonus beantragen}-Button auf Abschluss geklickt (Slow Path, nach Survey) \\
+\var{clicked\_application\_portal\_ts}& float & Unix-Zeitstempel des Klicks \\
+\bottomrule
+\end{longtable}
+
+% =====================================================================
+\section{Externe Datenquellen (Post-Field)}
+% =====================================================================
+
+\subsection{Admin-Daten der Stadt Frankfurt (Klimareferat)}
+
+Schriftliche Zusage bestätigt. Verknüpfung über pseudonymisierten
+Firmen-Identifier. Erhobene Felder pro Empfänger der Studie (nicht nur
+Klicker --- ITT-Sample über alle 20.000):
+
+\begin{itemize}
+    \item Tatsächliche Antragsstellung binnen 6 / 12 / 24~Monaten nach Field
+    \item Bewilligungsstatus
+    \item Förderzusage in Euro (granted amount)
+    \item Maßnahmenkategorie (PV, Begrünung, Speicher, \ldots)
+    \item Zeitstempel: Antragseinreichung, Bescheid, Auszahlungsantrag, Festsetzung
+    \item Tatsächlich ausgezahlte Fördersumme (Auszahlungsantrag)
+\end{itemize}
+
+\subsection{Mannheimer Unternehmenspanel (MUP)}
+
+Pre-Treatment-Charakteristik für alle 20.000 angeschriebenen Firmen.
+Geplante Kovariaten:
+
+\begin{itemize}
+    \item Mitarbeiterzahl / Größenklasse
+    \item Branche (WZ-Code)
+    \item Gründungsjahr
+    \item Umsatz, Bilanzsumme (sofern verfügbar)
+    \item Vorherige Förderhistorie (subsidies allg.)
+    \item Investitionsquote / CAPEX-Indikatoren (sofern verfügbar)
+\end{itemize}
+
+\subsection{Pioneer-Identifikation}
+
+\emph{Pioneer-Definition} (zu pre-registrieren): Frankfurter Unternehmen,
+die in der \textbf{ersten Welle des Klimabonus} (ersten 12 Monate seit
+Programm-Launch) einen Antrag gestellt haben --- behavioral identifiziert
+aus den Admin-Daten der Stadt. Aus dem MUP-Profil dieser
+First-Wave-Antragsteller wird ein \textbf{Pioneer-Profil} abgeleitet
+(welche MUP-Achsen, welche Schwellen --- offene Pre-Reg-Entscheidung).
+Heterogenitätstest: Klicker mit hohem Pioneer-Profil-Match reagieren
+stärker auf T1/T2; insbesondere T2. \emph{Transferability-Argument}: das
+Pioneer-Profil ist out-of-sample identifizierbar in anderen Städten ohne
+eigene Klimabonus-Historie.
+
+% =====================================================================
+\section{Hypothesen-Skizze (vorläufig)}
+% =====================================================================
+
+\paragraph{Identifikationsobjekt.} Average Treatment Effect on the Treated
+(ATT). Alle Effekte sind interpretiert auf der Subpopulation der
+Letter-Klicker (geschätzt ${\sim}\,2.000$).
+
+\begin{description}[font=\bfseries, leftmargin=1.4em, style=nextline]
+    \item[H1 (Misperception Correction).]
+        Beide Behandlungen korrigieren Misperceptions in self-referenten
+        Beliefs (Approval, Funding, Effort, Processing, Hassle) relativ
+        zur Control-Baseline.
+
+    \item[H2 (Peer $>$ City), Primär-Richtung.]
+        Peer-Testimonial verschiebt self-referente Beliefs und
+        Engagement-Outcomes stärker als Stadt-Aggregat-Statistik ---
+        weil Identitäts-Match (Branche $\times$ Größe) die Selbst-
+        Projektion erleichtert.
+
+    \item[H2$'$ (City $>$ Peer), Counter-Richtung.]
+        Stadt-Aggregat dominiert in Subgruppen mit hohem Behörden-
+        Vertrauen und niedriger Peer-Salience.
+
+    \item[H3 (Implementation Friction Residual).]
+        Treatment-Effekte sind größer auf low-cost-Engagement-Margen
+        (E-Mail-Opt-In, Event-Anfrage) als auf die Antrags-Klick-Rate
+        und die tatsächliche Admin-Antragsstellung.
+
+    \item[H4 (Firmengröße $\times$ Treatment), exploratory.]
+        Peer-Effekt größer bei kleineren Firmen (Owner-Manager-
+        Entscheidung).
+
+    \item[H5 (Branche $\times$ Treatment), exploratory.]
+        Peer-Effekt größer in Branchen mit geringer Peer-Adoptions-
+        Sichtbarkeit (Dienstleistung vs. Industrie).
+
+    \item[H6 (Consent-Selection als Outcome), primär.]
+        Final-Page-Consent-Rate ist eigenständiges Outcome, kein
+        Mediator (Selection auf Consent ist confounder).
+
+    \item[H7 (Behörden-Vertrauen $\times$ Treatment), exploratory.]
+        City-vs-Peer-Differenz steigt im Baseline-Vertrauen in die
+        Stadtverwaltung (Proxy: Bezirks-Indikatoren aus MUP).
+
+    \item[H8 (Pioneer-Profil $\times$ Treatment), primär.]
+        Klicker, deren MUP-Profil dem behavioralen Pioneer-Profil
+        (First-Wave-Antragsteller) ähnelt, reagieren stärker auf
+        beide Treatments, insbesondere auf T2.
+
+    \item[H9 (Long-Run Application Effects), primär.]
+        ATT-Effekt von T1 und T2 auf tatsächliche Klimabonus-Antrag-
+        stellung 12~Monate nach Field-Phase (Admin-Daten der Stadt).
+        Robustness: 6 und 24 Monate.
+
+    \item[H10 (Application Quality), exploratory.]
+        Conditional auf Antragsstellung: durchschnittliche Förderzusage
+        und Maßnahmenkategorie unterscheiden sich zwischen T1- und
+        T2-induzierten Anträgen (qualitative Selection in Maßnahmen).
+
+    \item[H11 (Posterior Precision), primär.]
+        \var{belief\_confidence} steigt in T1 und T2 gegenüber Control
+        (Treatments narrow priors), \emph{differentielle} Erhöhung
+        diskriminiert Aggregat-Anker- vs. Peer-Identifikations-
+        Mechanismus.
+\end{description}
+
+% =====================================================================
+\section{Power und Multiple-Testing}
+% =====================================================================
+
+\begin{tabularx}{\linewidth}{@{}lXl@{}}
+\toprule
+\textbf{Test} & \textbf{Detektierbar (80\,\% Power)} & \textbf{Status} \\
+\midrule
+H1--H3, H6, H8-Main, H9, H11 (Self-Report-Outcomes)
+    & ${\geq}\,0.3$ SD bzw. ${\geq}\,5$\,pp ($N{\sim}660$/Arm)
+    & primär \\
+H9 (Admin-Outcome bei Klickern, baseline ${\sim}5{-}10\,\%$)
+    & ${\sim}\,5{-}7$\,pp
+    & primär, marginal \\
+H4, H5, H7, H8-Subtests, H10 (Heterogenitäten)
+    & ${\geq}\,8{-}10$\,pp
+    & exploratory \\
+\bottomrule
+\end{tabularx}
+
+\paragraph{Multiple-Testing.} Romano-Wolf-Korrektur für alle exploratory
+Hypothesen; primäre Tests einzeln spezifiziert.
+
+\paragraph{Pre-Treatment-Belief-Survey.} \emph{Nicht} durchgeführt.
+Control-Arm dient als Counterfactual-Baseline gegen die echten Klimareferat-
+Statistiken (Misperception-Gap-Identifikation indirekt). Drei explorative
+Interviews mit Frankfurter Unternehmen motivieren die Misperception-
+Theorie qualitativ (zitierbar im Manuskript).
+
+% =====================================================================
+\section{Offene Punkte für die Pre-Registrierung}
+% =====================================================================
+
+Vor Field-Start zu entscheiden / zu pre-registrieren:
+
+\begin{itemize}
+    \item \textbf{Pioneer-Profil-Definition}: welche MUP-Variablen
+        (Investitionsquote, Gründungsjahr, vorherige Förderhistorie,
+        \ldots), welche Schwellen?
+    \item \textbf{Selection-Model}: welche MUP-Variablen für
+        \(P(\text{click})\); Stage-2-Specification (Lasso / PDS-Adjustment
+        / IMR-Korrektur).
+    \item \textbf{Primary Long-Run Window}: 12 oder 24~Monate post-Field.
+    \item \textbf{Multiple-Testing-Procedure}: Romano-Wolf vs.\
+        Benjamini-Hochberg.
+    \item \textbf{Sechs Peer-Profile}: echte Zitate, Fotos, Namen der
+        sechs Frankfurter Peer-Unternehmen (in Vorbereitung; Anfrage durch
+        Klimareferat).
+    \item \textbf{Replikation in einer zweiten Stadt} als Pioneer-
+        Transferability-Test (optional, Skalierungsargument).
+    \item \textbf{AEA RCT Registry}: Pre-Registrierung mit Zeitstempel
+        \emph{vor} Field-Start.
+\end{itemize}
+
+% =====================================================================
+\section*{Technische Referenz}
+% =====================================================================
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+oTree-App-Repository  & \var{github.com/[user]/klimabonus\_experiment\_code} \\
+Live-Deployment       & Heroku \\
+Treatment-Zuordnung   & \var{klimabonus/data/assignment.csv} (offline gepflegt) \\
+Peer-Profile          & \var{klimabonus/peers.py} \\
+Anschreiben           & \var{outreach/letter.tex}, \var{outreach/email.tex} \\
+Variablen-Schema      & \var{klimabonus/\_\_init\_\_.py} (Player-Modell) \\
+\end{tabularx}
+
+\bigskip
+\noindent\emph{Dieses Dokument ersetzt nicht den finalen Pre-Analysis Plan.
+Es dient als Briefing-Vorlage für die Co-Autoren-Diskussion.}
+
+\end{document}
