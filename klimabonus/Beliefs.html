@@ -8,66 +8,59 @@
         <span class="kicker">Ihre Einschätzung zum Antragsprozess</span>
         <h1>Ihre Einschätzung zum Klimabonus</h1>
         <p class="lede">
-            Wie schätzen Sie das Förderprogramm aus heutiger Sicht ein? Es gibt
-            keine richtigen oder falschen Antworten – uns interessiert Ihre
-            persönliche Einschätzung.
+            Wie schätzen Sie das Förderprogramm aus heutiger Sicht für
+            <strong>Ihr Unternehmen</strong> ein? Es gibt keine richtigen
+            oder falschen Antworten — uns interessiert Ihre persönliche
+            Einschätzung.
         </p>
     </div>
 </section>
 
+{# ============= 1. APPROVAL (self-referent) ============= #}
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
-        <h2>Was schätzen Sie: Wie viel Prozent der eingereichten Klimabonus-Anträge werden bewilligt?</h2>
+        <h2>Wie wahrscheinlich ist es Ihrer Einschätzung nach, dass Ihr Klimabonus-Antrag bewilligt würde?</h2>
 
         <div class="slider-wrap">
             <input type="range" min="0" max="100" step="1"
                    name="belief_approval_rate" id="belief_approval_rate"
-                   value="50" class="slider" data-untouched="true"
-                   oninput="this.removeAttribute('data-untouched'); document.getElementById('belief_approval_rate_val').textContent = this.value;">
+                   value="0" class="slider" data-untouched="true">
             <div class="slider-scale">
                 <span>0&nbsp;%</span>
                 <span class="slider-value-display">
-                    <strong id="belief_approval_rate_val">—</strong>
+                    <strong id="belief_approval_rate_val">—</strong>&nbsp;%
                 </span>
                 <span>100&nbsp;%</span>
             </div>
-            <p class="slider-hint">Bitte bewegen Sie den Schieberegler, um zu antworten.</p>
+            <p class="slider-hint">Bitte klicken Sie auf die Skala, um zu antworten.</p>
         </div>
     </div>
 </section>
 
+{# ============= 2. FUNDING (NEU, self-referent, free-text number) ============= #}
 <section class="content-block">
     <div class="content-inner form-section">
-        <h2>Wie lange dauert Ihrer Einschätzung nach die Bearbeitung eines Klimabonus-Antrags – von der Beantragung bis zur Auszahlung?</h2>
-
-        <div class="radio-stack">
-            <label class="radio-row">
-                <input type="radio" name="belief_processing_time" value="1" required>
-                <span>Weniger als 2&nbsp;Wochen</span>
-            </label>
-            <label class="radio-row">
-                <input type="radio" name="belief_processing_time" value="2">
-                <span>2 – 4&nbsp;Wochen</span>
-            </label>
-            <label class="radio-row">
-                <input type="radio" name="belief_processing_time" value="3">
-                <span>1 – 3&nbsp;Monate</span>
-            </label>
-            <label class="radio-row">
-                <input type="radio" name="belief_processing_time" value="4">
-                <span>3 – 6&nbsp;Monate</span>
-            </label>
-            <label class="radio-row">
-                <input type="radio" name="belief_processing_time" value="5">
-                <span>Mehr als 6&nbsp;Monate</span>
-            </label>
+        <h2>Wie hoch wäre Ihrer Einschätzung nach die Förderung für Ihr Unternehmen?</h2>
+        <p class="muted">
+            Bitte geben Sie eine Schätzung in Euro ein. Maximal sind
+            100.000&nbsp;€ pro Maßnahme möglich.
+        </p>
+        <div class="amount-input-wrap">
+            <input type="number"
+                   name="belief_funding_amount" id="belief_funding_amount"
+                   min="0" max="100000" step="1"
+                   inputmode="numeric"
+                   class="text-input amount-input"
+                   required>
+            <span class="amount-suffix">€</span>
         </div>
     </div>
 </section>
 
+{# ============= 3. APPLICATION EFFORT (self-referent) ============= #}
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
-        <h2>Wie hoch schätzen Sie den zeitlichen Aufwand für das Ausfüllen des Antrags?</h2>
+        <h2>Wie viel Zeit würden Sie voraussichtlich für das Ausfüllen Ihres Antrags benötigen?</h2>
 
         <div class="radio-stack">
             <label class="radio-row">
@@ -94,9 +87,40 @@
     </div>
 </section>
 
+{# ============= 4. PROCESSING TIME (self-referent) ============= #}
 <section class="content-block">
     <div class="content-inner form-section">
-        <h2>Und wie hoch schätzen Sie den bürokratischen Aufwand <em>nach</em> der Bewilligung – also für Nachweise und den Antrag auf Auszahlung?</h2>
+        <h2>Wie lange würde es Ihrer Einschätzung nach dauern, bis Ihr Antrag von der Stadt bearbeitet ist (bis zum Bescheid)?</h2>
+
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="1" required>
+                <span>Weniger als 2&nbsp;Wochen</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="2">
+                <span>2 – 4&nbsp;Wochen</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="3">
+                <span>1 – 3&nbsp;Monate</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="4">
+                <span>3 – 6&nbsp;Monate</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_processing_time" value="5">
+                <span>Mehr als 6&nbsp;Monate</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+{# ============= 5. PAYOUT EFFORT (self-referent) ============= #}
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Wie aufwendig wäre für Sie die Nachweis-Einreichung nach Abschluss der Maßnahme (Antrag auf Auszahlung)?</h2>
 
         <div class="radio-stack">
             <label class="radio-row">
@@ -119,6 +143,60 @@
                 <input type="radio" name="belief_payout_effort" value="5">
                 <span>Mehr als 1&nbsp;Arbeitstag</span>
             </label>
+        </div>
+    </div>
+</section>
+
+{# ============= 6. HASSLE / BELASTUNG (NEU, self-referent) ============= #}
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Wie belastend erwarten Sie den gesamten Klimabonus-Antragsprozess für Ihr Unternehmen?</h2>
+
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="belief_hassle" value="1" required>
+                <span>Überhaupt nicht belastend</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_hassle" value="2">
+                <span>Wenig belastend</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_hassle" value="3">
+                <span>Mittel</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_hassle" value="4">
+                <span>Eher belastend</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="belief_hassle" value="5">
+                <span>Sehr belastend</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+{# ============= 7. CONFIDENCE in own beliefs (NEU, am ENDE) ============= #}
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Wie sicher sind Sie sich insgesamt bei Ihren obigen Einschätzungen zum Klimabonus?</h2>
+        <p class="muted">
+            Eine Gesamteinschätzung über alle Ihre vorherigen Antworten.
+        </p>
+
+        <div class="slider-wrap">
+            <input type="range" min="1" max="10" step="1"
+                   name="belief_confidence" id="belief_confidence"
+                   value="1" class="slider" data-untouched="true">
+            <div class="slider-scale">
+                <span>1<br><small>sehr unsicher</small></span>
+                <span class="slider-value-display">
+                    <strong id="belief_confidence_val">—</strong>
+                </span>
+                <span>10<br><small>sehr sicher</small></span>
+            </div>
+            <p class="slider-hint">Bitte klicken Sie auf die Skala, um zu antworten.</p>
         </div>
 
         <button class="btn btn-primary" type="submit">Weiter</button>
@@ -150,8 +228,42 @@
     }
     window.addEventListener('beforeunload', commit);
 
-    // Block submit if the approval-rate slider is still untouched.
+    // ---- Slider: hide thumb until first interaction; click-to-jump in one click
+    const sliders = document.querySelectorAll('.slider[data-untouched]');
+    function jumpToClick(slider, clientX) {
+        const rect = slider.getBoundingClientRect();
+        const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        const min = parseFloat(slider.min);
+        const max = parseFloat(slider.max);
+        const step = parseFloat(slider.step) || 1;
+        const raw = min + ratio * (max - min);
+        const stepped = Math.round(raw / step) * step;
+        slider.value = stepped;
+        slider.removeAttribute('data-untouched');
+        slider.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    sliders.forEach(slider => {
+        const displayId = slider.id + '_val';
+        const display = document.getElementById(displayId);
+        slider.addEventListener('input', () => {
+            if (display) display.textContent = slider.value;
+            slider.removeAttribute('data-untouched');
+        });
+        slider.addEventListener('mousedown', (e) => {
+            if (slider.hasAttribute('data-untouched')) {
+                jumpToClick(slider, e.clientX);
+            }
+        });
+        slider.addEventListener('touchstart', (e) => {
+            if (slider.hasAttribute('data-untouched') && e.touches.length) {
+                jumpToClick(slider, e.touches[0].clientX);
+            }
+        }, { passive: true });
+    });
+
+    // ---- Submit guard: block if any required input is still untouched/empty
     document.getElementById('form').addEventListener('submit', (e) => {
+        // Untouched sliders
         const untouched = document.querySelectorAll('.slider[data-untouched]');
         if (untouched.length > 0) {
             e.preventDefault();

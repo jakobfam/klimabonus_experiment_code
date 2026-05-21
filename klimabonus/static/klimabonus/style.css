@@ -56,6 +56,17 @@ nav.navbar, .otree-body, .progress { display: none !important; }
     justify-content: space-between;
     padding: 18px 24px;
 }
+/* Co-Branding-Gruppe: Goethe-Uni + ZEW nebeneinander, durch dünnen
+   weißen Trennstrich visuell als institutionelles Paar gezeigt. */
+.brand-group {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+.brand-group .brand + .brand {
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    padding-left: 18px;
+}
 .brand {
     display: flex;
     align-items: center;
@@ -849,19 +860,43 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     font-weight: 700;
 }
 
-/* Slider in "untouched" state: thumb stays VISIBLE so a single click on
-   the track immediately positions it (no double-click needed). Anti-
-   anchoring is now handled at the display level: the slider-value-display
-   shows "—" until interaction, and the submit guard still blocks based on
-   the [data-untouched] attribute (set/unset by JS). */
-.slider[data-untouched] {
-    opacity: 0.85;
-}
+/* Slider im "untouched"-State: Thumb komplett unsichtbar — kein
+   visueller Default-Anchor. Single-Click ist trotzdem garantiert, weil
+   ein JS-mousedown/touchstart-Handler die Klick-Position berechnet,
+   den Wert programmatisch setzt und das input-Event feuert. Sobald
+   data-untouched entfernt wurde, springt der Thumb sichtbar an die
+   Klick-Position. */
 .slider[data-untouched]::-webkit-slider-thumb {
-    background: var(--text-muted);
+    opacity: 0;
+    pointer-events: none;
 }
 .slider[data-untouched]::-moz-range-thumb {
-    background: var(--text-muted);
+    opacity: 0;
+    pointer-events: none;
+}
+.slider[data-untouched] {
+    background: var(--bg-tint);
+}
+
+/* Number-Eingabefeld für Belief-Funding (Free-Text-Number) */
+.amount-input-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 8px;
+}
+.amount-input {
+    width: 200px;
+    font-variant-numeric: tabular-nums;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: right;
+    padding: 12px 14px;
+}
+.amount-suffix {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gu-blue-dark);
 }
 
 .slider-hint {
@@ -1152,5 +1187,7 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     .cta-card { padding: 28px 20px; }
     .site-header-inner { padding: 14px 16px; }
     .site-nav { display: none; }
-    .brand-img { height: 42px; padding: 4px 8px; }
+    .brand-img { height: 36px; padding: 3px 6px; }
+    .brand-group { gap: 10px; }
+    .brand-group .brand + .brand { padding-left: 10px; }
 }

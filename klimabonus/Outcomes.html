@@ -48,8 +48,7 @@
         <div class="slider-wrap">
             <input type="range" min="0" max="10" step="1"
                    name="application_likelihood" id="application_likelihood"
-                   value="5" class="slider" data-untouched="true"
-                   oninput="this.removeAttribute('data-untouched'); document.getElementById('application_likelihood_val').textContent = this.value;">
+                   value="0" class="slider" data-untouched="true">
             <div class="slider-scale">
                 <span>0<br><small>Sehr unwahrscheinlich</small></span>
                 <span class="slider-value-display">
@@ -57,7 +56,7 @@
                 </span>
                 <span>10<br><small>Sehr wahrscheinlich</small></span>
             </div>
-            <p class="slider-hint">Bitte bewegen Sie den Schieberegler, um zu antworten.</p>
+            <p class="slider-hint">Bitte klicken Sie auf die Skala, um zu antworten.</p>
         </div>
     </div>
 </section>
@@ -200,6 +199,39 @@
                 consentCb.checked ? (Date.now() / 1000).toFixed(2) : '';
         });
     }
+
+    // ---- Slider: hide thumb until first interaction; click-to-jump in one click
+    const sliders = document.querySelectorAll('.slider[data-untouched]');
+    function jumpToClick(slider, clientX) {
+        const rect = slider.getBoundingClientRect();
+        const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        const min = parseFloat(slider.min);
+        const max = parseFloat(slider.max);
+        const step = parseFloat(slider.step) || 1;
+        const raw = min + ratio * (max - min);
+        const stepped = Math.round(raw / step) * step;
+        slider.value = stepped;
+        slider.removeAttribute('data-untouched');
+        slider.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    sliders.forEach(slider => {
+        const displayId = slider.id + '_val';
+        const display = document.getElementById(displayId);
+        slider.addEventListener('input', () => {
+            if (display) display.textContent = slider.value;
+            slider.removeAttribute('data-untouched');
+        });
+        slider.addEventListener('mousedown', (e) => {
+            if (slider.hasAttribute('data-untouched')) {
+                jumpToClick(slider, e.clientX);
+            }
+        });
+        slider.addEventListener('touchstart', (e) => {
+            if (slider.hasAttribute('data-untouched') && e.touches.length) {
+                jumpToClick(slider, e.touches[0].clientX);
+            }
+        }, { passive: true });
+    });
 
     // ---- Block submit if any slider is still untouched ----
     document.getElementById('form').addEventListener('submit', (e) => {

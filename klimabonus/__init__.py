@@ -155,6 +155,32 @@ class Player(BasePlayer):
         ],
         label='Bürokratischer Aufwand nach Bewilligung (Nachweise, Auszahlungsantrag)',
     )
+    # Self-referential funding amount belief (free-text number input, EUR).
+    belief_funding_amount = models.IntegerField(
+        min=0, max=100000, blank=True,
+        label='Erwartete Förderung für das eigene Unternehmen (€)',
+    )
+    # Self-referential perceived overall hassle / burden of the application
+    # process. "Belastend" wording per coauthor request.
+    belief_hassle = models.IntegerField(
+        choices=[
+            [1, 'Überhaupt nicht belastend'],
+            [2, 'Wenig belastend'],
+            [3, 'Mittel'],
+            [4, 'Eher belastend'],
+            [5, 'Sehr belastend'],
+        ],
+        label='Erwartete Gesamt-Belastung durch den Klimabonus-Antragsprozess',
+    )
+    # Posterior precision / belief confidence — meta-question at end of the
+    # belief block. Replaces the earlier "credibility of shown info" item,
+    # which was ill-defined for the Control arm (no specific info to rate).
+    # 1 = sehr unsicher, 10 = sehr sicher. Treatment should narrow priors
+    # → confidence should be higher in T1 and T2 than in Control.
+    belief_confidence = models.IntegerField(
+        min=1, max=10, blank=True,
+        label='Sicherheit in den eigenen Belief-Einschätzungen (Bayesian posterior precision)',
+    )
 
     # ---- Respondent role (covariate) ----
     respondent_position = models.StringField(
@@ -394,8 +420,10 @@ class Outcomes(Page):
 class Beliefs(Page):
     form_model = 'player'
     form_fields = [
-        'belief_approval_rate', 'belief_processing_time',
-        'belief_effort', 'belief_payout_effort',
+        'belief_approval_rate', 'belief_funding_amount',
+        'belief_effort', 'belief_processing_time', 'belief_payout_effort',
+        'belief_hassle',
+        'belief_confidence',
         'time_beliefs',
     ]
 
@@ -520,8 +548,9 @@ def custom_export(players):
         'barrier_amount', 'barrier_property', 'barrier_priority',
         'barrier_already_applied',
         'barrier_other', 'barrier_other_text', 'barriers_order',
-        'belief_approval_rate', 'belief_processing_time',
-        'belief_effort', 'belief_payout_effort',
+        'belief_approval_rate', 'belief_funding_amount',
+        'belief_effort', 'belief_processing_time', 'belief_payout_effort',
+        'belief_hassle', 'belief_confidence',
         'respondent_position', 'respondent_position_other',
         'wants_email', 'email_address',
         'wants_event',
@@ -570,9 +599,12 @@ def custom_export(players):
             p.field_maybe_none('barrier_other_text') or '',
             p.field_maybe_none('barriers_order') or '',
             p.field_maybe_none('belief_approval_rate'),
-            p.field_maybe_none('belief_processing_time'),
+            p.field_maybe_none('belief_funding_amount'),
             p.field_maybe_none('belief_effort'),
+            p.field_maybe_none('belief_processing_time'),
             p.field_maybe_none('belief_payout_effort'),
+            p.field_maybe_none('belief_hassle'),
+            p.field_maybe_none('belief_confidence'),
             p.field_maybe_none('respondent_position') or '',
             p.field_maybe_none('respondent_position_other') or '',
             p.field_maybe_none('wants_email'),
