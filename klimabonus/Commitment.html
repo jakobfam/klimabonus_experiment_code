@@ -130,7 +130,41 @@
                    maxlength="40" class="text-input"
                    placeholder="z.B. 069 1234567">
         </div>
+    </div>
+</section>
 
+{# Einwilligung erscheint nur, wenn der/die Teilnehmer:in bei mindestens
+   einer der drei Optionen (E-Mail, Veranstaltung, Rückruf) "Ja" gewählt
+   hat. Bei "Nein" zu allen gibt es nichts zu teilen. #}
+<section id="consent-contact-section" class="content-block content-block-light"
+         hidden>
+    <div class="content-inner form-section">
+        <h2>Einwilligung zur Kontaktaufnahme</h2>
+        <p>
+            Damit wir Ihre Angaben (E-Mail-Adresse und/oder
+            Telefonnummer) an das Klimareferat der Stadt Frankfurt
+            weitergeben dürfen, benötigen wir Ihre Einwilligung. Ohne
+            Einwilligung leiten wir Ihre Angaben nicht weiter.
+        </p>
+        <label class="consent-checkbox">
+            <input type="checkbox" name="consent_contact" value="True"
+                   id="consent_contact_cb">
+            <span>
+                Ich willige ein, dass die Goethe-Universität Frankfurt
+                meine Angaben (E-Mail-Adresse und/oder Telefonnummer)
+                zum Zweck der Zusendung weiterer Informationen zum
+                Klimabonus an das Klimareferat der Stadt Frankfurt
+                weitergibt. Diese Einwilligung kann ich jederzeit
+                widerrufen
+                (<a href="mailto:klimabonus-studie@uni-frankfurt.de">klimabonus-studie@uni-frankfurt.de</a>).
+            </span>
+        </label>
+        <input type="hidden" name="consent_contact_ts" id="consent_contact_ts" value="">
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="content-inner form-section">
         <button class="btn btn-primary" type="submit">Weiter</button>
     </div>
 </section>
@@ -196,6 +230,29 @@
     }
     document.querySelectorAll('input[name="wants_email"], input[name="wants_event"]').forEach(el => {
         el.addEventListener('change', updateEmailVisibility);
+    });
+
+    // ---- Einwilligung zur Kontaktaufnahme:
+    // erscheint nur, wenn mindestens eine Ja-Antwort vorliegt ----
+    const consentSection = document.getElementById('consent-contact-section');
+    const consentCb = document.getElementById('consent_contact_cb');
+    function anyContactWanted() {
+        const e = selectedRadio('wants_email')    === 'True';
+        const v = selectedRadio('wants_event')    === 'True';
+        const c = selectedRadio('wants_callback') === 'True';
+        return e || v || c;
+    }
+    function updateConsentVisibility() {
+        consentSection.hidden = !anyContactWanted();
+    }
+    document.querySelectorAll(
+        'input[name="wants_email"], input[name="wants_event"], input[name="wants_callback"]'
+    ).forEach(el => el.addEventListener('change', updateConsentVisibility));
+
+    // Timestamp setzen beim Anklicken des Consent-Checkbox
+    consentCb.addEventListener('change', () => {
+        document.getElementById('consent_contact_ts').value =
+            consentCb.checked ? (Date.now() / 1000).toFixed(2) : '';
     });
 
     // Conditional reveal for "Sonstige Position" text input

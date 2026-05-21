@@ -849,17 +849,19 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     font-weight: 700;
 }
 
-/* Slider in "untouched" state: thumb hidden until first interaction.
-   Prevents anchoring of belief / likelihood responses to the midpoint. */
+/* Slider in "untouched" state: thumb stays VISIBLE so a single click on
+   the track immediately positions it (no double-click needed). Anti-
+   anchoring is now handled at the display level: the slider-value-display
+   shows "—" until interaction, and the submit guard still blocks based on
+   the [data-untouched] attribute (set/unset by JS). */
+.slider[data-untouched] {
+    opacity: 0.85;
+}
 .slider[data-untouched]::-webkit-slider-thumb {
-    opacity: 0;
-    pointer-events: auto;     /* still clickable to "set" the value */
+    background: var(--text-muted);
 }
 .slider[data-untouched]::-moz-range-thumb {
-    opacity: 0;
-}
-.slider[data-untouched] {
-    background: linear-gradient(to right, var(--bg-tint) 0%, var(--bg-tint) 100%);
+    background: var(--text-muted);
 }
 
 .slider-hint {

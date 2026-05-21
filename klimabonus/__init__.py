@@ -415,6 +415,7 @@ class Commitment(Page):
         'wants_email', 'email_address',
         'wants_event',
         'wants_callback', 'phone_number',
+        'consent_contact', 'consent_contact_ts',
         'time_commitment',
     ]
 
@@ -444,7 +445,6 @@ class Abschluss(Page):
     form_model = 'player'
     form_fields = [
         'feedback_subsidies',
-        'consent_contact', 'consent_contact_ts',
         'clicked_application_portal', 'clicked_application_portal_ts',
         'time_abschluss',
     ]

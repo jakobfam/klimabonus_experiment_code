@@ -48,24 +48,6 @@
 
 <section class="content-block">
     <div class="content-inner form-section">
-        <h2>Einwilligung zur Kontaktaufnahme</h2>
-        <p>
-            Falls Sie auf der vorherigen Seite eine E-Mail-Adresse oder
-            Telefonnummer angegeben haben, benötigen wir Ihre Einwilligung,
-            um Sie kontaktieren zu dürfen.
-        </p>
-        <label class="consent-checkbox">
-            <input type="checkbox" name="consent_contact" value="True" id="consent_contact_cb">
-            <span>
-                Ich willige ein, dass die Goethe-Universität Frankfurt meine
-                Angaben (E-Mail-Adresse und/oder Telefonnummer) zum Zweck der
-                Zusendung weiterer Informationen zum Klimabonus an das
-                Klimareferat der Stadt Frankfurt weitergibt. Diese Einwilligung
-                kann ich jederzeit widerrufen
-                (<a href="mailto:klimabonus-studie@uni-frankfurt.de">klimabonus-studie@uni-frankfurt.de</a>).
-            </span>
-        </label>
-
         <button class="btn btn-primary" type="submit">Abschließen</button>
     </div>
 </section>
@@ -95,7 +77,6 @@
 <input type="hidden" name="time_abschluss" id="time_abschluss" value="">
 <input type="hidden" name="clicked_application_portal" id="clicked_application_portal" value="False">
 <input type="hidden" name="clicked_application_portal_ts" id="clicked_application_portal_ts" value="">
-<input type="hidden" name="consent_contact_ts" id="consent_contact_ts" value="">
 
 {% endblock %}
 
@@ -115,13 +96,6 @@
         document.getElementById('clicked_application_portal').value = 'True';
         document.getElementById('clicked_application_portal_ts').value =
             (Date.now() / 1000).toFixed(2);
-    });
-
-    // Stamp consent timestamp when checkbox is toggled
-    const cb = document.getElementById('consent_contact_cb');
-    cb.addEventListener('change', () => {
-        document.getElementById('consent_contact_ts').value =
-            cb.checked ? (Date.now() / 1000).toFixed(2) : '';
     });
 })();
 </script>
