@@ -259,6 +259,16 @@
                 jumpToClick(slider, e.touches[0].clientX);
             }
         }, { passive: true });
+        // Fallback: some browsers (older Edge, browsers with privacy
+        // extensions, certain mobile setups) don't reliably fire
+        // mousedown on range inputs. The click event is a defensive
+        // backstop — the data-untouched guard ensures jumpToClick is
+        // idempotent, so no double-jump if both fire.
+        slider.addEventListener('click', (e) => {
+            if (slider.hasAttribute('data-untouched')) {
+                jumpToClick(slider, e.clientX);
+            }
+        });
     });
 
     // ---- Submit guard: block if any required input is still untouched/empty
