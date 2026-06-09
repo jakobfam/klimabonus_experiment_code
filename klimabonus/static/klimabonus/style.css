@@ -110,11 +110,113 @@ nav.navbar, .otree-body, .progress { display: none !important; }
 .site-footer a { color: var(--gu-blue); }
 .footer-meta { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 .footer-link { font-size: 14px; }
+/* Buttons that look like links — used for Impressum/Datenschutz/Kontakt
+   so we don't need href="#" hacks. */
+.footer-link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font: inherit;
+    font-size: 14px;
+}
+.footer-link-btn:hover { color: var(--gu-blue-dark); }
+
+/* ================ Legal modal (Datenschutz/Kontakt) ================ */
+/* CRITICAL: [hidden]-Override muss VOR `.legal-modal { display: flex }`
+   nicht funktionieren — der display:flex unten hätte den browser-default
+   `[hidden]{display:none}` überstimmt und das Modal wäre immer sichtbar.
+   Daher hier die explizite hidden-Regel als erstes. */
+.legal-modal[hidden] { display: none; }
+.legal-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.legal-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 30, 50, 0.55);
+    backdrop-filter: blur(2px);
+}
+.legal-modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 86vh;
+    overflow-y: auto;
+    padding: 40px 36px 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    color: var(--text);
+    line-height: 1.55;
+}
+.legal-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px 10px;
+}
+.legal-modal-close:hover { color: var(--gu-blue-dark); }
+.legal-modal-title {
+    margin: 0 0 16px;
+    color: var(--gu-blue-dark);
+    font-size: 26px;
+}
+.legal-section h3 {
+    margin: 22px 0 6px;
+    color: var(--gu-blue-dark);
+    font-size: 16px;
+    font-weight: 600;
+}
+.legal-section p {
+    margin: 6px 0;
+    font-size: 15px;
+}
+.legal-section ul {
+    margin: 6px 0 12px 20px;
+    font-size: 15px;
+}
+.legal-section ul li { margin: 4px 0; }
+.legal-small {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 18px;
+}
+@media (max-width: 640px) {
+    .legal-modal { padding: 12px; }
+    .legal-modal-content { padding: 32px 22px 24px; }
+    .legal-modal-title { font-size: 22px; }
+    .legal-section h3 { font-size: 15px; }
+    .legal-section p, .legal-section ul { font-size: 14px; }
+}
 
 /* ================ Sections / blocks ================ */
 .hero {
     background: linear-gradient(180deg, #f9fbfd 0%, #ffffff 100%);
     border-bottom: 1px solid var(--border);
+    /* Horizontal padding here (parallel to .content-block) so the inner
+       .hero-inner can hit max-width: 880px and align left-edge with
+       .content-inner. Without this, the padding lived INSIDE the 880-px
+       limit and shifted the hero text 24 px to the right vs. body
+       sections. (Bug N1.) */
+    padding: 0 24px;
 }
 .hero-inner {
     max-width: var(--maxw);
@@ -185,11 +287,59 @@ nav.navbar, .otree-body, .progress { display: none !important; }
 }
 .content-block-light { background: var(--bg-soft); }
 .content-block-contact { background: var(--bg-tint); }
+
+/* Standalone Survey-CTA-Section zwischen Process-Akkordeon und Contact.
+   Flexbox-Container, weil text-align:center bei inline-flex-Buttons
+   (.btn-with-subtitle nutzt display:inline-flex) je nach Browser
+   inkonsistent zentriert. align-items:center garantiert es. */
+.survey-cta-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.survey-cta-section .next-step-hint {
+    text-align: left;
+    max-width: 580px;
+    width: 100%;
+    margin: 0 0 24px;
+    box-sizing: border-box;
+}
 .content-inner {
     max-width: 880px;
     margin: 0 auto;
 }
 .content-block:last-child { border-bottom: none; }
+
+/* Kompakter Intro-Block — z.B. Abschluss "Danke für Ihr Interesse"
+   (Direktive 2026-06-08: deutlich kleiner als ein normaler Hero). */
+.content-block-compact {
+    padding: 28px 24px 20px;
+}
+.h1-compact {
+    font-size: 22px;
+    margin: 0 0 6px;
+    color: var(--gu-blue-dark);
+    font-weight: 700;
+}
+
+/* Form-validation error banner. Rendered at the top of the form when
+   oTree re-renders the page after a failed submit (Page.error_message
+   returned a string, IntegerField out of range, required field missing,
+   etc.). Without this, the page silently reloads and users have no
+   feedback. (BUG D5 fix — Lena.) */
+.form-error-banner {
+    max-width: 880px;
+    margin: 24px auto 0;
+    padding: 14px 20px;
+    border: 1px solid #e0b4b4;
+    border-left: 4px solid #c0392b;
+    background: #fdf3f2;
+    color: #6b1d15;
+    border-radius: 6px;
+    font-size: 15px;
+}
+.form-error-banner strong { color: #6b1d15; }
+.form-error-banner p { margin: 4px 0 0; }
 
 h1 { font-size: 36px; margin: 0 0 16px; color: var(--gu-blue-dark); font-weight: 700; letter-spacing: -0.3px; }
 h2 { font-size: 26px; margin: 0 0 16px; color: var(--gu-blue-dark); font-weight: 700; }
@@ -239,6 +389,34 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     border: 1px solid var(--border);
 }
 .btn-ghost:hover { background: var(--bg-soft); }
+
+/* ---- Form action row: Back + Next side-by-side. DOM-Reihenfolge ist
+   Next-zuerst (damit Enter = Weiter), CSS-`order` kehrt die VISUELLE
+   Reihenfolge um: Zurück links, Weiter rechts. ---- */
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+}
+.form-actions-back  { order: 1; }
+.form-actions-next  { order: 2; margin-left: auto; }
+
+/* Single-Button-Action-Row (z.B. Abschluss "Abschließen") — etwas
+   weniger top-Margin als .form-actions, weil der Button direkt unter
+   einem Input-Element sitzt und nicht als eigene Section abgesetzt ist. */
+.form-actions-single {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-start;
+}
+@media (max-width: 540px) {
+    .form-actions { flex-direction: column-reverse; gap: 10px; }
+    .form-actions-back,
+    .form-actions-next { order: 0; margin-left: 0; width: 100%; max-width: 360px; }
+}
 
 /* ================ Lists ================ */
 .check-list {
@@ -446,7 +624,7 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     line-height: 1.5;
 }
 
-/* Button with two-line subtitle (e.g. "ca. 3 Minuten") */
+/* Button with two-line subtitle (e.g. "ca. 5 Minuten") */
 .btn-with-subtitle {
     display: inline-flex;
     flex-direction: column;
@@ -511,6 +689,16 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 .alt-cta .btn-ghost:hover {
     background: var(--gu-blue);
     color: #fff;
+}
+
+/* Prominent variant — used on EndPage direkt unter dem Stat-Block.
+   Größerer Label-Text, mehr vertikaler Atem, gefüllter Primary-Button. */
+.alt-cta-prominent { margin: 8px auto; }
+.alt-cta-prominent .alt-cta-label {
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 14px;
+    font-weight: 500;
 }
 
 /* Inline tooltip (click-toggle, mobile-friendly) */
@@ -596,11 +784,11 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 /* ================ Compact hero (merged Landing) ================ */
 .hero-compact .hero-inner {
     grid-template-columns: 1fr;
-    /* Match max-width of .content-inner (880 px) so hero text is bündig
-       with the body sections below — same vertical left edge across the
-       whole page. */
+    /* Match max-width of .content-inner (880 px). Horizontal padding lives
+       on .hero (parent) so the inner can fill its max-width and align
+       with .content-inner's left edge. Vertical-only padding here. */
     max-width: 880px;
-    padding: 48px 24px 28px;
+    padding: 48px 0 28px;
     gap: 0;
 }
 .hero-compact h1 { font-size: 38px; margin-bottom: 14px; }
@@ -637,6 +825,26 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     text-align: center;
 }
 .stat-secondary strong {
+    color: var(--gu-blue-dark);
+    font-variant-numeric: tabular-nums;
+}
+
+/* P11 30%-Förderquoten-Anker: gibt der 8.776,97 €-Zahl einen
+   Investitions-Kontext, damit Teilnehmer:innen ein Gefühl für die
+   tatsächliche Projektgröße bekommen. Identisches Styling in T1 + T2. */
+.stat-context {
+    margin: 14px auto 0;
+    max-width: 640px;
+    padding: 10px 14px;
+    background: var(--bg-soft);
+    border-left: 3px solid var(--gu-blue);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.5;
+}
+.stat-context strong {
     color: var(--gu-blue-dark);
     font-variant-numeric: tabular-nums;
 }
@@ -749,9 +957,16 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     margin-top: 6px;
 }
 
+/* T2 Sekundäre Überschrift zwischen Peer-Quote und Stat-Box. Etwas mehr
+   Top-Margin als ein normaler h2, damit sie als visueller Trenner
+   zwischen den zwei Sub-Blöcken (Quote / Zahlen) wirkt. */
+.t2-stats-heading {
+    margin-top: 32px;
+}
+
 .quote-card {
     display: grid;
-    grid-template-columns: 160px 1fr;
+    grid-template-columns: 240px 1fr;
     gap: 28px;
     background: #f1f5fa;
     border: 1px solid #d5e0ed;
@@ -762,9 +977,12 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     margin: 24px 0;
     align-items: center;
 }
+/* Landscape-Format (3:2) — funktioniert für Gebäude-Luftbilder, Standort-
+   Aufnahmen UND Porträts (object-fit: cover croppt sauber zentriert).
+   Bewusst KEIN Kreis mehr, weil Wide-Shots dann zu viel verloren würden. */
 .quote-photo {
-    width: 160px; height: 160px;
-    border-radius: 50%;
+    width: 240px; height: 160px;
+    border-radius: 10px;
     background: var(--bg-tint);
     border: 2px dashed var(--border);
     display: flex; align-items: center; justify-content: center;
@@ -787,6 +1005,19 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     height: 100%;
     object-fit: cover;
     display: block;
+}
+/* Logo-Modifier: kompletter Logo-Inhalt sichtbar, deutlich kleiner als
+   der Slot. Wir override width/height explizit (Base-Rule setzt 100%),
+   sodass das Logo auf max 65% × 65% schrumpft und mit Whitespace
+   zentriert in der Card sitzt — auch wenn die Card noch als Kreis
+   gerendert wird (z.B. wegen gecachtem alten Stylesheet). */
+.quote-photo-contain img {
+    width: auto;
+    height: auto;
+    max-width: 65%;
+    max-height: 65%;
+    object-fit: contain;
+    padding: 0;
 }
 .quote-body blockquote {
     font-size: 21px;
@@ -911,6 +1142,77 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     font-weight: 600;
 }
 
+/* ---- Discrete 0-10 button scale (replaces slider for
+   application_likelihood; Vincent/Madeline: end-of-scale bias reduction).
+   Each <label> is a clickable card containing a hidden radio. The radio
+   carries the value; the label shows visual selection state. ---- */
+.button-scale {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 6px;
+    margin: 20px 0 6px;
+}
+/* Modifier: 10-button variant (used for belief_confidence 1–10). */
+.button-scale.button-scale-10 {
+    grid-template-columns: repeat(10, 1fr);
+}
+.button-scale-btn {
+    position: relative;
+    cursor: pointer;
+}
+.button-scale-btn input[type=radio] {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+}
+.button-scale-btn span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    font-weight: 600;
+    color: var(--text);
+    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.05s;
+    user-select: none;
+}
+.button-scale-btn:hover span {
+    border-color: var(--gu-blue);
+    background: var(--bg-soft);
+}
+.button-scale-btn input[type=radio]:checked + span {
+    background: var(--gu-blue);
+    border-color: var(--gu-blue);
+    color: #fff;
+}
+.button-scale-btn input[type=radio]:focus-visible + span {
+    outline: 2px solid var(--gu-blue);
+    outline-offset: 2px;
+}
+.button-scale-anchors {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-muted);
+    margin: 0 2px 6px;
+}
+@media (max-width: 640px) {
+    .button-scale {
+        grid-template-columns: repeat(11, minmax(0, 1fr));
+        gap: 3px;
+    }
+    .button-scale.button-scale-10 {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
+    .button-scale-btn span {
+        height: 40px;
+        font-size: 14px;
+    }
+}
+
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1022,24 +1324,38 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 }
 
 /* ================ CTA card (Abschluss) ================ */
+/* Antrag-CTA-Card auf Abschluss. Kompakter als der Hero-CTA der
+   Landing-Seite — soll als Nebenangebot wirken, nicht als Hauptaktion
+   (Direktive 2026-06-08: "etwas kleiner"). */
 .cta-card {
     background: var(--gu-blue);
     color: #fff;
     border-radius: var(--radius);
-    padding: 36px 28px;
-    margin: 24px 0;
+    padding: 22px 24px;
+    margin: 16px auto;
+    max-width: 560px;
     box-shadow: var(--shadow-md);
     text-align: center;
 }
-.cta-card h2 { color: #fff; margin-bottom: 12px; }
-.cta-card p { color: rgba(255,255,255,0.92); }
+.cta-card h2 {
+    color: #fff;
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+.cta-card p {
+    color: rgba(255,255,255,0.92);
+    font-size: 14.5px;
+    margin: 6px 0;
+}
 .cta-card .btn-primary {
     background: #fff;
     color: var(--gu-blue);
-    margin: 12px 0;
+    margin: 10px 0 6px;
+    padding: 10px 22px;
+    font-size: 15px;
 }
 .cta-card .btn-primary:hover { background: var(--bg-soft); }
-.cta-note { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 8px; }
+.cta-note { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 4px; }
 
 /* ================ Survey-prompt modal (2-min nudge) ================ */
 .survey-prompt[hidden] { display: none; }
@@ -1149,11 +1465,18 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
 /* ================ Responsive ================ */
 @media (max-width: 768px) {
     body { font-size: 16px; }
+    /* Match .content-block mobile horizontal padding (20 px) so the
+       Hero edge aligns with body sections on mobile, same as desktop
+       (Bug N1 architecture). */
+    .hero { padding: 0 20px; }
     .hero-inner {
         grid-template-columns: 1fr;
-        padding: 40px 20px;
+        padding: 40px 0;
         gap: 32px;
     }
+    /* Compact hero (used on Landing/EndPage) keeps the vertical-only
+       inner padding pattern from desktop, just smaller. */
+    .hero-compact .hero-inner { padding: 32px 0 20px; }
     .hero h1 { font-size: 32px; }
     .lede { font-size: 17px; }
     .content-block { padding: 40px 20px; }
@@ -1190,4 +1513,59 @@ h3 { font-size: 19px; margin: 0 0 8px; color: var(--gu-blue-dark); font-weight: 
     .brand-img { height: 36px; padding: 3px 6px; }
     .brand-group { gap: 10px; }
     .brand-group .brand + .brand { padding-left: 10px; }
+
+    /* New block-3 / block-6 elements: keep them readable + tappable. */
+    .stat-context {
+        font-size: 13px;
+        padding: 10px 12px;
+        text-align: left;
+    }
+    .form-error-banner {
+        margin: 16px 14px 0;
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+    .button-scale {
+        gap: 4px;
+    }
+    .button-scale-btn span {
+        height: 44px;          /* iOS HIG minimum touch target */
+        font-size: 14px;
+    }
+
+    /* Funding table: with only 2 columns it stays usable, but the long
+       "Solar-Gründächer..." labels need wrapping room. */
+    .funding-table th,
+    .funding-table td { font-size: 14px; padding: 10px 8px; }
+    .funding-table th:first-child { word-break: break-word; }
+
+    /* Process accordion: larger summary tap area + more breathing room on
+       the step content (line-length feels right but vertical rhythm was
+       cramped on narrow screens). */
+    .process-accordion summary { padding: 16px 14px; min-height: 48px; }
+    .process-steps li { padding: 14px 12px; gap: 14px; }
+    .step-num { width: 32px; height: 32px; font-size: 15px; }
+
+    /* Radio-row + checkbox-card touch targets: oTree forms get long;
+       on mobile we want each option to be clearly thumb-sized. */
+    .radio-row { min-height: 48px; padding: 12px 14px; }
+    .checkbox-card { min-height: 56px; }
+
+    /* Contact strip + section CTA buttons: full width on mobile so the
+       Weiter-Button isn't lost in a center-aligned vacuum. */
+    .form-section .btn-primary { width: 100%; max-width: 360px; }
+}
+
+/* Very small screens: 8.776,97 € is 9 glyphs + space; at 22 px figure
+   width that pushes past one column at ~360 px viewport. Drop the stat
+   figure another step and tighten the label to fit. */
+@media (max-width: 380px) {
+    .stat-box { gap: 6px; padding: 14px 8px; }
+    .stat-figure { font-size: 18px; }
+    .stat-label { font-size: 10.5px; line-height: 1.25; }
+    .hero h1 { font-size: 26px; }
+    .lede { font-size: 16px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    .content-block { padding: 32px 16px; }
 }

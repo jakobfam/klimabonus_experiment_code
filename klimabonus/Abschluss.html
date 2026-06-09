@@ -3,20 +3,48 @@
 
 {% block content %}
 
+<section class="content-block content-block-compact">
+    <div class="content-inner">
+        <h1 class="h1-compact">Danke für Ihr Interesse am Klimabonus</h1>
+        <p class="muted">Wir hoffen, die Informationen waren hilfreich.</p>
+    </div>
+</section>
+
+{# Reihenfolge geändert (Direktive Jakob 2026-06-08): erst Feedback,
+   dann Antrag-CTA. So sieht der/die Teilnehmer:in das Feedback-Feld
+   bevor er/sie zum Antrag-Tab gewechselt. #}
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Möchten Sie uns noch etwas mitteilen?</h2>
+        <p class="muted">
+            Was läuft bei städtischen Förderungen gut, was sollte besser
+            werden? Ihre Anmerkungen – positiv wie kritisch – werden
+            pseudonymisiert an das Klimareferat weitergegeben (optional).
+        </p>
+        <textarea name="feedback_subsidies" id="feedback_subsidies"
+                  class="text-input feedback-textarea"
+                  rows="5"
+                  maxlength="2000"
+                  placeholder="Ihre Anmerkungen …"></textarea>
+
+        {# Abschließen-Button direkt unter dem Feedback-Feld (Direktive
+           Jakob 2026-06-08). Antrag-CTA-Card kommt darunter — User
+           klickt im neuen Tab und kann später Abschließen drücken. #}
+        <div class="form-actions-single">
+            <button class="btn btn-primary" type="submit">Abschließen</button>
+        </div>
+    </div>
+</section>
+
 <section class="content-block">
     <div class="content-inner">
-        <span class="kicker">Vielen Dank!</span>
-        <h1>Danke für Ihr Interesse am Klimabonus</h1>
-        <p class="lede">
-            Wir hoffen, die Informationen waren hilfreich. Wenn Sie eine Förderung
-            beantragen möchten, können Sie das direkt online tun.
-        </p>
-
         <div class="cta-card">
             <h2>Direkt zum Antrag</h2>
-            <p>Der Antrag läuft komplett digital. Sie registrieren sich mit Ihrer
-               E-Mail-Adresse und werden Schritt für Schritt durch das Formular geführt.</p>
-            <a class="btn btn-primary btn-large"
+            <p>Wenn Sie eine Förderung beantragen möchten, können Sie das
+               direkt online tun. Der Antrag läuft komplett digital. Sie
+               registrieren sich mit Ihrer E-Mail-Adresse und werden
+               Schritt für Schritt durch das Formular geführt.</p>
+            <a class="btn btn-primary"
                id="portal-link"
                href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
                target="_blank" rel="noopener">
@@ -31,34 +59,12 @@
 </section>
 
 <section class="content-block content-block-light">
-    <div class="content-inner form-section">
-        <h2>Möchten Sie uns noch etwas mitteilen?</h2>
-        <p class="muted">
-            Was läuft bei städtischen Förderungen gut, was sollte besser
-            werden? Ihre Anmerkungen – positiv wie kritisch – werden
-            anonym an das Klimareferat weitergegeben (optional).
-        </p>
-        <textarea name="feedback_subsidies" id="feedback_subsidies"
-                  class="text-input feedback-textarea"
-                  rows="5"
-                  maxlength="2000"
-                  placeholder="Ihre Anmerkungen …"></textarea>
-    </div>
-</section>
-
-<section class="content-block">
-    <div class="content-inner form-section">
-        <button class="btn btn-primary" type="submit">Abschließen</button>
-    </div>
-</section>
-
-<section class="content-block content-block-light">
     <div class="content-inner">
         <h2>Sie haben Fragen?</h2>
         <p>
             Das Klimareferat der Stadt Frankfurt beantwortet Ihre Fragen
-            jederzeit gerne. Auf Wunsch ruft das Team Sie auch persönlich
-            zurück.
+            jederzeit gerne — schriftlich per E-Mail oder telefonisch
+            über die Klimabonus-Hotline.
         </p>
         <p class="contact-large">
             <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
@@ -75,8 +81,6 @@
 </section>
 
 <input type="hidden" name="time_abschluss" id="time_abschluss" value="">
-<input type="hidden" name="clicked_application_portal" id="clicked_application_portal" value="False">
-<input type="hidden" name="clicked_application_portal_ts" id="clicked_application_portal_ts" value="">
 
 {% endblock %}
 
@@ -91,11 +95,36 @@
     window.addEventListener('beforeunload', commit);
     document.getElementById('form').addEventListener('submit', commit);
 
-    // Track click on Antragsportal
-    document.getElementById('portal-link').addEventListener('click', () => {
-        document.getElementById('clicked_application_portal').value = 'True';
-        document.getElementById('clicked_application_portal_ts').value =
-            (Date.now() / 1000).toFixed(2);
+    // ---- liveSend wrapper (fire-and-forget) ----
+    function fireEvent(payload) {
+        try {
+            if (typeof liveSend === 'function') liveSend(payload);
+        } catch (e) {
+            console.warn('liveSend failed', e);
+        }
+    }
+    function nowSec() { return Date.now() / 1000; }
+
+    // ---- Antrag-Click: live_method statt Form-Field. Speichert
+    //      clicked_application_portal=True sofort server-seitig, auch
+    //      wenn der/die Teilnehmer:in danach den Browser schließt ohne
+    //      "Abschließen" zu drücken. Symmetrisch zu Landing.
+    //      Belt + suspenders: localStorage-Replay bei Form-Submit für
+    //      WS-Race-Condition-Fallback (siehe Landing.html). ----
+    const LS_KEY = 'klimabonus_abschluss_click_ts';
+    const portalLink = document.getElementById('portal-link');
+    if (portalLink) {
+        portalLink.addEventListener('click', () => {
+            const ts = nowSec();
+            fireEvent({ event: 'application_portal_click', ts: ts });
+            try { localStorage.setItem(LS_KEY, String(ts)); } catch (_) {}
+        });
+    }
+    document.getElementById('form').addEventListener('submit', () => {
+        try {
+            const saved = localStorage.getItem(LS_KEY);
+            if (saved) fireEvent({ event: 'application_portal_click', ts: parseFloat(saved) });
+        } catch (_) {}
     });
 })();
 </script>

@@ -10,6 +10,35 @@
     {# No oTree default CSS / progress bar — we render a plain website #}
     <link rel="stylesheet" href="{% static 'klimabonus/style.css' %}">
     {% block styles %}{% endblock %}
+
+    {# ====================================================================
+       oTree Live-Channel Dependencies — KRITISCH.
+
+       otree/js/live.js (am Seitenende geladen in {% block live %}) braucht:
+         1. jQuery  — verwendet $('#otree-live'), $(document).ready()
+         2. makeReconnectingWebSocket  — aus reconnecting-websocket-iife
+
+       Die werden normalerweise von oTrees Base_UserFacing.html geladen.
+       Da wir aber unsere eigene global/Page.html bauen, müssen wir sie
+       hier explizit mitladen — sonst crasht live.js sofort beim Init
+       mit "$ is undefined", liveSend wird nie definiert, und ALLE
+       live_method-Events (consent_analytics, portal_click,
+       expanded_process, prompt_*, application_portal_click) gehen
+       silent verloren. Genau dieser Bug war im Pilot vom 2026-06-05
+       sichtbar: 0/50 live-Events trotz Form-Submits funktionierten.
+
+       In den <head> geladen, damit jQuery vor jeglichem Page-JS
+       verfügbar ist (z.B. unsere Inline-Scripts in Landing.html). ==== #}
+    <script src="{% static 'otree/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'otree/js/reconnecting-websocket-iife.min.js' %}"></script>
+    {# common_user_facing.js definiert makeReconnectingWebSocket(path).
+       live.js braucht das — ohne diese Datei crasht live.js beim Init
+       (ReferenceError: makeReconnectingWebSocket is not defined),
+       liveSend bleibt undefined, und ALLE live_method-Events gehen
+       silent verloren. Genau dieser Bug war im Pilot vom 2026-06-05
+       (0/50 clicked_portal_landing) UND nach den ersten Tracking-Fixes
+       weiterhin sichtbar. Notwendige Ergänzung zum jQuery+RWS-Load. #}
+    <script src="{% static 'otree/js/common_user_facing.js' %}"></script>
 </head>
 <body>
     <header class="site-header">
@@ -31,6 +60,14 @@
                          src="{% static 'klimabonus/logo_zew.jpg' %}"
                          alt="ZEW Mannheim">
                 </a>
+                <a href="https://frankfurt.de/themen/klima-und-energie/stadtklima/klimabonus"
+                   class="brand"
+                   target="_blank" rel="noopener"
+                   aria-label="Klimabonus der Stadt Frankfurt">
+                    <img class="brand-img brand-img-klimabonus"
+                         src="{% static 'klimabonus/Klimabonus_rgb.jpg' %}"
+                         alt="Klimabonus Stadt Frankfurt">
+                </a>
             </div>
             <nav class="site-nav" aria-label="Hauptnavigation">
                 <span class="nav-pill">Informationsportal Klimabonus</span>
@@ -41,6 +78,19 @@
     <main class="site-main">
         <form class="otree-form" id="form" method="post" autocomplete="off" role="form">
             <script src="{% static 'otree/js/formInputs.js' %}"></script>
+            {# Form-error banner: shows on top of the page when oTree
+               re-renders due to validation errors (error_message return,
+               IntegerField range, required field missing, etc.). Without
+               this block, users see no feedback after a failed submit —
+               the page just reloads silently. (BUG D5 fix.) #}
+            {% if form.errors %}
+                <div class="form-error-banner" role="alert">
+                    <strong>Bitte überprüfen Sie Ihre Eingaben.</strong>
+                    {% if form.non_field_error %}
+                        <p>{{ form.non_field_error }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
             {% block content %}{% endblock %}
         </form>
     </main>
@@ -58,14 +108,193 @@
                 <a href="https://frankfurt.de/themen/klima-und-energie/stadtklima/klimabonus" target="_blank" rel="noopener">frankfurt.de/klimabonus</a>
             </div>
             <div class="footer-col footer-meta">
-                <a href="#" class="footer-link">Impressum</a>
-                <a href="#" class="footer-link">Datenschutz</a>
-                <a href="#" class="footer-link">Kontakt</a>
+                <button type="button" class="footer-link footer-link-btn"
+                        data-legal-open="datenschutz">Datenschutz</button>
+                <button type="button" class="footer-link footer-link-btn"
+                        data-legal-open="kontakt">Kontakt</button>
             </div>
         </div>
     </footer>
 
+    {# ====================================================================
+       Legal popups (Datenschutz / Kontakt). Triggered by the footer
+       buttons via data-legal-open="<id>". One container, two sections —
+       only the matching section is visible at a time. Impressum bewusst
+       NICHT enthalten (Direktive Jakob, 2026-06-08).
+
+       Datenschutz-Struktur folgt 1:1 dem Goethe-Uni Boilerplate
+       (Vorlage: FLEX Datenschutzhinweis 2024). Bewusst minimal — keine
+       zusätzlichen Sektionen für DSB, Beschwerderecht, detaillierte
+       Datenkategorien o. ä. (Direktive Jakob 2026-06-08).
+       ==================================================================== #}
+    <div class="legal-modal" id="legal-modal" role="dialog"
+         aria-modal="true" aria-labelledby="legal-modal-title" hidden>
+        <div class="legal-modal-backdrop" data-legal-close></div>
+        <div class="legal-modal-content">
+            <button type="button" class="legal-modal-close"
+                    data-legal-close aria-label="Schließen">×</button>
+
+            {# ---------- DATENSCHUTZ (DSGVO) — FLEX-Boilerplate ---------- #}
+            <section class="legal-section" data-legal-section="datenschutz" hidden>
+                <h2 id="legal-modal-title-datenschutz" class="legal-modal-title">Datenschutzhinweis</h2>
+
+                <h3>Verantwortlicher</h3>
+                <p>
+                    Die Goethe-Universität Frankfurt am Main,
+                    Theodor-W.-Adorno-Platz 1, 60629 Frankfurt am Main,
+                    vertreten durch Prof. Dr. Guido Friebel, ist
+                    Verantwortlicher im Sinne der
+                    Datenschutz-Grundverordnung (DS-GVO) und des
+                    Hessischen Datenschutz- und Informationsfreiheits­gesetzes
+                    (HDSIG). Wir verarbeiten im Zuge des Forschungs­vorhabens
+                    zum Förderprogramm Klimabonus der Stadt Frankfurt
+                    personenbezogene Daten, die Sie uns durch Ihre
+                    Teilnahme zur Verfügung stellen.
+                </p>
+
+                <h3>Personenbezogene Daten</h3>
+                <p>Folgende personenbezogene Daten werden verarbeitet:</p>
+                <ul>
+                    <li>
+                        Weitere Informationen, wie z. B. E-Mail-Adresse,
+                        die Sie uns freiwillig im Rahmen des
+                        Forschungsprojekts geben.
+                    </li>
+                </ul>
+
+                <h3>Zwecke der Verarbeitung</h3>
+                <p>Wir verarbeiten die personenbezogenen Daten für folgende Zwecke:</p>
+                <ul>
+                    <li>Durchführung des Forschungsprojekts;</li>
+                    <li>
+                        Auf Ihren ausdrücklichen Wunsch: Zusendung von
+                        Informationsmaterial bzw. Veranstaltungs­einladungen
+                        durch das Klimareferat der Stadt Frankfurt.
+                    </li>
+                </ul>
+                <p>
+                    Ihre personenbezogenen Daten sind für die Erreichung
+                    dieser Zwecke erforderlich. Rechtsgrundlage der
+                    Datenverarbeitung ist Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a
+                    DS-GVO (Einwilligung der betroffenen Person).
+                </p>
+
+                <h3>Übermittlung der Daten / Verarbeitungsort</h3>
+                <p>
+                    Eine Übermittlung Ihrer Daten an Dritte erfolgt nur,
+                    wenn Sie hierzu Ihre ausdrückliche Einwilligung
+                    erteilt haben (z. B. Weitergabe Ihrer E-Mail-Adresse
+                    an das Klimareferat der Stadt Frankfurt). Die
+                    personenbezogenen Daten werden ausschließlich in
+                    Deutschland und in der EU verarbeitet.
+                </p>
+
+                <h3>Löschung Ihrer Daten</h3>
+                <p>
+                    Alle Daten werden unmittelbar nach der Erhebung
+                    pseudonymisiert gespeichert und anschließend
+                    statistisch ausgewertet. Aus den Ergebnissen lassen
+                    sich keine Rückschlüsse auf Sie als Person ziehen.
+                </p>
+                <p>
+                    Personenbezogene Daten werden getrennt von den
+                    Erhebungsdaten gespeichert und nach Abschluss des
+                    Forschungsprojekts unverzüglich gelöscht, es sei denn
+                    Sie haben Ihre Einwilligung zur Speicherung bereits
+                    vorher widerrufen oder gesetzliche
+                    Aufbewahrungs­pflichten stehen einer Löschung
+                    entgegen.
+                </p>
+
+                <h3>Ihre Rechte</h3>
+                <p>Sie haben das Recht, jederzeit</p>
+                <ul>
+                    <li>Auskunft über Ihre bei uns gespeicherten Daten zu verlangen;</li>
+                    <li>Ihre bei uns gespeicherten Daten sperren, berichtigen, einschränken oder löschen zu lassen;</li>
+                    <li>Ihre uns erteilte Einwilligung zur Datenerhebung und Verarbeitung zu widerrufen oder der Verarbeitung zu widersprechen.</li>
+                </ul>
+
+                <h3>Kontakt</h3>
+                <p>
+                    Haben Sie noch Fragen? Wenden Sie sich bitte
+                    jederzeit an Jakob Famulok, Chair for Human Resources,
+                    Goethe-Universität Frankfurt:
+                    <a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>
+                </p>
+            </section>
+
+            {# ---------- KONTAKT ---------- #}
+            <section class="legal-section" data-legal-section="kontakt" hidden>
+                <h2 id="legal-modal-title-kontakt" class="legal-modal-title">Kontakt</h2>
+
+                <p>
+                    Bei Fragen zur Studie, zu Ihrer Teilnahme oder zur
+                    Verarbeitung Ihrer Daten wenden Sie sich gerne an:
+                </p>
+
+                <p>
+                    Jakob Famulok<br>
+                    Chair for Human Resources<br>
+                    Goethe-Universität Frankfurt am Main<br>
+                    E-Mail:
+                    <a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>
+                </p>
+
+                <p class="legal-small">
+                    Für inhaltliche Fragen zum Förderprogramm selbst
+                    (z. B. zur Antragsstellung oder zu konkreten Maßnahmen)
+                    wenden Sie sich bitte direkt an das Klimareferat der
+                    Stadt Frankfurt
+                    (<a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>).
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        const modal = document.getElementById('legal-modal');
+        if (!modal) return;
+        const sections = modal.querySelectorAll('[data-legal-section]');
+        function open(id) {
+            sections.forEach(s => {
+                s.hidden = (s.dataset.legalSection !== id);
+            });
+            modal.hidden = false;
+            // a11y: move focus into the modal
+            const close = modal.querySelector('[data-legal-close]:not(.legal-modal-backdrop)');
+            if (close) close.focus();
+            document.body.style.overflow = 'hidden';
+        }
+        function close() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+        }
+        document.querySelectorAll('[data-legal-open]').forEach(btn => {
+            btn.addEventListener('click', () => open(btn.dataset.legalOpen));
+        });
+        modal.querySelectorAll('[data-legal-close]').forEach(el => {
+            el.addEventListener('click', close);
+        });
+        document.addEventListener('keydown', (e) => {
+            if (!modal.hidden && e.key === 'Escape') close();
+        });
+    })();
+    </script>
+
     {% block scripts %}{% endblock %}
+
+    {# Form-Persistence über Reloads / Back-Button / Validation-Errors.
+       oTree 6 stellt das Feature über `Page.preserve_unsubmitted_inputs
+       = True` (Backend-Flag) UND `preserve_unsubmitted_inputs.js`
+       (Client-Logik, sessionStorage) bereit. Beides braucht's:
+       das Backend-Flag allein bewirkt nichts ohne den Client-Script.
+       oTrees Standard-Page.html lädt das Script conditional:
+           {% if view.preserve_unsubmitted_inputs %}…{% endif %}
+       Wir machen das hier in unserer Custom-Page.html identisch. #}
+    {% if view.preserve_unsubmitted_inputs %}
+        <script src="{% static 'otree/js/preserve_unsubmitted_inputs.js' %}"></script>
+    {% endif %}
 
     {# oTree live channel — auto-activates when the Page class has a
        live_method. Provides the global liveSend() function used by

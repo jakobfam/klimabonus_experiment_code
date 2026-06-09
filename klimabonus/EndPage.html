@@ -29,10 +29,13 @@
             <span class="kicker">Information für Frankfurter Unternehmen</span>
             <h1>Klimabonus der Stadt Frankfurt</h1>
             <p class="lede">
-                Die Stadt Frankfurt unterstützt Ihr Unternehmen beim
-                Klimaschutz mit bis zu 100.000&nbsp;EUR pro Maßnahme – für
-                Solaranlagen, Dachbegrünung, Fassadenbegrünung,
-                Regenwasserspeicher und mehr.
+                Schneller amortisiert dank Förderung: Die Stadt Frankfurt
+                beteiligt sich mit bis zu 100.000&nbsp;EUR pro Maßnahme
+                an Investitionen Frankfurter Unternehmen – für
+                Solaranlagen, Dach- und Fassadenbegrünung,
+                Regenwasserspeicher und mehr. Maßnahmen, die laufende
+                Betriebskosten senken und einen Beitrag zum Klimaschutz
+                leisten.
             </p>
         </div>
     </div>
@@ -44,7 +47,7 @@
 <section class="content-block treatment-block treatment-block-t1">
     <div class="content-inner">
         <span class="kicker">Wussten Sie schon?</span>
-        <h2>So läuft das Förderprogramm in der Praxis</h2>
+        <h2>So läuft das Förderprogramm für Frankfurter Unternehmen</h2>
 
         <div class="stat-box stat-box-mono">
             <div class="stat-row">
@@ -53,17 +56,17 @@
             </div>
             <div class="stat-row">
                 <div class="stat-figure">15&nbsp;Min.</div>
-                <div class="stat-label">durchschnittlich<br>für den Antrag</div>
+                <div class="stat-label">Ausfüllzeit<br>im Durchschnitt</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">7.883,75&nbsp;€</div>
+                <div class="stat-figure">8.776,97&nbsp;€</div>
                 <div class="stat-label">durchschnittliche<br>Förderzusage je Antrag</div>
             </div>
         </div>
         <p class="stat-secondary">
             Bearbeitungszeit Förderantrag:
             <strong>⌀&nbsp;11&nbsp;Tage</strong>&nbsp;·&nbsp;
-            Auszahlungsantrag: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
+            Zeit bis zur Auszahlung: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
         </p>
         <p class="source-note">
             Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
@@ -78,10 +81,12 @@
         <h2>So lief der Klimabonus für {{ peer.firma }}</h2>
 
         <div class="quote-card">
-            <div class="quote-photo" aria-label="Foto Geschäftsführung {{ peer.firma }}">
+            <div class="quote-photo quote-photo-{{ peer.photo_fit }}"
+                 aria-label="Foto {{ peer.firma }}">
                 {% if peer.photo %}
-                    <img src="{% static 'klimabonus/' %}{{ peer.photo }}"
-                         alt="Geschäftsführung {{ peer.firma }}">
+                    {# peer.photo enthält bereits den 'klimabonus/'-Prefix. #}
+                    <img src="{% static peer.photo %}"
+                         alt="{{ peer.firma }}">
                 {% else %}
                     <span>[PLATZHALTER: PEER_FOTO]</span>
                 {% endif %}
@@ -89,11 +94,16 @@
             <div class="quote-body">
                 <blockquote>„{{ peer.quote }}"</blockquote>
                 <cite>
-                    — {{ peer.name }}, Geschäftsführung, {{ peer.firma }}
+                    {# Name + Position können None sein (z.B. Peer 1
+                       Nassauische Heimstätte). #}
+                    — {% if peer.name %}{{ peer.name }}, {% endif %}{% if peer.position %}{{ peer.position }}, {% endif %}{{ peer.firma }}
                     <span class="cite-meta">{{ peer.branche }} · {{ peer.size_label }}</span>
                 </cite>
             </div>
         </div>
+
+        {# Sekundäre Überschrift (mirror Landing T2). #}
+        <h2 class="t2-stats-heading">So läuft das Förderprogramm für Frankfurter Unternehmen</h2>
 
         <div class="stat-box stat-box-mono">
             <div class="stat-row">
@@ -102,17 +112,17 @@
             </div>
             <div class="stat-row">
                 <div class="stat-figure">15&nbsp;Min.</div>
-                <div class="stat-label">durchschnittlich<br>für den Antrag</div>
+                <div class="stat-label">Ausfüllzeit<br>im Durchschnitt</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">7.883,75&nbsp;€</div>
+                <div class="stat-figure">8.776,97&nbsp;€</div>
                 <div class="stat-label">durchschnittliche<br>Förderzusage je Antrag</div>
             </div>
         </div>
         <p class="stat-secondary">
             Bearbeitungszeit Förderantrag:
             <strong>⌀&nbsp;11&nbsp;Tage</strong>&nbsp;·&nbsp;
-            Auszahlungsantrag: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
+            Zeit bis zur Auszahlung: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
         </p>
         <p class="source-note">
             Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
@@ -132,6 +142,28 @@
     </div>
 </section>
 {% endif %}
+
+{# ============= ANTRAG-CTA direkt unter Treatment-Block (Direktive
+   Jakob 2026-06-08): primärer Conversion-Hook gleich nach den
+   Zahlen / Peer-Quote, bevor die Lesefläche mit Wirtschaftlichkeit /
+   Funding-Tabelle / Process weiter scrollt. Identisch in allen drei
+   Armen. ============= #}
+
+<section class="content-block content-block-light">
+    <div class="content-inner">
+        <div class="alt-cta alt-cta-prominent">
+            <span class="alt-cta-label">
+                Möchten Sie den Klimabonus jetzt beantragen?
+            </span>
+            <a class="btn btn-primary btn-large"
+               href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
+               target="_blank" rel="noopener"
+               id="portal-link-endpage-top">
+                Direkt zum Antrag
+            </a>
+        </div>
+    </div>
+</section>
 
 {# ============= WIRTSCHAFTLICHKEIT (identical across arms) ============= #}
 
@@ -224,37 +256,42 @@
                 <li>
                     <span class="step-num">1</span>
                     <div>
-                        <h3>Maßnahme planen und recherchieren</h3>
-                        <p>Wer den Antrag vorbereitet stellt, ist nach wenigen
-                           Minuten durch. Das Klimareferat bietet auch im
-                           Vorfeld eine fachliche Beratung an.</p>
+                        <h3>Maßnahme planen und Antrag vorbereiten</h3>
+                        <p>Wer den Antrag gut vorbereitet hat, ist nach
+                           wenigen Minuten durch. Das Klimareferat bietet
+                           auch im Vorfeld eine kostenlose fachliche
+                           Beratung an.</p>
                     </div>
                 </li>
                 <li>
                     <span class="step-num">2</span>
                     <div>
                         <h3>Antrag digital einreichen</h3>
-                        <p>Mit E-Mail-Adresse registrieren, Antrag online
-                           einreichen und per Mail bestätigen.</p>
+                        <p>Mit E-Mail-Adresse online registrieren, Antrag
+                           ausfüllen und absenden. Eingang wird per E-Mail
+                           bestätigt.</p>
                     </div>
                 </li>
                 <li>
                     <span class="step-num">3</span>
                     <div>
-                        <h3>Bescheid abwarten und Maßnahme umsetzen</h3>
-                        <p>Erst nach Bescheid mit der Maßnahme beginnen.
-                           Umsetzungszeit: <strong>12 bzw. 24&nbsp;Monate</strong>.
-                           Eine Fristverlängerung ist formlos per E-Mail
-                           oder Anruf möglich.</p>
+                        <h3>Bewilligung abwarten und Maßnahme umsetzen</h3>
+                        <p>Erst nach Erhalt der Bewilligung mit der
+                           Maßnahme beginnen. Umsetzungszeit:
+                           <strong>12 bzw. 24&nbsp;Monate</strong> (je
+                           nach Maßnahme). Eine Fristverlängerung ist
+                           formlos per E-Mail oder Anruf möglich.</p>
                     </div>
                 </li>
                 <li>
                     <span class="step-num">4</span>
                     <div>
                         <h3>Auszahlung beantragen</h3>
-                        <p>Nach Abschluss der Maßnahme den Antrag auf
-                           Auszahlung einreichen. Die Auszahlung folgt nach
-                           dem Bescheid der Stadt.</p>
+                        <p>Nach Abschluss der Maßnahme den
+                           Auszahlungsantrag mit den entsprechenden
+                           Nachweisen (z.&nbsp;B. Rechnungen) einreichen.
+                           Die Auszahlung erfolgt nach Prüfung durch die
+                           Stadt.</p>
                     </div>
                 </li>
             </ol>
@@ -266,14 +303,13 @@
 
 <section class="content-block content-block-contact">
     <div class="content-inner">
-        <img src="{% static 'klimabonus/klimabonus_logo.jpg' %}"
-             alt="Klimabonus — Stadt Frankfurt"
-             class="klimabonus-logo">
+        {# Klimabonus-Logo lebt jetzt im Header (siehe Page.html). #}
         <h2>Sie haben Fragen?</h2>
         <p>
             Das Klimareferat der Stadt Frankfurt beantwortet Ihre Fragen
             zum Förderprogramm oder zur fachlichen Planung Ihrer Maßnahme
-            gerne. Auf Wunsch ruft das Team Sie auch persönlich zurück.
+            gerne — schriftlich per E-Mail oder telefonisch über die
+            Klimabonus-Hotline.
         </p>
         <p class="contact-large">
             <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
@@ -291,17 +327,8 @@
                 um den Klimabonus.
             </figcaption>
         </figure>
-
-        <div class="alt-cta">
-            <span class="alt-cta-label">
-                Möchten Sie den Klimabonus jetzt beantragen?
-            </span>
-            <a class="btn btn-ghost"
-               href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
-               target="_blank" rel="noopener">
-                Direkt zum Antrag
-            </a>
-        </div>
+        {# Antrag-CTA wurde nach oben gezogen (siehe Section direkt
+           unter Treatment-Block) — hier nicht mehr doppelt zeigen. #}
     </div>
 </section>
 
@@ -310,20 +337,41 @@
 {% block scripts %}
 <script>
 (function () {
-    // Tooltip toggle (mobile-friendly) — same behaviour as on Landing.
+    // ---- Tooltip toggle (mobile-friendly) — same behaviour as on Landing. ----
     const triggers = document.querySelectorAll('.tooltip-trigger');
-    function closeAll() {
+    function closeAllTooltips() {
         triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
     }
     triggers.forEach(t => {
         t.addEventListener('click', (e) => {
             e.stopPropagation();
             const wasOpen = t.getAttribute('aria-expanded') === 'true';
-            closeAll();
+            closeAllTooltips();
             if (!wasOpen) t.setAttribute('aria-expanded', 'true');
         });
     });
-    document.addEventListener('click', closeAll);
+    document.addEventListener('click', closeAllTooltips);
+
+    // ---- EndPage Antrag-CTA Click-Tracking ----
+    // Identische Architektur wie Landing.html: live_method (fire-and-
+    // forget WebSocket) speichert clicked_portal_endpage=True sofort
+    // server-seitig. EndPage hat keinen Form-Submit, daher KEIN
+    // localStorage-Replay-Pfad (Fallback hier nur über WS-Retry, die
+    // reconnecting-websocket-iife in Page.html selbst macht).
+    function fireEvent(payload) {
+        try {
+            if (typeof liveSend === 'function') liveSend(payload);
+        } catch (e) {
+            console.warn('liveSend failed', e);
+        }
+    }
+    function nowSec() { return Date.now() / 1000; }
+
+    document.querySelectorAll('#portal-link-endpage-top, .alt-cta a').forEach(el => {
+        el.addEventListener('click', () => {
+            fireEvent({ event: 'endpage_portal_click', ts: nowSec() });
+        });
+    });
 })();
 </script>
 {% endblock %}

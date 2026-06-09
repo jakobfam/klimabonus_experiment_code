@@ -13,34 +13,23 @@
             oder falschen Antworten — uns interessiert Ihre persönliche
             Einschätzung.
         </p>
-    </div>
-</section>
-
-{# ============= 1. APPROVAL (self-referent) ============= #}
-<section class="content-block content-block-light">
-    <div class="content-inner form-section">
-        <h2>Wie wahrscheinlich ist es Ihrer Einschätzung nach, dass Ihr Klimabonus-Antrag bewilligt würde?</h2>
-
-        <div class="slider-wrap">
-            <input type="range" min="0" max="100" step="1"
-                   name="belief_approval_rate" id="belief_approval_rate"
-                   value="0" class="slider" data-untouched="true">
-            <div class="slider-scale">
-                <span>0&nbsp;%</span>
-                <span class="slider-value-display">
-                    <strong id="belief_approval_rate_val">—</strong>&nbsp;%
-                </span>
-                <span>100&nbsp;%</span>
-            </div>
-            <p class="slider-hint">Bitte klicken Sie auf die Skala, um zu antworten.</p>
+        <div class="next-step-hint" role="note">
+            <strong>Hinweis</strong>
+            Nach Abschluss aller Fragen gelangen Sie automatisch wieder
+            zur Informationsseite zum Klimabonus — dort können Sie alle
+            Details des Förderprogramms in Ruhe nachlesen.
         </div>
     </div>
 </section>
 
-{# ============= 2. FUNDING (NEU, self-referent, free-text number) ============= #}
-<section class="content-block">
+{# ============= 1. FUNDING — Reihenfolge mit Approval getauscht
+   (Direktive Jakob 2026-06-08): erst nach Fördersumme fragen, dann
+   nach Bewilligungswahrscheinlichkeit. Hintergrund: Reihenfolge folgt
+   der natürlichen Antrags-Logik (zuerst denkt der/die Befragte über
+   die Höhe nach, dann über die Erfolgswahrscheinlichkeit). ============= #}
+<section class="content-block content-block-light">
     <div class="content-inner form-section">
-        <h2>Wie hoch wäre Ihrer Einschätzung nach die Förderung für Ihr Unternehmen?</h2>
+        <h2>Angenommen, Ihr Unternehmen würde eine Klimaschutz-Maßnahme umsetzen — mit welcher Fördersumme würden Sie für diese Maßnahme rechnen?</h2>
         <p class="muted">
             Bitte geben Sie eine Schätzung in Euro ein. Maximal sind
             100.000&nbsp;€ pro Maßnahme möglich.
@@ -57,10 +46,30 @@
     </div>
 </section>
 
+{# ============= 2. APPROVAL (self-referent) ============= #}
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Was denken Sie: Wie wahrscheinlich ist es, dass Ihr Klimabonus-Antrag bewilligt würde?</h2>
+        <p class="muted">
+            Bitte geben Sie einen Wert zwischen 0&nbsp;% (sehr
+            unwahrscheinlich) und 100&nbsp;% (sehr wahrscheinlich) ein.
+        </p>
+        <div class="amount-input-wrap">
+            <input type="number"
+                   name="belief_approval_rate" id="belief_approval_rate"
+                   min="0" max="100" step="1"
+                   inputmode="numeric"
+                   class="text-input amount-input"
+                   required>
+            <span class="amount-suffix">%</span>
+        </div>
+    </div>
+</section>
+
 {# ============= 3. APPLICATION EFFORT (self-referent) ============= #}
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
-        <h2>Wie viel Zeit würden Sie voraussichtlich für das Ausfüllen Ihres Antrags benötigen?</h2>
+        <h2>Wie viel Zeit würden Sie voraussichtlich benötigen, um den Klimabonus-Antrag auszufüllen und einzureichen?</h2>
 
         <div class="radio-stack">
             <label class="radio-row">
@@ -90,7 +99,7 @@
 {# ============= 4. PROCESSING TIME (self-referent) ============= #}
 <section class="content-block">
     <div class="content-inner form-section">
-        <h2>Wie lange würde es Ihrer Einschätzung nach dauern, bis Ihr Antrag von der Stadt bearbeitet ist (bis zum Bescheid)?</h2>
+        <h2>Was denken Sie: Wie lange würde es nach der Einreichung Ihres Antrags dauern, bis Sie eine Bewilligung (oder Ablehnung) von der Stadt erhalten?</h2>
 
         <div class="radio-stack">
             <label class="radio-row">
@@ -120,7 +129,7 @@
 {# ============= 5. PAYOUT EFFORT (self-referent) ============= #}
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
-        <h2>Wie aufwendig wäre für Sie die Nachweis-Einreichung nach Abschluss der Maßnahme (Antrag auf Auszahlung)?</h2>
+        <h2>Wie hoch schätzen Sie den Aufwand ein, der benötigt wird, um Ihre Investition nachzuweisen und das Geld zu erhalten (Antrag auf Auszahlung)?</h2>
 
         <div class="radio-stack">
             <label class="radio-row">
@@ -150,7 +159,12 @@
 {# ============= 6. HASSLE / BELASTUNG (NEU, self-referent) ============= #}
 <section class="content-block">
     <div class="content-inner form-section">
-        <h2>Wie belastend erwarten Sie den gesamten Klimabonus-Antragsprozess für Ihr Unternehmen?</h2>
+        <h2>Was erwarten Sie: Wie belastend wäre der gesamte Klimabonus-Antragsprozess für Ihr Unternehmen insgesamt?</h2>
+        <p class="muted">
+            Gemeint ist nicht die reine Zeit, sondern wie unangenehm,
+            mühsam oder &quot;nervig&quot; sich der Prozess insgesamt
+            anfühlen würde.
+        </p>
 
         <div class="radio-stack">
             <label class="radio-row">
@@ -183,20 +197,56 @@
         <h2>Wie sicher sind Sie sich insgesamt bei Ihren obigen Einschätzungen zum Klimabonus?</h2>
         <p class="muted">
             Eine Gesamteinschätzung über alle Ihre vorherigen Antworten.
+            Bitte wählen Sie einen Wert von 1 (sehr unsicher) bis 10
+            (sehr sicher).
         </p>
 
-        <div class="slider-wrap">
-            <input type="range" min="1" max="10" step="1"
-                   name="belief_confidence" id="belief_confidence"
-                   value="1" class="slider" data-untouched="true">
-            <div class="slider-scale">
-                <span>1<br><small>sehr unsicher</small></span>
-                <span class="slider-value-display">
-                    <strong id="belief_confidence_val">—</strong>
-                </span>
-                <span>10<br><small>sehr sicher</small></span>
-            </div>
-            <p class="slider-hint">Bitte klicken Sie auf die Skala, um zu antworten.</p>
+        <div class="button-scale button-scale-10" id="belief_confidence_scale"
+             role="radiogroup" aria-label="Sicherheit Skala 1 bis 10">
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="1" required>
+                <span>1</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="2">
+                <span>2</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="3">
+                <span>3</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="4">
+                <span>4</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="5">
+                <span>5</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="6">
+                <span>6</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="7">
+                <span>7</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="8">
+                <span>8</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="9">
+                <span>9</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="belief_confidence" value="10">
+                <span>10</span>
+            </label>
+        </div>
+        <div class="button-scale-anchors">
+            <small>1 — sehr unsicher</small>
+            <small>10 — sehr sicher</small>
         </div>
 
         <button class="btn btn-primary" type="submit">Weiter</button>
@@ -210,7 +260,7 @@
     <div class="contact-strip-text">
         <strong>Klimareferat der Stadt Frankfurt</strong>
         <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
-        <span class="contact-strip-note">Bei Fragen ruft das Team Sie gerne zurück.</span>
+        <span class="contact-strip-note">Bei Fragen ist das Team gerne erreichbar.</span>
     </div>
 </aside>
 
@@ -227,63 +277,7 @@
             ((Date.now() - startTime) / 1000).toFixed(2);
     }
     window.addEventListener('beforeunload', commit);
-
-    // ---- Slider: hide thumb until first interaction; click-to-jump in one click
-    const sliders = document.querySelectorAll('.slider[data-untouched]');
-    function jumpToClick(slider, clientX) {
-        const rect = slider.getBoundingClientRect();
-        const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-        const min = parseFloat(slider.min);
-        const max = parseFloat(slider.max);
-        const step = parseFloat(slider.step) || 1;
-        const raw = min + ratio * (max - min);
-        const stepped = Math.round(raw / step) * step;
-        slider.value = stepped;
-        slider.removeAttribute('data-untouched');
-        slider.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    sliders.forEach(slider => {
-        const displayId = slider.id + '_val';
-        const display = document.getElementById(displayId);
-        slider.addEventListener('input', () => {
-            if (display) display.textContent = slider.value;
-            slider.removeAttribute('data-untouched');
-        });
-        slider.addEventListener('mousedown', (e) => {
-            if (slider.hasAttribute('data-untouched')) {
-                jumpToClick(slider, e.clientX);
-            }
-        });
-        slider.addEventListener('touchstart', (e) => {
-            if (slider.hasAttribute('data-untouched') && e.touches.length) {
-                jumpToClick(slider, e.touches[0].clientX);
-            }
-        }, { passive: true });
-        // Fallback: some browsers (older Edge, browsers with privacy
-        // extensions, certain mobile setups) don't reliably fire
-        // mousedown on range inputs. The click event is a defensive
-        // backstop — the data-untouched guard ensures jumpToClick is
-        // idempotent, so no double-jump if both fire.
-        slider.addEventListener('click', (e) => {
-            if (slider.hasAttribute('data-untouched')) {
-                jumpToClick(slider, e.clientX);
-            }
-        });
-    });
-
-    // ---- Submit guard: block if any required input is still untouched/empty
-    document.getElementById('form').addEventListener('submit', (e) => {
-        // Untouched sliders
-        const untouched = document.querySelectorAll('.slider[data-untouched]');
-        if (untouched.length > 0) {
-            e.preventDefault();
-            untouched[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-            const hint = untouched[0].closest('.slider-wrap').querySelector('.slider-hint');
-            if (hint) hint.classList.add('slider-hint-error');
-            return;
-        }
-        commit();
-    });
+    document.getElementById('form').addEventListener('submit', commit);
 })();
 </script>
 {% endblock %}

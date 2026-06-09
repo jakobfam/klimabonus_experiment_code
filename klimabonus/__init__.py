@@ -105,13 +105,21 @@ class Player(BasePlayer):
     measure_greening = models.BooleanField(blank=True, initial=False)          # Dach-/Fassaden-/Hofbegrünung
     measure_rainwater = models.BooleanField(blank=True, initial=False)         # Regenwasserspeicher
     measure_drinking_fountain = models.BooleanField(blank=True, initial=False) # Trinkbrunnen
-    measure_already_done = models.BooleanField(blank=True, initial=False)      # bereits ähnliche Maßnahmen umgesetzt
     measure_other = models.BooleanField(blank=True, initial=False)             # Sonstiges (mit Freitext)
     measure_other_text = models.StringField(blank=True)
     measure_none = models.BooleanField(blank=True, initial=False)
 
     # Randomized display order of measure checkboxes (comma-separated keys)
     measures_order = models.StringField(blank=True)
+
+    # ---- Vorab-Screening (B-Cluster, pre-treatment) ----
+    # "Hat Ihr Unternehmen bereits eine ähnliche Maßnahme umgesetzt?" — moved
+    # out of the planned-measures checklist and into its own screening
+    # question (was: measure_already_done, removed). Ja/Nein.
+    screening_similar_done = models.BooleanField(
+        blank=True,
+        choices=[[True, 'Ja'], [False, 'Nein']],
+    )
 
     # ---- Outcome 3: barriers ----
     barrier_time = models.BooleanField(blank=True, initial=False)
@@ -121,6 +129,11 @@ class Player(BasePlayer):
     barrier_property = models.BooleanField(blank=True, initial=False)
     barrier_priority = models.BooleanField(blank=True, initial=False)
     barrier_already_applied = models.BooleanField(blank=True, initial=False)  # Fördermittel bereits beantragt / genutzt
+    # New C2a-d barriers (Klimareferat / Madeline feedback):
+    barrier_funding_liquidity = models.BooleanField(blank=True, initial=False)  # C2a Vorfinanzierung / Liquidität
+    barrier_internal_capacity = models.BooleanField(blank=True, initial=False)  # C2b Personalkapazität intern
+    barrier_owner_tenant      = models.BooleanField(blank=True, initial=False)  # C2c Eigentums-/Mietverhältnis verhindert Investition
+    barrier_proof_uncertainty = models.BooleanField(blank=True, initial=False)  # C2d Unsicherheit, was für den Nachweis benötigt wird
     barrier_other = models.BooleanField(blank=True, initial=False)
     barrier_other_text = models.StringField(blank=True)
     barriers_order = models.StringField(blank=True)
@@ -196,6 +209,21 @@ class Player(BasePlayer):
     )
     respondent_position_other = models.StringField(blank=True)
 
+    # ---- G1: Stated importance of climate protection for the firm ----
+    # 5-point Likert. Captures heterogeneity of treatment effects by stated
+    # green orientation (pre-registered moderator). Asked on Outcomes page.
+    respondent_climate_importance = models.IntegerField(
+        blank=True,
+        choices=[
+            [1, 'Überhaupt nicht wichtig'],
+            [2, 'Eher unwichtig'],
+            [3, 'Teils, teils'],
+            [4, 'Eher wichtig'],
+            [5, 'Sehr wichtig'],
+        ],
+        label='Wie wichtig ist Klimaschutz für Ihr Unternehmen?',
+    )
+
     # ---- Commitment ladder (revealed actions) ----
     wants_email = models.BooleanField(
         choices=[[True, 'Ja, gerne'], [False, 'Nein, danke']],
@@ -206,19 +234,35 @@ class Player(BasePlayer):
         choices=[[True, 'Ja, gerne'], [False, 'Nein, danke']],
     )
 
-    wants_callback = models.BooleanField(
+    wants_hotline = models.BooleanField(
         choices=[[True, 'Ja, gerne'], [False, 'Nein, danke']],
     )
+    # phone_number is kept for backward compatibility with existing
+    # session DBs but is no longer collected. D4 (Rückruf → Hotline):
+    # the hotline is OUR phone, participants call us; we don't ask for
+    # theirs. Stays blank for all new participants.
     phone_number = models.StringField(blank=True)
 
     # ---- Revealed action: click on Antragsportal ----
-    # Two separate trackers: the direct-CTA on Landing (fast path, before
-    # survey) vs. the post-survey CTA on Abschluss (slow path).
+    # Drei separate Click-Tracker:
+    #   1. Landing (fast path, vor Survey) — beobachtet User die schon
+    #      vor der Befragung direkt zum Antrag springen.
+    #   2. Abschluss (slow path, direkt nach Survey, auf der CTA-Card) —
+    #      beobachtet User die nach kompletter Befragung konvertieren.
+    #   3. EndPage (post-completed, beim Re-Read der Info-Seite) —
+    #      beobachtet User die erst beim zweiten Durchblättern überzeugt
+    #      sind. Wichtig weil EndPage = re-displayed Treatment-Info.
+    # Alle drei laufen über live_method (sofort-Persistenz, unabhängig
+    # vom Form-Submit; siehe Landing.live_method / Abschluss.live_method
+    # / EndPage.live_method).
     clicked_portal_landing = models.BooleanField(blank=True, initial=False)
     clicked_portal_landing_ts = models.FloatField(blank=True)
 
     clicked_application_portal = models.BooleanField(blank=True, initial=False)
     clicked_application_portal_ts = models.FloatField(blank=True)
+
+    clicked_portal_endpage = models.BooleanField(blank=True, initial=False)
+    clicked_portal_endpage_ts = models.FloatField(blank=True)
 
     # ---- Final free-text feedback (Abschluss page) ----
     feedback_subsidies = models.LongStringField(blank=True)
@@ -385,18 +429,32 @@ class Landing(Page):
 
 class Outcomes(Page):
     form_model = 'player'
+    # Back-Button erlaubt — Teilnehmer:innen können zur Landing zurück,
+    # um die Treatment-Information erneut zu lesen. Bewusst NICHT für
+    # Beliefs/Commitment aktiviert (Kontamination der Outcomes-Antworten
+    # durch nachgelagerte Belief-Block-Inhalte).
+    allow_back_button = True
+    # Erhält bereits eingegebene Werte über Page-Reload, Back-Navigation
+    # und nach Validation-Errors (oTree 6 Feature, browser-localStorage).
+    preserve_unsubmitted_inputs = True
     form_fields = [
         'consent_research', 'consent_research_ts',
+        # Vorab-Screening (B-Cluster, pre-treatment)
+        'screening_similar_done',
+        # G1 Klimaschutz-Wichtigkeit (covariate / moderator)
+        'respondent_climate_importance',
         'application_likelihood',
         'measure_solar', 'measure_solar_green_roof', 'measure_battery',
         'measure_greening',
         'measure_rainwater', 'measure_drinking_fountain',
-        'measure_already_done',
         'measure_other', 'measure_other_text',
         'measure_none',
         'barrier_time', 'barrier_complexity', 'barrier_uncertainty',
         'barrier_amount', 'barrier_property', 'barrier_priority',
         'barrier_already_applied',
+        # C2a-d new barriers
+        'barrier_funding_liquidity', 'barrier_internal_capacity',
+        'barrier_owner_tenant', 'barrier_proof_uncertainty',
         'barrier_other', 'barrier_other_text',
         'measures_order', 'barriers_order',
         'time_outcomes',
@@ -419,6 +477,7 @@ class Outcomes(Page):
 
 class Beliefs(Page):
     form_model = 'player'
+    preserve_unsubmitted_inputs = True  # Reload-/Validation-Survival
     form_fields = [
         'belief_approval_rate', 'belief_funding_amount',
         'belief_effort', 'belief_processing_time', 'belief_payout_effort',
@@ -438,11 +497,12 @@ class Beliefs(Page):
 
 class Commitment(Page):
     form_model = 'player'
+    preserve_unsubmitted_inputs = True  # Reload-/Validation-Survival
     form_fields = [
         'respondent_position', 'respondent_position_other',
         'wants_email', 'email_address',
         'wants_event',
-        'wants_callback', 'phone_number',
+        'wants_hotline',
         'consent_contact', 'consent_contact_ts',
         'time_commitment',
     ]
@@ -461,8 +521,11 @@ class Commitment(Page):
         if values.get('wants_event') and not email:
             return ('Damit wir Sie zur Informationsveranstaltung einladen '
                     'können, benötigen wir Ihre E-Mail-Adresse.')
-        if values.get('wants_callback') and not (values.get('phone_number') or '').strip():
-            return 'Bitte geben Sie eine Telefonnummer an oder wählen Sie "Nein, danke".'
+        # D4 Hotline (no phone_number anymore — user calls our hotline):
+        # we still need an email to send out the hotline number + Sprechzeiten.
+        if values.get('wants_hotline') and not email:
+            return ('Damit wir Ihnen die Hotline-Nummer und die Sprechzeiten '
+                    'zusenden können, benötigen wir Ihre E-Mail-Adresse.')
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -471,11 +534,37 @@ class Commitment(Page):
 
 class Abschluss(Page):
     form_model = 'player'
+    preserve_unsubmitted_inputs = True  # Reload-/Validation-Survival
+    # clicked_application_portal + _ts laufen jetzt über live_method
+    # (symmetrisch zu Landing), damit der Antrag-Click auch dann persistent
+    # ist, wenn der/die Teilnehmer:in NACH dem Klick den Browser schließt
+    # ohne "Abschließen" zu drücken. Daher NICHT mehr in form_fields.
     form_fields = [
         'feedback_subsidies',
-        'clicked_application_portal', 'clicked_application_portal_ts',
         'time_abschluss',
     ]
+
+    @staticmethod
+    def live_method(player: Player, data):
+        """Receive fire-and-forget click events from the Abschluss page.
+
+        Mirrors Landing.live_method's design but for the post-survey
+        Antrag-CTA. Without this, clicks would only persist if the user
+        also submits the form via 'Abschließen' — but the most converting
+        path is exactly the opposite (klick → opens portal in new tab →
+        user starts antrag, never returns to close Abschluss tab).
+        """
+        event = (data or {}).get('event')
+        ts = (data or {}).get('ts')
+        try:
+            ts = float(ts) if ts is not None else None
+        except (TypeError, ValueError):
+            ts = None
+        if event == 'application_portal_click':
+            player.clicked_application_portal = True
+            if ts is not None:
+                player.clicked_application_portal_ts = ts
+        return {}
 
     @staticmethod
     def is_displayed(player: Player):
@@ -492,11 +581,37 @@ class EndPage(Page):
     Landing (treatment block included), but without the survey CTA, the
     cookie banner, or the Vorab-Hinweis. Lets participants re-read the
     treatment-relevant information for as long as they want.
-    No form, no further submission."""
+
+    Kein Form-Submit, aber live_method ist da, um Antrag-Klicks auch
+    HIER zu tracken. Ohne live_method würde der Re-Read-Antrag-Klick
+    in der Datenanalyse fehlen — wichtig weil EndPage potenziell der
+    Conversion-Trigger für überlegende User ist (Direktive Jakob
+    2026-06-08)."""
 
     @staticmethod
     def is_displayed(player: Player):
         return player.field_maybe_none('label_valid') is True
+
+    @staticmethod
+    def live_method(player: Player, data):
+        """Receive 'endpage_portal_click' events from the EndPage CTA.
+
+        Symmetrisch zu Landing.live_method und Abschluss.live_method:
+        sofortige Persistenz, unabhängig davon ob User danach noch
+        irgendwo "Weiter" klickt (es gibt nichts mehr — EndPage ist
+        die letzte Seite).
+        """
+        event = (data or {}).get('event')
+        ts = (data or {}).get('ts')
+        try:
+            ts = float(ts) if ts is not None else None
+        except (TypeError, ValueError):
+            ts = None
+        if event == 'endpage_portal_click':
+            player.clicked_portal_endpage = True
+            if ts is not None:
+                player.clicked_portal_endpage_ts = ts
+        return {}
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -538,15 +653,19 @@ def custom_export(players):
         'time_commitment', 'time_abschluss',
         'scroll_landing', 'expanded_process',
         'prompt_shown_ts', 'prompt_used', 'prompt_dismissed_ts',
+        'screening_similar_done',
+        'respondent_climate_importance',
         'application_likelihood',
         'measure_solar', 'measure_solar_green_roof', 'measure_battery',
         'measure_greening',
         'measure_rainwater', 'measure_drinking_fountain',
-        'measure_already_done', 'measure_other', 'measure_other_text',
+        'measure_other', 'measure_other_text',
         'measure_none', 'measures_order',
         'barrier_time', 'barrier_complexity', 'barrier_uncertainty',
         'barrier_amount', 'barrier_property', 'barrier_priority',
         'barrier_already_applied',
+        'barrier_funding_liquidity', 'barrier_internal_capacity',
+        'barrier_owner_tenant', 'barrier_proof_uncertainty',
         'barrier_other', 'barrier_other_text', 'barriers_order',
         'belief_approval_rate', 'belief_funding_amount',
         'belief_effort', 'belief_processing_time', 'belief_payout_effort',
@@ -554,10 +673,11 @@ def custom_export(players):
         'respondent_position', 'respondent_position_other',
         'wants_email', 'email_address',
         'wants_event',
-        'wants_callback', 'phone_number',
+        'wants_hotline',
         'feedback_subsidies',
         'clicked_portal_landing', 'clicked_portal_landing_ts',
         'clicked_application_portal', 'clicked_application_portal_ts',
+        'clicked_portal_endpage', 'clicked_portal_endpage_ts',
     ]
     for p in players:
         t = p.field_maybe_none('treatment')
@@ -584,17 +704,21 @@ def custom_export(players):
             p.field_maybe_none('prompt_shown_ts'),
             p.field_maybe_none('prompt_used'),
             p.field_maybe_none('prompt_dismissed_ts'),
+            p.field_maybe_none('screening_similar_done'),
+            p.field_maybe_none('respondent_climate_importance'),
             p.field_maybe_none('application_likelihood'),
             p.measure_solar, p.measure_solar_green_roof, p.measure_battery,
             p.measure_greening,
             p.measure_rainwater, p.measure_drinking_fountain,
-            p.measure_already_done, p.measure_other,
+            p.measure_other,
             p.field_maybe_none('measure_other_text') or '',
             p.measure_none,
             p.field_maybe_none('measures_order') or '',
             p.barrier_time, p.barrier_complexity, p.barrier_uncertainty,
             p.barrier_amount, p.barrier_property, p.barrier_priority,
             p.barrier_already_applied,
+            p.barrier_funding_liquidity, p.barrier_internal_capacity,
+            p.barrier_owner_tenant, p.barrier_proof_uncertainty,
             p.barrier_other,
             p.field_maybe_none('barrier_other_text') or '',
             p.field_maybe_none('barriers_order') or '',
@@ -610,13 +734,14 @@ def custom_export(players):
             p.field_maybe_none('wants_email'),
             p.field_maybe_none('email_address') or '',
             p.field_maybe_none('wants_event'),
-            p.field_maybe_none('wants_callback'),
-            p.field_maybe_none('phone_number') or '',
+            p.field_maybe_none('wants_hotline'),
             p.field_maybe_none('feedback_subsidies') or '',
             p.clicked_portal_landing,
             p.field_maybe_none('clicked_portal_landing_ts'),
             p.clicked_application_portal,
             p.field_maybe_none('clicked_application_portal_ts'),
+            p.clicked_portal_endpage,
+            p.field_maybe_none('clicked_portal_endpage_ts'),
         ]
 
 

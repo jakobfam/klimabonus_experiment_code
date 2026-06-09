@@ -5,12 +5,13 @@
 
 <section class="content-block">
     <div class="content-inner">
-        <span class="kicker">Weitere Informationen erhalten</span>
-        <h1>Möchten Sie zum Klimabonus auf dem Laufenden bleiben?</h1>
+        <span class="kicker">Nächste Schritte</span>
+        <h1>Bleiben Sie zum Klimabonus auf dem Laufenden</h1>
         <p class="lede">
-            Falls Sie das Förderprogramm interessiert, schicken wir Ihnen gerne
-            weitere Informationen zu. Sie entscheiden, was für Ihr Unternehmen
-            passt.
+            Sie können sich vom Klimareferat zum Klimabonus informieren
+            lassen — per E-Mail, persönlich auf einer
+            Informationsveranstaltung oder direkt telefonisch über die
+            Hotline. Sie entscheiden, was für Ihr Unternehmen passt.
         </p>
     </div>
 </section>
@@ -71,27 +72,21 @@
                 <span>Nein, danke</span>
             </label>
         </div>
-
-        <div id="email_wrap" class="cond-input" hidden>
-            <label id="email_label" for="email_address">Ihre E-Mail-Adresse</label>
-            <p id="email_hint" class="muted" style="display: none; margin: -4px 0 8px; font-size: 13px;">
-                Damit wir Sie zur Informationsveranstaltung einladen
-                können, benötigen wir Ihre E-Mail-Adresse.
-            </p>
-            <input type="email" name="email_address" id="email_address"
-                   maxlength="200" class="text-input"
-                   placeholder="name@unternehmen.de">
-        </div>
+        {# Email-Slot Q1: JS verschiebt #email_wrap hier rein, wenn diese
+           Frage die erste mit "Ja" ist. #}
+        <div class="email-slot" data-email-slot="q1"></div>
     </div>
 </section>
 
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
-        <h2>Informationsveranstaltung</h2>
+        <h2>Einladung zu einer Informationsveranstaltung</h2>
         <p>
-            Das Klimareferat der Stadt Frankfurt bietet regelmäßig
-            Informationsveranstaltungen zum Klimabonus an. Möchten Sie zu einer
-            der nächsten Veranstaltungen eingeladen werden?
+            Das Klimareferat der Stadt Frankfurt veranstaltet regelmäßig
+            kostenlose Informationsveranstaltungen zum Klimabonus. Dort
+            werden die Förderbedingungen vorgestellt und alle Fragen
+            persönlich beantwortet. Möchten Sie zur nächsten
+            Veranstaltung eingeladen werden?
         </p>
         <div class="radio-stack">
             <label class="radio-row">
@@ -103,38 +98,49 @@
                 <span>Nein, danke</span>
             </label>
         </div>
+        <div class="email-slot" data-email-slot="q2"></div>
     </div>
 </section>
 
 <section class="content-block">
     <div class="content-inner form-section">
-        <h2>Persönlicher Rückruf</h2>
+        <h2>Telefon-Hotline des Klimareferats</h2>
         <p>
-            Falls Sie individuelle Fragen zu Ihrer Situation haben, ruft Sie das
-            Klimareferat gerne persönlich zurück.
+            Bei individuellen Fragen zu Ihrem Vorhaben können Sie sich
+            direkt an die Klimabonus-Hotline des Klimareferats wenden.
+            Möchten Sie die Hotline-Nummer und die aktuellen Sprechzeiten
+            per E-Mail zugesendet bekommen?
         </p>
         <div class="radio-stack">
             <label class="radio-row">
-                <input type="radio" name="wants_callback" value="True" required class="js-wants-callback">
+                <input type="radio" name="wants_hotline" value="True" required class="js-wants-hotline">
                 <span>Ja, gerne</span>
             </label>
             <label class="radio-row">
-                <input type="radio" name="wants_callback" value="False" class="js-wants-callback">
+                <input type="radio" name="wants_hotline" value="False" class="js-wants-hotline">
                 <span>Nein, danke</span>
             </label>
         </div>
-
-        <div id="phone_wrap" class="cond-input" hidden>
-            <label for="phone_number">Ihre Telefonnummer</label>
-            <input type="tel" name="phone_number" id="phone_number"
-                   maxlength="40" class="text-input"
-                   placeholder="z.B. 069 1234567">
-        </div>
+        <div class="email-slot" data-email-slot="q3"></div>
     </div>
 </section>
 
+{# Email-Input lebt initially HIER (versteckt) — JS bewegt das ganze
+   wrap-Div in den richtigen email-slot je nach aktiver Ja-Frage.
+   Ein einzelnes Input-Element → garantiert ein einziger Wert beim Submit. #}
+<div id="email_wrap" class="cond-input" hidden>
+    <label id="email_label" for="email_address">Ihre E-Mail-Adresse</label>
+    <p id="email_hint" class="muted" style="display: none; margin: -4px 0 8px; font-size: 13px;">
+        Damit wir Sie zur Informationsveranstaltung einladen
+        können, benötigen wir Ihre E-Mail-Adresse.
+    </p>
+    <input type="email" name="email_address" id="email_address"
+           maxlength="200" class="text-input"
+           placeholder="name@unternehmen.de">
+</div>
+
 {# Einwilligung erscheint nur, wenn der/die Teilnehmer:in bei mindestens
-   einer der drei Optionen (E-Mail, Veranstaltung, Rückruf) "Ja" gewählt
+   einer der drei Optionen (E-Mail, Veranstaltung, Hotline) "Ja" gewählt
    hat. Bei "Nein" zu allen gibt es nichts zu teilen. #}
 <section id="consent-contact-section" class="content-block content-block-light"
          hidden>
@@ -156,7 +162,7 @@
                 Klimabonus an das Klimareferat der Stadt Frankfurt
                 weitergibt. Diese Einwilligung kann ich jederzeit
                 widerrufen
-                (<a href="mailto:klimabonus-studie@uni-frankfurt.de">klimabonus-studie@uni-frankfurt.de</a>).
+                (<a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>).
             </span>
         </label>
         <input type="hidden" name="consent_contact_ts" id="consent_contact_ts" value="">
@@ -176,7 +182,7 @@
     <div class="contact-strip-text">
         <strong>Klimareferat der Stadt Frankfurt</strong>
         <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
-        <span class="contact-strip-note">Bei Fragen ruft das Team Sie gerne zurück.</span>
+        <span class="contact-strip-note">Bei Fragen ist das Team gerne erreichbar.</span>
     </div>
 </aside>
 
@@ -195,42 +201,60 @@
     window.addEventListener('beforeunload', commit);
     document.getElementById('form').addEventListener('submit', commit);
 
-    // Conditional reveal for callback / phone
-    function bindToggle(radioClass, wrapId, expectedValue) {
-        const wrap = document.getElementById(wrapId);
-        document.querySelectorAll('.' + radioClass).forEach(el => {
-            el.addEventListener('change', () => {
-                wrap.hidden = (el.value !== expectedValue || !el.checked);
-            });
-        });
-    }
-    bindToggle('js-wants-callback', 'phone_wrap', 'True');
-
-    // Email input shows if EITHER answer requires it: "Ja" zu E-Mail-Info
-    // ODER "Ja" zur Veranstaltung. Label + hint adapt to context.
+    // ---- Kontextuelle Email-Field-Platzierung (Direktive 2026-06-08) ----
+    // Ein einziges Input-Element (#email_wrap) — JS bewegt es zur ERSTEN
+    // Frage mit "Ja". So sieht der/die Teilnehmer:in das Email-Feld
+    // immer direkt unter der Frage, die sie/er gerade beantwortet.
+    // Garantiert ein einziger Wert beim Submit (kein Multi-Input-Konflikt).
     const emailWrap  = document.getElementById('email_wrap');
     const emailLabel = document.getElementById('email_label');
     const emailHint  = document.getElementById('email_hint');
+    const slotQ1 = document.querySelector('[data-email-slot="q1"]');
+    const slotQ2 = document.querySelector('[data-email-slot="q2"]');
+    const slotQ3 = document.querySelector('[data-email-slot="q3"]');
     function selectedRadio(name) {
         const el = document.querySelector('input[name="' + name + '"]:checked');
         return el ? el.value : null;
     }
     function updateEmailVisibility() {
-        const wantsEmail = selectedRadio('wants_email') === 'True';
-        const wantsEvent = selectedRadio('wants_event') === 'True';
-        const needEmail  = wantsEmail || wantsEvent;
-        emailWrap.hidden = !needEmail;
+        const wantsEmail   = selectedRadio('wants_email')   === 'True';
+        const wantsEvent   = selectedRadio('wants_event')   === 'True';
+        const wantsHotline = selectedRadio('wants_hotline') === 'True';
+
+        // Priorität: erste Ja-Frage gewinnt. Email-Feld erscheint dort
+        // (unter Q1 wenn Q1=Ja; sonst Q2 wenn Q2=Ja; sonst Q3 wenn Q3=Ja).
+        let targetSlot = null;
+        let label = 'Ihre E-Mail-Adresse';
+        let showHint = false;
         if (wantsEmail) {
-            emailLabel.textContent = 'Ihre E-Mail-Adresse';
-            emailHint.style.display = 'none';
+            targetSlot = slotQ1;
+            label = 'Ihre E-Mail-Adresse';
+            showHint = false;
         } else if (wantsEvent) {
-            emailLabel.textContent = 'Ihre E-Mail-Adresse für die Einladung';
-            emailHint.style.display = 'block';
+            targetSlot = slotQ2;
+            label = 'Ihre E-Mail-Adresse für die Einladung';
+            showHint = true;
+        } else if (wantsHotline) {
+            targetSlot = slotQ3;
+            label = 'Ihre E-Mail-Adresse für die Hotline-Informationen';
+            showHint = false;
         }
+
+        if (targetSlot && emailWrap.parentElement !== targetSlot) {
+            targetSlot.appendChild(emailWrap);
+        }
+        emailWrap.hidden = (targetSlot === null);
+        emailLabel.textContent = label;
+        emailHint.style.display = showHint ? 'block' : 'none';
     }
-    document.querySelectorAll('input[name="wants_email"], input[name="wants_event"]').forEach(el => {
+    document.querySelectorAll(
+        'input[name="wants_email"], input[name="wants_event"], input[name="wants_hotline"]'
+    ).forEach(el => {
         el.addEventListener('change', updateEmailVisibility);
     });
+    // Apply on load — restores email-field visibility/placement after
+    // oTree re-renders the page with preserved form values.
+    updateEmailVisibility();
 
     // ---- Einwilligung zur Kontaktaufnahme:
     // erscheint nur, wenn mindestens eine Ja-Antwort vorliegt ----
@@ -239,15 +263,17 @@
     function anyContactWanted() {
         const e = selectedRadio('wants_email')    === 'True';
         const v = selectedRadio('wants_event')    === 'True';
-        const c = selectedRadio('wants_callback') === 'True';
+        const c = selectedRadio('wants_hotline') === 'True';
         return e || v || c;
     }
     function updateConsentVisibility() {
         consentSection.hidden = !anyContactWanted();
     }
     document.querySelectorAll(
-        'input[name="wants_email"], input[name="wants_event"], input[name="wants_callback"]'
+        'input[name="wants_email"], input[name="wants_event"], input[name="wants_hotline"]'
     ).forEach(el => el.addEventListener('change', updateConsentVisibility));
+    // Apply on load (BUG D5).
+    updateConsentVisibility();
 
     // Timestamp setzen beim Anklicken des Consent-Checkbox
     consentCb.addEventListener('change', () => {

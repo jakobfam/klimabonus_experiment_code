@@ -21,7 +21,7 @@
    Numbers shown (identical in T1 and T2 — real official values, 2026-05):
      96 %        Bewilligungsquote          — Klimareferat Stadt Frankfurt
      15 Min.     Antragsdauer (vorbereitet) — Klimareferat Stadt Frankfurt
-     7.883,75 €  Förderzusage je Antrag     — Klimareferat Stadt Frankfurt
+     8.776,97 €  Förderzusage je Antrag     — Klimareferat Stadt Frankfurt
      11 / 32 Tg  Bearbeitungszeiten         — Klimareferat Stadt Frankfurt
    ================================================================ #}
 
@@ -33,10 +33,13 @@
             <span class="kicker">Information für Frankfurter Unternehmen</span>
             <h1>Klimabonus der Stadt Frankfurt</h1>
             <p class="lede">
-                Die Stadt Frankfurt unterstützt Ihr Unternehmen beim
-                Klimaschutz mit bis zu 100.000&nbsp;EUR pro Maßnahme – für
-                Solaranlagen, Dachbegrünung, Fassadenbegrünung,
-                Regenwasserspeicher und mehr.
+                Schneller amortisiert dank Förderung: Die Stadt Frankfurt
+                beteiligt sich mit bis zu 100.000&nbsp;EUR pro Maßnahme
+                an Investitionen Frankfurter Unternehmen – für
+                Solaranlagen, Dach- und Fassadenbegrünung,
+                Regenwasserspeicher und mehr. Maßnahmen, die laufende
+                Betriebskosten senken und einen Beitrag zum Klimaschutz
+                leisten.
             </p>
         </div>
     </div>
@@ -48,7 +51,7 @@
 <section class="content-block treatment-block treatment-block-t1">
     <div class="content-inner">
         <span class="kicker">Wussten Sie schon?</span>
-        <h2>So läuft das Förderprogramm in der Praxis</h2>
+        <h2>So läuft das Förderprogramm für Frankfurter Unternehmen</h2>
 
         <div class="stat-box stat-box-mono">
             <div class="stat-row">
@@ -57,17 +60,17 @@
             </div>
             <div class="stat-row">
                 <div class="stat-figure">15&nbsp;Min.</div>
-                <div class="stat-label">durchschnittlich<br>für den Antrag</div>
+                <div class="stat-label">Ausfüllzeit<br>im Durchschnitt</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">7.883,75&nbsp;€</div>
+                <div class="stat-figure">8.776,97&nbsp;€</div>
                 <div class="stat-label">durchschnittliche<br>Förderzusage je Antrag</div>
             </div>
         </div>
         <p class="stat-secondary">
             Bearbeitungszeit Förderantrag:
             <strong>⌀&nbsp;11&nbsp;Tage</strong>&nbsp;·&nbsp;
-            Auszahlungsantrag: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
+            Zeit bis zur Auszahlung: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
         </p>
         <p class="source-note">
             Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
@@ -82,10 +85,15 @@
         <h2>So lief der Klimabonus für {{ peer.firma }}</h2>
 
         <div class="quote-card">
-            <div class="quote-photo" aria-label="Foto Geschäftsführung {{ peer.firma }}">
+            <div class="quote-photo quote-photo-{{ peer.photo_fit }}"
+                 aria-label="Foto {{ peer.firma }}">
                 {% if peer.photo %}
-                    <img src="{% static 'klimabonus/' %}{{ peer.photo }}"
-                         alt="Geschäftsführung {{ peer.firma }}">
+                    {# peer.photo enthält bereits den 'klimabonus/'-Prefix
+                       (oTree 6 {% static %} validiert strict, dass der
+                       Path eine real existierende Datei ist — Concat
+                       würde "klimabonus/" als Directory fehlschlagen). #}
+                    <img src="{% static peer.photo %}"
+                         alt="{{ peer.firma }}">
                 {% else %}
                     <span>[PLATZHALTER: PEER_FOTO]</span>
                 {% endif %}
@@ -93,11 +101,19 @@
             <div class="quote-body">
                 <blockquote>„{{ peer.quote }}"</blockquote>
                 <cite>
-                    — {{ peer.name }}, Geschäftsführung, {{ peer.firma }}
+                    {# Name + Position können None sein (z.B. Peer 1
+                       Nassauische Heimstätte — Zitat dem Unternehmen
+                       zugeordnet, nicht einer Person). #}
+                    — {% if peer.name %}{{ peer.name }}, {% endif %}{% if peer.position %}{{ peer.position }}, {% endif %}{{ peer.firma }}
                     <span class="cite-meta">{{ peer.branche }} · {{ peer.size_label }}</span>
                 </cite>
             </div>
         </div>
+
+        {# Sekundäre Überschrift (Direktive Jakob 2026-06-08): identisch
+           zu T1, leitet die Zahlen-Box zwischen Peer-Quote und Stat-Box
+           ein. Sorgt für visuelle Parität zwischen den Treatments. #}
+        <h2 class="t2-stats-heading">So läuft das Förderprogramm für Frankfurter Unternehmen</h2>
 
         <div class="stat-box stat-box-mono">
             <div class="stat-row">
@@ -106,17 +122,17 @@
             </div>
             <div class="stat-row">
                 <div class="stat-figure">15&nbsp;Min.</div>
-                <div class="stat-label">durchschnittlich<br>für den Antrag</div>
+                <div class="stat-label">Ausfüllzeit<br>im Durchschnitt</div>
             </div>
             <div class="stat-row">
-                <div class="stat-figure">7.883,75&nbsp;€</div>
+                <div class="stat-figure">8.776,97&nbsp;€</div>
                 <div class="stat-label">durchschnittliche<br>Förderzusage je Antrag</div>
             </div>
         </div>
         <p class="stat-secondary">
             Bearbeitungszeit Förderantrag:
             <strong>⌀&nbsp;11&nbsp;Tage</strong>&nbsp;·&nbsp;
-            Auszahlungsantrag: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
+            Zeit bis zur Auszahlung: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
         </p>
         <p class="source-note">
             Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
@@ -228,37 +244,42 @@
                 <li>
                     <span class="step-num">1</span>
                     <div>
-                        <h3>Maßnahme planen und recherchieren</h3>
-                        <p>Wer den Antrag vorbereitet stellt, ist nach wenigen
-                           Minuten durch. Das Klimareferat bietet auch im
-                           Vorfeld eine fachliche Beratung an.</p>
+                        <h3>Maßnahme planen und Antrag vorbereiten</h3>
+                        <p>Wer den Antrag gut vorbereitet hat, ist nach
+                           wenigen Minuten durch. Das Klimareferat bietet
+                           auch im Vorfeld eine kostenlose fachliche
+                           Beratung an.</p>
                     </div>
                 </li>
                 <li>
                     <span class="step-num">2</span>
                     <div>
                         <h3>Antrag digital einreichen</h3>
-                        <p>Mit E-Mail-Adresse registrieren, Antrag online
-                           einreichen und per Mail bestätigen.</p>
+                        <p>Mit E-Mail-Adresse online registrieren, Antrag
+                           ausfüllen und absenden. Eingang wird per E-Mail
+                           bestätigt.</p>
                     </div>
                 </li>
                 <li>
                     <span class="step-num">3</span>
                     <div>
-                        <h3>Bescheid abwarten und Maßnahme umsetzen</h3>
-                        <p>Erst nach Bescheid mit der Maßnahme beginnen.
-                           Umsetzungszeit: <strong>12 bzw. 24&nbsp;Monate</strong>.
-                           Eine Fristverlängerung ist formlos per E-Mail
-                           oder Anruf möglich.</p>
+                        <h3>Bewilligung abwarten und Maßnahme umsetzen</h3>
+                        <p>Erst nach Erhalt der Bewilligung mit der
+                           Maßnahme beginnen. Umsetzungszeit:
+                           <strong>12 bzw. 24&nbsp;Monate</strong> (je
+                           nach Maßnahme). Eine Fristverlängerung ist
+                           formlos per E-Mail oder Anruf möglich.</p>
                     </div>
                 </li>
                 <li>
                     <span class="step-num">4</span>
                     <div>
                         <h3>Auszahlung beantragen</h3>
-                        <p>Nach Abschluss der Maßnahme den Antrag auf
-                           Auszahlung einreichen. Die Auszahlung folgt nach
-                           dem Bescheid der Stadt.</p>
+                        <p>Nach Abschluss der Maßnahme den
+                           Auszahlungsantrag mit den entsprechenden
+                           Nachweisen (z.&nbsp;B. Rechnungen) einreichen.
+                           Die Auszahlung erfolgt nach Prüfung durch die
+                           Stadt.</p>
                     </div>
                 </li>
             </ol>
@@ -266,18 +287,42 @@
     </div>
 </section>
 
+{# ============= SURVEY CTA (NACH Process, VOR Contact) ============= #}
+{# Direktive Jakob 2026-06-08: Primary-CTA aus der Contact-Section in
+   eine eigene Section gezogen, damit Teilnehmer:innen schon nach dem
+   Process-Akkordeon (in dem die wichtigsten Detail-Infos stehen) zur
+   Befragung greifen können — bevor sie zur Kontakt-Sektion scrollen
+   müssen. Contact bleibt als sekundärer Pfad mit eigenem Alt-CTA. #}
+<section class="content-block content-block-light">
+    <div class="content-inner survey-cta-section">
+        <div class="next-step-hint" role="note">
+            <strong>Wie geht es weiter?</strong>
+            Auf den nächsten Seiten folgen ein paar kurze Fragen.
+            Anschließend kommen Sie direkt zum Antragsportal der Stadt
+            Frankfurt.
+        </div>
+
+        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit">
+            <span class="btn-text">Ihre Meinung ist uns wichtig</span>
+            <span class="btn-subtitle">Dauert ca. 5&nbsp;Minuten</span>
+        </button>
+    </div>
+</section>
+
 {# ============= CONTACT WITH TEAM PHOTO (identical) ============= #}
 
 <section class="content-block content-block-contact">
     <div class="content-inner">
-        <img src="{% static 'klimabonus/klimabonus_logo.jpg' %}"
-             alt="Klimabonus — Stadt Frankfurt"
-             class="klimabonus-logo">
+        {# Klimabonus-Logo lebt jetzt im Header (siehe Page.html) —
+           hier in der Contact-Section nicht mehr doppelt zeigen.
+           Survey-CTA + next-step-hint sind bewusst in die vorherige
+           Section gezogen (Direktive Jakob 2026-06-08). #}
         <h2>Sie haben Fragen?</h2>
         <p>
             Das Klimareferat der Stadt Frankfurt beantwortet Ihre Fragen
             zum Förderprogramm oder zur fachlichen Planung Ihrer Maßnahme
-            gerne. Auf Wunsch ruft das Team Sie auch persönlich zurück.
+            gerne — schriftlich per E-Mail oder telefonisch über die
+            Klimabonus-Hotline.
         </p>
         <p class="contact-large">
             <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
@@ -295,18 +340,6 @@
                 um den Klimabonus.
             </figcaption>
         </figure>
-
-        <div class="next-step-hint" role="note">
-            <strong>Wie geht es weiter?</strong>
-            Auf den nächsten Seiten folgen ein paar kurze Fragen.
-            Anschließend kommen Sie direkt zum Antragsportal der Stadt
-            Frankfurt.
-        </div>
-
-        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit">
-            <span class="btn-text">Ihre Meinung ist uns wichtig</span>
-            <span class="btn-subtitle">Dauert ca. 3&nbsp;Minuten</span>
-        </button>
 
         <div class="alt-cta">
             <span class="alt-cta-label">
@@ -343,7 +376,7 @@
                 id="survey-prompt-submit">
             Zur Befragung
         </button>
-        <p class="survey-prompt-meta">Dauert ca. 3&nbsp;Minuten</p>
+        <p class="survey-prompt-meta">Dauert ca. 5&nbsp;Minuten</p>
     </div>
 </div>
 
@@ -358,9 +391,10 @@
             <p id="consent-desc">
                 Diese Webseite wird von der Goethe-Universität Frankfurt im
                 Rahmen eines Forschungsprojekts zum Klimabonus betrieben.
-                Wir erfassen anonymisiert, wie Sie diese Seite nutzen, um das
-                Informationsangebot für Frankfurter Unternehmen zu
-                verbessern. Ihre Angaben werden nicht weitergegeben.
+                Wir erfassen pseudonymisiert, wie Sie diese Seite nutzen,
+                um das Informationsangebot für Frankfurter Unternehmen zu
+                verbessern. Ihre Angaben werden nicht an Dritte
+                weitergegeben.
             </p>
         </div>
         <div class="consent-actions">
@@ -441,12 +475,30 @@
     decline.addEventListener('click', () => recordConsent(false));
 
     // ---------- Direct-to-Antrag click tracking ----------
+    // Two-track persistence (belt + suspenders):
+    //  1. liveSend (WebSocket → live_method)  — instant, but fragile if
+    //     the user clicks before the WS handshake completes (~200 ms after
+    //     load) or under flaky networks. We tolerate single losses.
+    //  2. localStorage replay — survives even if liveSend failed. Re-fires
+    //     the event whenever the form is submitted (i.e. the user later
+    //     comes back and finishes the survey), so the late-arriving event
+    //     still hits live_method and persists.
+    const LS_KEY = 'klimabonus_portal_click_ts';
     const portalLink = document.getElementById('landing-portal-link');
     if (portalLink) {
         portalLink.addEventListener('click', () => {
-            fireEvent({ event: 'portal_click', ts: nowSec() });
+            const ts = nowSec();
+            fireEvent({ event: 'portal_click', ts: ts });
+            try { localStorage.setItem(LS_KEY, String(ts)); } catch (_) {}
         });
     }
+    // Replay localStorage on form submit (covers WS race-condition losses).
+    document.getElementById('form').addEventListener('submit', () => {
+        try {
+            const saved = localStorage.getItem(LS_KEY);
+            if (saved) fireEvent({ event: 'portal_click', ts: parseFloat(saved) });
+        } catch (_) {}
+    });
 
     // ---------- Survey-prompt modal (fires after 2 min on page) ----------
     const PROMPT_DELAY_MS = 120 * 1000; // 2 minutes

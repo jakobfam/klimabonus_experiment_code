@@ -15,15 +15,21 @@
     </div>
 </section>
 
+{# F1 — Forschungs-Einwilligung. Wording: "pseudonymisiert" statt
+   "anonymisiert", weil wir Antworten via participant.label mit dem
+   MUP-Datensatz verlinken (Pioneer-Profile). Echte Anonymität ist
+   damit nicht gegeben — pseudonymisiert ist die saubere DSGVO-Form. #}
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
         <h2>Einwilligung zur Forschungsteilnahme</h2>
         <p>
             Diese Befragung wird im Rahmen einer Forschungsstudie der
             Goethe-Universität Frankfurt durchgeführt. Ihre Antworten
-            werden anonymisiert ausgewertet und können in
-            wissenschaftlichen Veröffentlichungen verwendet werden. Es
-            werden keine personenbezogenen Daten an Dritte weitergegeben.
+            werden <strong>pseudonymisiert</strong> ausgewertet — das
+            heißt, Ihr Unternehmen wird durch einen Zufallscode ersetzt
+            und nicht namentlich genannt. Die Auswertung erfolgt nur zu
+            wissenschaftlichen Zwecken; es werden keine
+            personenbezogenen Daten an Dritte weitergegeben.
         </p>
         <label class="consent-checkbox">
             <input type="checkbox" name="consent_research" value="True"
@@ -31,40 +37,20 @@
             <span>
                 Ich willige in die Teilnahme an dieser Forschungsstudie
                 der Goethe-Universität Frankfurt ein und stimme der
-                anonymisierten wissenschaftlichen Auswertung meiner
+                pseudonymisierten wissenschaftlichen Auswertung meiner
                 Angaben zu. Diese Einwilligung kann ich jederzeit ohne
                 Angabe von Gründen widerrufen
-                (<a href="mailto:klimabonus-studie@uni-frankfurt.de">klimabonus-studie@uni-frankfurt.de</a>).
+                (<a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>).
             </span>
         </label>
         <input type="hidden" name="consent_research_ts" id="consent_research_ts" value="">
     </div>
 </section>
 
-<section class="content-block">
-    <div class="content-inner form-section">
-        <h2>Wie wahrscheinlich ist es, dass Sie in den nächsten 12&nbsp;Monaten einen Klimabonus-Antrag stellen?</h2>
-
-        <div class="slider-wrap">
-            <input type="range" min="0" max="10" step="1"
-                   name="application_likelihood" id="application_likelihood"
-                   value="0" class="slider" data-untouched="true">
-            <div class="slider-scale">
-                <span>0<br><small>Sehr unwahrscheinlich</small></span>
-                <span class="slider-value-display">
-                    <strong id="application_likelihood_val">—</strong>
-                </span>
-                <span>10<br><small>Sehr wahrscheinlich</small></span>
-            </div>
-            <p class="slider-hint">Bitte klicken Sie auf die Skala, um zu antworten.</p>
-        </div>
-    </div>
-</section>
-
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
         <h2>Welche Maßnahmen kommen für Ihr Unternehmen grundsätzlich in Frage?</h2>
-        <p class="muted">Mehrfachauswahl möglich.</p>
+        <p class="muted">Mehrfachauswahl möglich. Sie können auch &quot;Keine davon&quot; auswählen.</p>
 
         <div class="checkbox-grid" id="measures-grid">
             <label class="checkbox-card">
@@ -92,12 +78,8 @@
                 <span class="checkbox-card-label">Trinkbrunnen</span>
             </label>
             <label class="checkbox-card">
-                <input type="checkbox" name="measure_already_done" data-key="already_done">
-                <span class="checkbox-card-label">Ähnliche Maßnahmen bereits umgesetzt</span>
-            </label>
-            <label class="checkbox-card">
                 <input type="checkbox" name="measure_other" data-key="other" id="measure_other_cb">
-                <span class="checkbox-card-label">Sonstiges</span>
+                <span class="checkbox-card-label">Eine andere Klimaschutz-Maßnahme</span>
             </label>
             <label class="checkbox-card checkbox-card-none">
                 <input type="checkbox" name="measure_none" data-key="none" id="measure_none">
@@ -107,13 +89,15 @@
         <input type="hidden" name="measures_order" id="measures_order" value="">
 
         <div id="measure_other_wrap" class="cond-input" hidden>
-            <label for="measure_other_text">Welche Maßnahme möchten Sie nennen?</label>
+            <label for="measure_other_text">Welche Maßnahme planen Sie? (kurze Beschreibung)</label>
             <input type="text" name="measure_other_text" id="measure_other_text"
                    maxlength="200" class="text-input">
         </div>
     </div>
 </section>
 
+{# Barriers: bestehende 7 + neue C2a-d. Wording von complexity /
+   uncertainty / amount präzisiert (C3b/c/d). #}
 <section class="content-block">
     <div class="content-inner form-section">
         <h2>Was sind für Sie die größten Hindernisse bei der Beantragung von Fördermitteln?</h2>
@@ -122,35 +106,54 @@
         <div class="checkbox-grid" id="barriers-grid">
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_time" data-key="time">
-                <span class="checkbox-card-label">Zu hoher Zeitaufwand</span>
+                <span class="checkbox-card-label">Zu hoher Zeitaufwand für die Antragstellung</span>
             </label>
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_complexity" data-key="complexity">
-                <span class="checkbox-card-label">Zu komplizierter Antrag</span>
+                <span class="checkbox-card-label">Antragsprozess wirkt zu kompliziert</span>
             </label>
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_uncertainty" data-key="uncertainty">
-                <span class="checkbox-card-label">Unsicherheit, ob bewilligt wird</span>
+                <span class="checkbox-card-label">Unsicherheit, ob der Antrag bewilligt wird</span>
             </label>
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_amount" data-key="amount">
-                <span class="checkbox-card-label">Fördersumme zu gering</span>
+                <span class="checkbox-card-label">Förderhöhe ist nicht attraktiv genug</span>
             </label>
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_property" data-key="property">
-                <span class="checkbox-card-label">Kein passendes Gebäude / Grundstück</span>
+                <span class="checkbox-card-label">Kein passendes Gebäude / Grundstück verfügbar</span>
             </label>
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_priority" data-key="priority">
-                <span class="checkbox-card-label">Thema hat keine Priorität</span>
+                <span class="checkbox-card-label">Thema hat im Unternehmen aktuell keine Priorität</span>
             </label>
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_already_applied" data-key="already_applied">
                 <span class="checkbox-card-label">Fördermittel bereits beantragt bzw. in Anspruch genommen</span>
             </label>
+
+            {# --- C2a-d new barriers (Klimareferat-Feedback) --- #}
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_funding_liquidity" data-key="funding_liquidity">
+                <span class="checkbox-card-label">Vorfinanzierung / Liquidität für die Investition</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_internal_capacity" data-key="internal_capacity">
+                <span class="checkbox-card-label">Fehlende Personalkapazität intern</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_owner_tenant" data-key="owner_tenant">
+                <span class="checkbox-card-label">Eigentums- / Mietverhältnis verhindert Investition</span>
+            </label>
+            <label class="checkbox-card">
+                <input type="checkbox" name="barrier_proof_uncertainty" data-key="proof_uncertainty">
+                <span class="checkbox-card-label">Unsicherheit, welche Nachweise für die Auszahlung verlangt werden</span>
+            </label>
+
             <label class="checkbox-card">
                 <input type="checkbox" name="barrier_other" data-key="other" id="barrier_other_cb">
-                <span class="checkbox-card-label">Sonstiges</span>
+                <span class="checkbox-card-label">Ein anderes Hindernis</span>
             </label>
         </div>
         <input type="hidden" name="barriers_order" id="barriers_order" value="">
@@ -160,8 +163,138 @@
             <input type="text" name="barrier_other_text" id="barrier_other_text"
                    maxlength="200" class="text-input">
         </div>
+    </div>
+</section>
 
-        <button class="btn btn-primary" type="submit">Weiter</button>
+{# --------------------------------------------------------------------
+   Allgemeine Fragen ZUM SCHLUSS der Seite (Reihenfolge per Direktive
+   2026-06-08): erst die maßnahmen-/hindernisspezifischen Outcomes,
+   dann der breitere Kontext und die Wahrscheinlichkeit.
+   -------------------------------------------------------------------- #}
+
+{# B-Cluster Vorab-Screening #}
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Hat Ihr Unternehmen bereits eine ähnliche klimaschützende Maßnahme umgesetzt?</h2>
+        <p class="muted">Zum Beispiel eine PV-Anlage, Dachbegrünung, Lade­säule, Regenwasserspeicher oder vergleichbare Investition.</p>
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="screening_similar_done" value="True" required>
+                <span>Ja</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="screening_similar_done" value="False">
+                <span>Nein</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+{# G1 Klimaschutz-Wichtigkeit #}
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Wie wichtig ist Klimaschutz für Ihr Unternehmen?</h2>
+        <div class="radio-stack">
+            <label class="radio-row">
+                <input type="radio" name="respondent_climate_importance" value="1" required>
+                <span>Überhaupt nicht wichtig</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_climate_importance" value="2">
+                <span>Eher unwichtig</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_climate_importance" value="3">
+                <span>Teils, teils</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_climate_importance" value="4">
+                <span>Eher wichtig</span>
+            </label>
+            <label class="radio-row">
+                <input type="radio" name="respondent_climate_importance" value="5">
+                <span>Sehr wichtig</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+{# A1+A4 Antragswahrscheinlichkeit — diskrete Buttons. Letzte Frage,
+   Submit-Button direkt darunter. #}
+<section class="content-block">
+    <div class="content-inner form-section">
+        <h2>Wie wahrscheinlich ist es, dass Ihr Unternehmen in den nächsten 12&nbsp;Monaten einen Antrag für den Klimabonus stellt?</h2>
+        <p class="muted">Bitte wählen Sie einen Wert von 0 (sehr unwahrscheinlich) bis 10 (sehr wahrscheinlich).</p>
+
+        <div class="button-scale" id="application_likelihood_scale" role="radiogroup"
+             aria-label="Antragswahrscheinlichkeit Skala 0 bis 10">
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="0" required>
+                <span>0</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="1">
+                <span>1</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="2">
+                <span>2</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="3">
+                <span>3</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="4">
+                <span>4</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="5">
+                <span>5</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="6">
+                <span>6</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="7">
+                <span>7</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="8">
+                <span>8</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="9">
+                <span>9</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="10">
+                <span>10</span>
+            </label>
+        </div>
+        <div class="button-scale-anchors">
+            <small>0 — sehr unwahrscheinlich</small>
+            <small>10 — sehr wahrscheinlich</small>
+        </div>
+
+        {# DOM-Reihenfolge: Submit zuerst (damit Enter = Weiter und
+           nicht Zurück); CSS-flex `order` kehrt die VISUELLE
+           Reihenfolge um (Zurück links, Weiter rechts). Back-Button
+           sendet name="back_button" (oTree-Konvention, siehe
+           otree.constants.back_button = "back_button"). Vorher hatten
+           wir fälschlich name="_back" → wurde server-seitig nicht
+           erkannt, der Klick zählte als regulärer Submit. #}
+        <div class="form-actions">
+            <button class="btn btn-primary form-actions-next" type="submit">
+                Weiter
+            </button>
+            <button class="btn btn-ghost form-actions-back"
+                    type="submit" name="back_button" value="{}"
+                    formnovalidate>
+                ← Zurück zur Information
+            </button>
+        </div>
     </div>
 </section>
 
@@ -172,7 +305,7 @@
     <div class="contact-strip-text">
         <strong>Klimareferat der Stadt Frankfurt</strong>
         <a href="mailto:klimabonus@stadt-frankfurt.de">klimabonus@stadt-frankfurt.de</a>
-        <span class="contact-strip-note">Bei Fragen ruft das Team Sie gerne zurück.</span>
+        <span class="contact-strip-note">Bei Fragen ist das Team gerne erreichbar.</span>
     </div>
 </aside>
 
@@ -190,6 +323,7 @@
             ((Date.now() - startTime) / 1000).toFixed(2);
     }
     window.addEventListener('beforeunload', commit);
+    document.getElementById('form').addEventListener('submit', commit);
 
     // ---- Stamp consent_research timestamp when ticked ----
     const consentCb = document.getElementById('consent_research_cb');
@@ -200,69 +334,12 @@
         });
     }
 
-    // ---- Slider: hide thumb until first interaction; click-to-jump in one click
-    const sliders = document.querySelectorAll('.slider[data-untouched]');
-    function jumpToClick(slider, clientX) {
-        const rect = slider.getBoundingClientRect();
-        const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-        const min = parseFloat(slider.min);
-        const max = parseFloat(slider.max);
-        const step = parseFloat(slider.step) || 1;
-        const raw = min + ratio * (max - min);
-        const stepped = Math.round(raw / step) * step;
-        slider.value = stepped;
-        slider.removeAttribute('data-untouched');
-        slider.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    sliders.forEach(slider => {
-        const displayId = slider.id + '_val';
-        const display = document.getElementById(displayId);
-        slider.addEventListener('input', () => {
-            if (display) display.textContent = slider.value;
-            slider.removeAttribute('data-untouched');
-        });
-        slider.addEventListener('mousedown', (e) => {
-            if (slider.hasAttribute('data-untouched')) {
-                jumpToClick(slider, e.clientX);
-            }
-        });
-        slider.addEventListener('touchstart', (e) => {
-            if (slider.hasAttribute('data-untouched') && e.touches.length) {
-                jumpToClick(slider, e.touches[0].clientX);
-            }
-        }, { passive: true });
-        // Fallback: some browsers (older Edge, browsers with privacy
-        // extensions, certain mobile setups) don't reliably fire
-        // mousedown on range inputs. The click event is a defensive
-        // backstop — the data-untouched guard ensures jumpToClick is
-        // idempotent, so no double-jump if both fire.
-        slider.addEventListener('click', (e) => {
-            if (slider.hasAttribute('data-untouched')) {
-                jumpToClick(slider, e.clientX);
-            }
-        });
-    });
-
-    // ---- Block submit if any slider is still untouched ----
-    document.getElementById('form').addEventListener('submit', (e) => {
-        const untouched = document.querySelectorAll('.slider[data-untouched]');
-        if (untouched.length > 0) {
-            e.preventDefault();
-            untouched[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-            const hint = untouched[0].closest('.slider-wrap').querySelector('.slider-hint');
-            if (hint) hint.classList.add('slider-hint-error');
-            return;
-        }
-        commit();
-    });
-
     // ---- Randomize checkbox display order; record the chosen order ----
     function shuffleChildren(container) {
         const items = Array.from(container.children);
         for (let i = items.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             container.insertBefore(items[j], items[i]);
-            // swap so we don't pick j again
             const tmp = items[i]; items[i] = items[j]; items[j] = tmp;
         }
     }
@@ -272,6 +349,7 @@
     }
     const measuresGrid = document.getElementById('measures-grid');
     const barriersGrid = document.getElementById('barriers-grid');
+
     // Keep "Sonstiges" + "Keine davon" pinned at the end of measures
     const measureOtherCard = document.getElementById('measure_other_cb').closest('.checkbox-card');
     const noneCard = document.getElementById('measure_none').closest('.checkbox-card');
