@@ -140,18 +140,11 @@
         </p>
     </div>
 </section>
-{% else %}
-<section class="content-block treatment-block treatment-block-control">
-    <div class="content-inner">
-        <p class="control-note">
-            Klimaschutz und wirtschaftlich attraktive Investitionen lassen
-            sich verbinden. Der Klimabonus unterstützt Frankfurter
-            Unternehmen dabei, Maßnahmen umzusetzen, die finanzielle
-            Vorteile bringen und gleichzeitig den CO₂-Ausstoß reduzieren.
-        </p>
-    </div>
-</section>
 {% endif %}
+{# Control-Arm (treatment == 1): bewusst KEIN Treatment-Block.
+   Reine Information ohne zusätzlichen Stimulus — der Kontrast zu T1
+   und T2 ist genau die Abwesenheit dieser Inhalte (Direktive Jakob
+   2026-06-08, Pure-Control-Design). #}
 
 {# ============= WIRTSCHAFTLICHKEIT (identical across arms) ============= #}
 
