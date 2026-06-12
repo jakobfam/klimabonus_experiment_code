@@ -100,7 +100,7 @@ class Player(BasePlayer):
     # Categories mirror the 7 funding-table rows on Landing exactly.
     measure_solar = models.BooleanField(blank=True, initial=False)             # PV / Solarthermie
     measure_solar_green_roof = models.BooleanField(blank=True, initial=False)  # Solar-Gründächer
-    measure_battery = models.BooleanField(blank=True, initial=False)           # Batteriespeicher (mit neuer PV)
+    measure_battery = models.BooleanField(blank=True, initial=False)           # Batteriespeicher (mit neuer Solaranlage)
     measure_charging = models.BooleanField(blank=True, initial=False)          # Ladesäulen
     measure_greening = models.BooleanField(blank=True, initial=False)          # Dach-/Fassaden-/Hofbegrünung
     measure_rainwater = models.BooleanField(blank=True, initial=False)         # Regenwasserspeicher

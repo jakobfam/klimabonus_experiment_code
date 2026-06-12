@@ -34,8 +34,8 @@
                 an Investitionen Frankfurter Unternehmen – für
                 Solaranlagen, Dach- und Fassadenbegrünung,
                 Regenwasserspeicher und mehr. Maßnahmen, die laufende
-                Betriebskosten senken und einen Beitrag zum Klimaschutz
-                leisten.
+                Betriebskosten senken und ihre Liegenschaft an die
+                Folgen des Klimawandels anpassen.
             </p>
         </div>
     </div>
@@ -66,7 +66,8 @@
         <p class="stat-secondary">
             Bearbeitungszeit Förderantrag:
             <strong>⌀&nbsp;11&nbsp;Tage</strong>&nbsp;·&nbsp;
-            Zeit bis zur Auszahlung: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
+            Zeit bis zum Festsetzungsbescheid oder bis zur Entscheidung
+            über die Auszahlung: <strong>⌀&nbsp;41&nbsp;Tage</strong>.
         </p>
         <p class="source-note">
             Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
@@ -122,7 +123,8 @@
         <p class="stat-secondary">
             Bearbeitungszeit Förderantrag:
             <strong>⌀&nbsp;11&nbsp;Tage</strong>&nbsp;·&nbsp;
-            Zeit bis zur Auszahlung: <strong>⌀&nbsp;32&nbsp;Tage</strong>.
+            Zeit bis zum Festsetzungsbescheid oder bis zur Entscheidung
+            über die Auszahlung: <strong>⌀&nbsp;41&nbsp;Tage</strong>.
         </p>
         <p class="source-note">
             Quelle: Klimareferat der Stadt Frankfurt, offizielle Statistik
@@ -184,7 +186,7 @@
             <div class="benefit-card">
                 <h3>Höhere Rentabilität durch Förderung</h3>
                 <p>
-                    Mit dem Klimabonus rechnen sich Investitionen früher —
+                    Mit dem Klimabonus rechnen sich Investitionen in Frankfurt früher —
                     die Förderung verbessert die Wirtschaftlichkeit Ihrer
                     Maßnahme spürbar.
                 </p>
@@ -208,8 +210,8 @@
                 </button>
                 <span id="tip-foerderfaehig" class="tooltip-content" role="tooltip">
                     Förderfähige Kosten umfassen alle direkten Aufwendungen
-                    der Maßnahme — <strong>z.&nbsp;B. von der Planung bis
-                    zur Abnahme</strong>.
+                    der Maßnahme — <strong>von der Planung bis zur
+                    Abnahme</strong>.
                 </span>
             </span>:
         </p>
@@ -218,9 +220,40 @@
                 <tr><th>Maßnahme</th><th>Anteil&nbsp;an&nbsp;den Kosten</th></tr>
             </thead>
             <tbody>
-                <tr><th>Solaranlagen (auch Erweiterung und Erneuerung)</th><td>20&nbsp;%</td></tr>
-                <tr><th>Solar-Gründächer</th><td>30&nbsp;%</td></tr>
-                <tr><th>Batteriespeicher (mit neuer PV)</th><td>20&nbsp;%</td></tr>
+                <tr>
+                    <th>
+                        Solaranlagen
+                        <span class="tooltip-host">
+                            <button type="button" class="tooltip-trigger"
+                                    aria-expanded="false"
+                                    aria-controls="tip-solaranlagen-ep">
+                                <span class="tooltip-icon" aria-hidden="true">?</span>
+                            </button>
+                            <span id="tip-solaranlagen-ep" class="tooltip-content" role="tooltip">
+                                PV oder Solarthermie, auch
+                                Erweiterungen und Erneuerungen.
+                            </span>
+                        </span>
+                    </th>
+                    <td>20&nbsp;%</td>
+                </tr>
+                <tr>
+                    <th>
+                        Solar-Gründächer
+                        <span class="tooltip-host">
+                            <button type="button" class="tooltip-trigger"
+                                    aria-expanded="false"
+                                    aria-controls="tip-solargruen-ep">
+                                <span class="tooltip-icon" aria-hidden="true">?</span>
+                            </button>
+                            <span id="tip-solargruen-ep" class="tooltip-content" role="tooltip">
+                                Solaranlagen auf einer Dachbegrünung.
+                            </span>
+                        </span>
+                    </th>
+                    <td>30&nbsp;%</td>
+                </tr>
+                <tr><th>Batteriespeicher (mit neuer Solaranlage)</th><td>20&nbsp;%</td></tr>
                 <tr><th>Dach-, Fassaden- und Hofbegrünung</th><td>50&nbsp;%</td></tr>
                 <tr><th>Regenwasserspeicher</th><td>50&nbsp;%</td></tr>
                 <tr><th>Trinkbrunnen</th><td>50&nbsp;%</td></tr>
@@ -257,8 +290,9 @@
                     <span class="step-num">2</span>
                     <div>
                         <h3>Antrag digital einreichen</h3>
-                        <p>Mit E-Mail-Adresse online registrieren, Antrag
-                           ausfüllen und absenden. Eingang wird per E-Mail
+                        <p>Antrag online ausfüllen, E-Mail-Adresse
+                           verifizieren und absenden. Es ist kein
+                           Account nötig — der Eingang wird per E-Mail
                            bestätigt.</p>
                     </div>
                 </li>
@@ -293,7 +327,10 @@
 
 <section class="content-block content-block-contact">
     <div class="content-inner">
-        {# Klimabonus-Logo lebt jetzt im Header (siehe Page.html). #}
+        {# Klimabonus-Logo zurück hier (mirror Landing). #}
+        <img src="{% static 'klimabonus/Klimabonus_rgb.jpg' %}"
+             alt="Klimabonus — Stadt Frankfurt"
+             class="klimabonus-logo">
         <h2>Sie haben Fragen?</h2>
         <p>
             Das Klimareferat der Stadt Frankfurt beantwortet Ihre Fragen

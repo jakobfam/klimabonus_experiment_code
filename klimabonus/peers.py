@@ -59,20 +59,21 @@ PEERS = {
         ),
     ),
     3: dict(
-        name='[Vorname Nachname Firma 3]',
-        position='Geschäftsführung',
-        firma='Firma 3',
-        branche='[Branche Firma 3]',
-        size_label='[Mitarbeitendenzahl Firma 3]',
-        # WICHTIG: photo muss den 'klimabonus/'-Prefix enthalten, z.B.
-        # 'klimabonus/peer_3.jpg' — oTree 6 {% static %} validiert
-        # strict, daher Pfad als-Ganzes übergeben, nicht im Template
-        # concat'en.
-        photo=None,
+        # Wilhelm Roth GmbH (Handwerk, klein). Real-content befüllt
+        # 2026-06-08. Logo: roth.jpg liegt im static folder.
+        name='Jens Hackbarth',
+        position='Geschäftsführer',
+        firma='Wilhelm Roth GmbH',
+        branche='Handwerk',
+        size_label='Kleinunternehmen',
+        photo='klimabonus/roth.jpeg',
+        photo_fit='contain',  # Logo nicht croppen (Roth Dachdecker)
         quote=(
-            'Was uns überrascht hat: Das Klimareferat war bei '
-            'Rückfragen schnell erreichbar und hat uns unkompliziert '
-            'weitergeholfen. Klare Empfehlung.'
+            'Es war eine gute Entscheidung, den Antrag für den '
+            'Klimabonus einzureichen. Es war weniger aufwendig und hat '
+            'uns mehr gebracht als gedacht. Der Prozess war direkt, '
+            'unkompliziert und ohne Frust. Kann ich jedem Unternehmen '
+            'nur empfehlen.'
         ),
     ),
     4: dict(
