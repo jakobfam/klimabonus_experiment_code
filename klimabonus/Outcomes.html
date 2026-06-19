@@ -15,31 +15,35 @@
     </div>
 </section>
 
-{# F1 — Forschungs-Einwilligung. Wording: "pseudonymisiert" statt
-   "anonymisiert", weil wir Antworten via participant.label mit dem
-   MUP-Datensatz verlinken (Pioneer-Profile). Echte Anonymität ist
-   damit nicht gegeben — pseudonymisiert ist die saubere DSGVO-Form. #}
+{# F1 — Forschungs-Einwilligung. Slim-Version (Direktive 2026-06-19):
+   knapper Hinweistext mit Link zum ausführlichen Datenschutzhinweis-PDF
+   bzw. zum Datenschutz-Popup im Footer. Vollständige DSGVO-Pflichtangaben
+   sind im PDF + Popup hinterlegt. #}
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
         <h2>Einwilligung zur Forschungsteilnahme</h2>
         <p>
-            Diese Befragung wird im Rahmen einer Forschungsstudie der
-            Goethe-Universität Frankfurt durchgeführt. Ihre Antworten
-            werden <strong>pseudonymisiert</strong> ausgewertet — das
-            heißt, Ihr Unternehmen wird durch einen Zufallscode ersetzt
-            und nicht namentlich genannt. Die Auswertung erfolgt nur zu
-            wissenschaftlichen Zwecken; es werden keine
-            personenbezogenen Daten an Dritte weitergegeben.
+            Diese Befragung wird vom FLEX der Goethe-Universität Frankfurt
+            im Rahmen eines wissenschaftlichen Forschungsprojekts zum
+            Klimabonus durchgeführt. Ihre Antworten werden
+            <strong>pseudonymisiert</strong> ausgewertet und
+            ausschließlich in aggregierter Form veröffentlicht.
+        </p>
+        <p class="muted" style="margin-top:-4px;">
+            Details siehe
+            <a href="{% static 'klimabonus/Datenschutzhinweis_Klimabonus.pdf' %}"
+               target="_blank" rel="noopener">ausführlicher
+            Datenschutzhinweis (PDF)</a>
+            oder im Datenschutz-Link unten in der Fußzeile.
         </p>
         <label class="consent-checkbox">
             <input type="checkbox" name="consent_research" value="True"
                    id="consent_research_cb" required>
             <span>
-                Ich willige in die Teilnahme an dieser Forschungsstudie
-                der Goethe-Universität Frankfurt ein und stimme der
-                pseudonymisierten wissenschaftlichen Auswertung meiner
-                Angaben zu. Diese Einwilligung kann ich jederzeit ohne
-                Angabe von Gründen widerrufen
+                Ich willige in die Teilnahme an der Forschungsstudie
+                und in die pseudonymisierte wissenschaftliche Auswertung
+                meiner Angaben ein. Diese Einwilligung kann ich jederzeit
+                ohne Angabe von Gründen widerrufen
                 (<a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>).
             </span>
         </label>

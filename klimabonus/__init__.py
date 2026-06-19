@@ -63,7 +63,11 @@ class Player(BasePlayer):
     stratum = models.StringField(blank=True)  # optional, copied from CSV
 
     # ---- Consent ----
-    consent_analytics = models.BooleanField(blank=True)        # cookie-banner click
+    # consent_analytics / _ts: deprecated 2026-06-19. Cookie-Banner
+    # entfernt; Consent erfolgt durch Link-Klick aus dem Anschreiben.
+    # Felder bleiben aus Backward-Compat in der DB, werden aber nicht
+    # mehr gesetzt.
+    consent_analytics = models.BooleanField(blank=True)
     consent_analytics_ts = models.FloatField(blank=True)
     consent_research = models.BooleanField(blank=True)         # research participation, before survey
     consent_research_ts = models.FloatField(blank=True)
@@ -370,8 +374,6 @@ class Landing(Page):
 
         Expected payload from JS liveSend(): { event: <str>, ts: <float>,
         value?: <bool> }. Events handled:
-          - 'consent_analytics'  → consent_analytics + ts
-              (data.value carries True for accept, False for decline)
           - 'portal_click'       → clicked_portal_landing + ts
           - 'process_expand'     → expanded_process = True
           - 'prompt_shown'       → prompt_shown_ts (2-min survey-prompt
@@ -380,6 +382,11 @@ class Landing(Page):
               without clicking the CTA inside it)
           - 'prompt_used'        → prompt_used = True (user clicked the
               CTA inside the modal — fires just before form submit)
+
+        NOTE: 'consent_analytics' wurde 2026-06-19 entfernt — Cookie-Banner
+        existiert nicht mehr, Consent wird durch den Link-Klick aus dem
+        Anschreiben gegeben (siehe Datenschutzhinweis).
+
         Returns empty dict (no client-side response needed).
         """
         event = (data or {}).get('event')
@@ -388,12 +395,7 @@ class Landing(Page):
             ts = float(ts) if ts is not None else None
         except (TypeError, ValueError):
             ts = None
-
-        if event == 'consent_analytics':
-            player.consent_analytics = bool(data.get('value'))
-            if ts is not None:
-                player.consent_analytics_ts = ts
-        elif event == 'portal_click':
+        if event == 'portal_click':
             player.clicked_portal_landing = True
             if ts is not None:
                 player.clicked_portal_landing_ts = ts

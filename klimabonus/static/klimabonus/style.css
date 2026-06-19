@@ -82,6 +82,19 @@ nav.navbar, .otree-body, .progress { display: none !important; }
     padding: 6px 12px;
     box-sizing: content-box;
 }
+/* Klimareferat-Logo hat 5:1-Aspect-Ratio (sehr breit, "STADT FRANKFURT
+   AM MAIN" + "Klimareferat" Untertitel). Bei der Standard-Höhe von 56 px
+   wird es ~280 px breit und überschattet Goethe + ZEW (die je ~100 px
+   breit sind). Lösung: max-width statt height kappen — Logo skaliert
+   proportional und behält das Text-Layout, nur kompakter. Bei
+   max-width 200 ergibt sich automatisch eine Höhe von ~40 px, die
+   Untertitel-Schrift "Klimareferat" bleibt lesbar. */
+.brand-img-klimareferat {
+    height: auto;
+    max-width: 200px;
+    max-height: 56px;
+    padding: 4px 10px;
+}
 .site-nav .nav-pill {
     background: rgba(255,255,255,0.12);
     padding: 6px 14px;

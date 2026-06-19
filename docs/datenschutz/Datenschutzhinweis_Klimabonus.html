@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Datenschutzhinweis Klimabonus</title>
+<style>
+:root {
+    --gu-blue:        #003C8F;
+    --gu-blue-dark:   #00306E;
+    --body-text:      #222222;
+    --grey:           #666666;
+    --light-grey:     #D8D8D8;
+}
+* { box-sizing: border-box; }
+
+@page {
+    size: A4;
+    margin: 22mm 22mm 20mm 22mm;
+    @bottom-left { content: "Stand: " counter(page); }
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+    color: var(--body-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Segoe UI", "Lato", Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.45;
+}
+
+/* Screen wrapper for preview (becomes invisible on print) */
+.page {
+    background: #ffffff;
+    max-width: 210mm;
+    margin: 24px auto;
+    padding: 22mm 22mm 20mm 22mm;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    min-height: 297mm;
+}
+
+@media print {
+    body { background: white; }
+    .page {
+        background: white;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        max-width: none;
+        min-height: 0;
+    }
+    .print-only { display: block; }
+    .screen-only { display: none; }
+    h2, h3, h4 { page-break-after: avoid; }
+    p, li { orphans: 3; widows: 3; }
+}
+
+.screen-only-controls {
+    max-width: 210mm;
+    margin: 24px auto 0;
+    padding: 12px 16px;
+    background: #fff8e0;
+    border: 1px solid #f0d96a;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #6b4900;
+}
+@media print { .screen-only-controls { display: none; } }
+
+/* ------- Letterhead ------- */
+.letterhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+.letterhead-left,
+.letterhead-right {
+    font-size: 9pt;
+    color: var(--grey);
+    line-height: 1.4;
+}
+.letterhead-left strong {
+    color: var(--grey);
+    font-weight: 700;
+}
+.letterhead-right {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+a { color: var(--gu-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ------- Title ------- */
+.title {
+    color: var(--gu-blue-dark);
+    font-size: 26pt;
+    font-weight: 700;
+    margin: 0 0 6pt 0;
+    line-height: 1.1;
+}
+.subtitle {
+    color: var(--grey);
+    font-size: 13pt;
+    font-weight: 400;
+    margin: 0 0 14pt 0;
+    line-height: 1.3;
+}
+
+.divider {
+    border: none;
+    border-top: 0.6pt solid var(--light-grey);
+    margin: 12pt 0 18pt 0;
+}
+
+/* ------- Sections ------- */
+h2 {
+    color: var(--gu-blue-dark);
+    font-size: 13pt;
+    font-weight: 700;
+    margin: 16pt 0 6pt 0;
+}
+
+p {
+    margin: 6pt 0;
+}
+
+ul {
+    margin: 6pt 0 6pt 0;
+    padding-left: 20pt;
+}
+ul li {
+    margin: 3pt 0;
+}
+
+strong { color: var(--body-text); font-weight: 700; }
+
+.addr-block {
+    line-height: 1.45;
+}
+</style>
+</head>
+<body>
+
+<div class="screen-only-controls">
+    <strong>Vorschau im Browser.</strong> Zum Erzeugen der druckfertigen PDF:
+    <kbd>⌘P</kbd> → "PDF speichern". Margins / Header sind bereits für A4 ausgelegt.
+</div>
+
+<div class="page">
+
+    <!-- Letterhead -->
+    <div class="letterhead">
+        <div class="letterhead-left">
+            <strong>Goethe-Universität Frankfurt am Main</strong><br>
+            <strong>FLEX — Frankfurter Labor für Experimentelle Wirtschaftsforschung</strong><br>
+            Theodor-W.-Adorno-Platz 1, 60629 Frankfurt am Main<br>
+            <a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>
+        </div>
+        <div class="letterhead-right">
+            Stand:<br>
+            <span id="datestamp">Juni 2026</span>
+        </div>
+    </div>
+
+    <h1 class="title">Datenschutzhinweis</h1>
+    <p class="subtitle">zum Forschungsprojekt »Klimabonus« der Goethe-Universität Frankfurt am Main</p>
+
+    <hr class="divider">
+
+    <h2>Verantwortlicher</h2>
+    <p>
+        Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DS-GVO) und des
+        Hessischen Datenschutz- und Informationsfreiheitsgesetzes (HDSIG) ist die
+    </p>
+    <p class="addr-block">
+        <strong>Goethe-Universität Frankfurt am Main</strong><br>
+        <strong>FLEX — Frankfurter Labor für Experimentelle Wirtschaftsforschung</strong><br>
+        Theodor-W.-Adorno-Platz 1, 60629 Frankfurt am Main<br>
+        E-Mail:
+        <a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>
+    </p>
+    <p>
+        Das FLEX verarbeitet im Rahmen einer wissenschaftlichen Studie zum
+        städtischen Förderprogramm Klimabonus für Frankfurter Unternehmen
+        personenbezogene Daten, die Sie uns durch Ihre Teilnahme zur Verfügung
+        stellen.
+    </p>
+
+    <h2>Freiwilligkeit</h2>
+    <p>
+        Ihre Teilnahme an dieser Befragung ist <strong>freiwillig</strong>. Aus
+        einer Nicht-Teilnahme entstehen Ihnen keinerlei Nachteile.
+    </p>
+
+    <h2>Personenbezogene Daten und Datenminimierung</h2>
+    <p>Es werden nur solche Daten erhoben, die für die genannten Zwecke erforderlich sind:</p>
+    <ul>
+        <li>
+            <strong>Pseudonyme Studien-Kennung</strong>, die Ihre Antworten mit
+            dem an Sie versandten Anschreiben verknüpft, jedoch keine direkte
+            Identifikation Ihrer Person durch uns ermöglicht.
+        </li>
+        <li>
+            <strong>Ihre Antworten in der Befragung</strong> sowie
+            <strong>Nutzungs-Metadaten</strong> (Zeit auf der Seite, Klick- und
+            Scroll-Verhalten) zur statistischen Auswertung des
+            Forschungsprojekts.
+        </li>
+        <li>
+            Optional und nur bei Ihrer ausdrücklichen Zustimmung: Ihre
+            <strong>E-Mail-Adresse</strong> (für Informationsmaterial,
+            Veranstaltungseinladung oder Hotline-Kontakt) sowie Ihre
+            <strong>Position im Unternehmen</strong>.
+        </li>
+    </ul>
+
+    <h2>Zwecke der Verarbeitung</h2>
+    <p>
+        Wir verarbeiten die personenbezogenen Daten zur wissenschaftlichen
+        Durchführung und Evaluation des Forschungsprojekts.
+    </p>
+
+    <h2>Rechtsgrundlagen</h2>
+    <p>Rechtsgrundlagen der Datenverarbeitung sind:</p>
+    <ul>
+        <li>
+            <strong>Art. 6 Abs. 1 lit. a DS-GVO</strong> — Ihre Einwilligung, die
+            Sie durch das Anklicken des personalisierten Studien-Links im an Sie
+            versandten Anschreiben erteilen, sowie Ihre gesonderte Einwilligung
+            für die optionale Weitergabe Ihrer E-Mail-Adresse an das Klimareferat;
+        </li>
+        <li>
+            <strong>Art. 6 Abs. 1 lit. f DS-GVO</strong> — berechtigtes Interesse
+            zur wissenschaftlichen Durchführung und Evaluation eines
+            Forschungsprojekts.
+        </li>
+    </ul>
+
+    <h2>Empfänger / Übermittlung</h2>
+    <p>
+        Die personenbezogenen Daten werden ausschließlich am FLEX der
+        Goethe-Universität Frankfurt verarbeitet.
+    </p>
+    <p>
+        Die <strong>Versendung der Studien-Anschreiben</strong> (E-Mail bzw.
+        Brief) erfolgt im Auftrag und unter Weisung des FLEX durch das
+        <strong>ZEW – Leibniz-Zentrum für Europäische Wirtschaftsforschung
+        GmbH Mannheim</strong> (L7, 1, 68161 Mannheim) als Auftragsverarbeiter im
+        Sinne von Art. 28 DS-GVO. Eine darüber hinausgehende Verarbeitung Ihrer
+        Daten durch das ZEW erfolgt nicht.
+    </p>
+    <p>
+        Eine <strong>Weitergabe an weitere Dritte erfolgt grundsätzlich
+        nicht</strong>. Eine Ausnahme bildet die Weiterleitung Ihrer
+        E-Mail-Adresse an das <strong>Klimareferat der Stadt Frankfurt</strong>,
+        sofern Sie dieser Weiterleitung in der Befragung <strong>ausdrücklich
+        zugestimmt</strong> haben (z. B. um eine Einladung zur Informations­veranstaltung
+        zu erhalten).
+    </p>
+    <p>Die Daten werden ausschließlich in Deutschland und in der EU verarbeitet.</p>
+
+    <h2>Pseudonymisierung und wissenschaftliche Auswertung</h2>
+    <p>
+        Alle Daten werden unmittelbar nach Erhebung pseudonymisiert gespeichert
+        und anschließend statistisch ausgewertet. Aus den Ergebnissen lassen
+        sich <strong>keine Rückschlüsse auf Sie als Person</strong> ziehen.
+        Wissenschaftliche Veröffentlichungen erfolgen ausschließlich in
+        <strong>aggregierter Form</strong>.
+    </p>
+
+    <h2>Löschung Ihrer Daten / Speicherdauer</h2>
+    <p>
+        Identifizierbare Kontaktdaten (E-Mail-Adresse) werden
+        <strong>unverzüglich nach Projektende gelöscht</strong>.
+    </p>
+    <p>
+        Pseudonymisierte Forschungsdaten werden gemäß den Leitlinien guter
+        wissenschaftlicher Praxis für <strong>maximal 10 Jahre nach
+        Projektende</strong> aufbewahrt und anschließend gelöscht — es sei denn,
+        Sie haben Ihre Einwilligung zur Speicherung bereits vorher widerrufen
+        oder gesetzliche Aufbewahrungspflichten stehen einer Löschung entgegen.
+    </p>
+
+    <h2>Ihre Rechte</h2>
+    <p>Sie haben jederzeit das Recht auf</p>
+    <ul>
+        <li><strong>Auskunft</strong> über Ihre bei uns gespeicherten Daten (Art. 15 DS-GVO);</li>
+        <li><strong>Berichtigung</strong> Ihrer bei uns gespeicherten Daten (Art. 16 DS-GVO);</li>
+        <li><strong>Löschung</strong> (Art. 17 DS-GVO);</li>
+        <li><strong>Einschränkung der Verarbeitung</strong> (Art. 18 DS-GVO);</li>
+        <li><strong>Datenübertragbarkeit</strong> (Art. 20 DS-GVO);</li>
+        <li><strong>Widerspruch</strong> gegen die Verarbeitung (Art. 21 DS-GVO).</li>
+    </ul>
+    <p>
+        Eine erteilte Einwilligung können Sie jederzeit ohne Angabe von Gründen
+        mit Wirkung für die Zukunft widerrufen. Zudem steht Ihnen das Recht auf
+        Beschwerde beim Hessischen Beauftragten für Datenschutz und
+        Informationsfreiheit zu (Gustav-Stresemann-Ring 1, 65189 Wiesbaden).
+    </p>
+
+    <h2>Kontakt</h2>
+    <p>
+        Für alle Fragen zur Studie und zur Verarbeitung Ihrer Daten erreichen
+        Sie uns unter:
+    </p>
+    <p>
+        E-Mail:
+        <a href="mailto:klimabonus-studie@flex.uni-frankfurt.de">klimabonus-studie@flex.uni-frankfurt.de</a>
+    </p>
+
+</div>
+
+<script>
+// Auto-fill the date stamp ("Juni 2026") with current month/year for convenience
+(function() {
+    const months = ['Januar','Februar','März','April','Mai','Juni','Juli',
+                    'August','September','Oktober','November','Dezember'];
+    const now = new Date();
+    document.getElementById('datestamp').textContent =
+        months[now.getMonth()] + ' ' + now.getFullYear();
+})();
+</script>
+
+</body>
+</html>

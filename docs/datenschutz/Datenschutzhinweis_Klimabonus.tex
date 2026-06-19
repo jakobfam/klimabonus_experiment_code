@@ -1,0 +1,191 @@
+% =====================================================================
+%  Datenschutzhinweis zum Forschungsprojekt Klimabonus
+%  Goethe-Universität Frankfurt am Main, FLEX
+%
+%  Drucksauberes PDF — kompilierbar mit pdflatex (TeX Live 2022+):
+%    pdflatex Datenschutzhinweis_Klimabonus.tex
+%  (zweimal laufen lassen, damit pageref korrekt aufgelöst wird)
+%
+%  Styling:
+%    - KOMA-Script article (scrartcl), 11 pt, A4
+%    - Sans-serif Body (Helvetica/Latin Modern Sans) für Behörden-typische
+%      Lesbarkeit
+%    - Goethe-Uni-Blau (#003C8F) als Akzent für Überschriften
+%    - Dezenter Header/Footer mit Studien-Identifikation
+% =====================================================================
+
+\documentclass[11pt,a4paper,parskip=half,DIV=12]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}  % Sans-serif body
+\usepackage{microtype}
+
+\usepackage[a4paper,top=2.8cm,bottom=2.2cm,left=2.5cm,right=2.5cm]{geometry}
+
+\usepackage{xcolor}
+\definecolor{gublue}{HTML}{003C8F}
+\definecolor{gubluedark}{HTML}{00306E}
+\definecolor{gubodytext}{HTML}{222222}
+\definecolor{gugrey}{HTML}{666666}
+\definecolor{gulightgrey}{HTML}{D8D8D8}
+
+\color{gubodytext}
+
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.4em,labelsep=0.6em,itemsep=2pt,topsep=4pt}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=gublue,
+    urlcolor=gublue,
+    pdftitle={Datenschutzhinweis Klimabonus},
+    pdfauthor={FLEX, Goethe-Universität Frankfurt am Main},
+    pdfsubject={Datenschutzhinweis zum Forschungsprojekt Klimabonus},
+    pdfkeywords={Datenschutz, DSGVO, Klimabonus, FLEX, Goethe-Universität}
+}
+
+% --- KOMA-Heading styles ---------------------------------------------
+\setkomafont{disposition}{\sffamily\bfseries\color{gubluedark}}
+\setkomafont{title}{\sffamily\Huge\bfseries\color{gubluedark}}
+\setkomafont{section}{\sffamily\large\bfseries\color{gubluedark}}
+\setkomafont{subsection}{\sffamily\normalsize\bfseries\color{gubluedark}}
+\addtokomafont{paragraph}{\sffamily\color{gubluedark}}
+
+\RedeclareSectionCommand[
+  beforeskip=1.4em,
+  afterskip=0.5em
+]{section}
+
+% --- Header / Footer -------------------------------------------------
+\usepackage{scrlayer-scrpage}
+\usepackage{lastpage}
+
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+\ihead{\footnotesize\color{gugrey}FLEX --- Goethe-Universität Frankfurt am Main}
+\ohead{\footnotesize\color{gugrey}Datenschutzhinweis Klimabonus}
+\ofoot{\footnotesize\color{gugrey}Seite \thepage~/~\pageref*{LastPage}}
+\ifoot{\footnotesize\color{gugrey}Stand: \today}
+\setkomafont{pageheadfoot}{\sffamily}
+\KOMAoptions{headsepline=0.4pt,footsepline=0.4pt}
+\setkomafont{headsepline}{\color{gulightgrey}}
+\setkomafont{footsepline}{\color{gulightgrey}}
+
+% Tighten paragraphs marginally for printability
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1.10}
+
+% =====================================================================
+\begin{document}
+
+% --- Letterhead block ------------------------------------------------
+\begin{minipage}[t]{0.7\textwidth}
+\vspace{0pt}\raggedright
+{\footnotesize\color{gugrey}
+\textbf{Goethe-Universität Frankfurt am Main}\\
+\textbf{FLEX --- Frankfurter Labor für Experimentelle Wirtschafts\-forschung}\\
+Theodor-W.-Adorno-Platz 1, 60629 Frankfurt am Main\\
+\href{mailto:klimabonus-studie@flex.uni-frankfurt.de}{klimabonus-studie@flex.uni-frankfurt.de}
+}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.27\textwidth}
+\vspace{0pt}\raggedleft
+{\footnotesize\color{gugrey}Stand:\\ \today}
+\end{minipage}
+
+\vspace{1.4cm}
+
+{\sffamily\fontsize{26pt}{30pt}\selectfont\bfseries\color{gubluedark}Datenschutzhinweis}\\[0.3em]
+{\sffamily\large\color{gugrey}zum Forschungsprojekt »Klimabonus« der Goethe-Universität Frankfurt am Main}
+
+\vspace{0.6cm}
+{\color{gulightgrey}\rule{\textwidth}{0.6pt}}
+\vspace{0.4cm}
+
+% --- Inhaltliche Sections --------------------------------------------
+
+\section*{Verantwortlicher}
+
+Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DS-GVO) und des Hessischen Datenschutz- und Informations\-freiheitsgesetzes (HDSIG) ist die
+
+\textbf{Goethe-Universität Frankfurt am Main}\\
+\textbf{FLEX --- Frankfurter Labor für Experimentelle Wirtschafts\-forschung}\\
+Theodor-W.-Adorno-Platz~1, 60629 Frankfurt am Main\\
+E-Mail: \href{mailto:klimabonus-studie@flex.uni-frankfurt.de}{klimabonus-studie@flex.uni-frankfurt.de}
+
+Das FLEX verarbeitet im Rahmen einer wissenschaftlichen Studie zum städtischen Förderprogramm Klimabonus für Frankfurter Unternehmen personenbezogene Daten, die Sie uns durch Ihre Teilnahme zur Verfügung stellen.
+
+\section*{Freiwilligkeit}
+
+Ihre Teilnahme an dieser Befragung ist \textbf{freiwillig}. Aus einer Nicht-Teilnahme entstehen Ihnen keinerlei Nachteile.
+
+\section*{Personenbezogene Daten und Datenminimierung}
+
+Es werden nur solche Daten erhoben, die für die genannten Zwecke erforderlich sind:
+
+\begin{itemize}
+  \item \textbf{Pseudonyme Studien-Kennung}, die Ihre Antworten mit dem an Sie versandten Anschreiben verknüpft, jedoch keine direkte Identifikation Ihrer Person durch uns ermöglicht.
+  \item \textbf{Ihre Antworten in der Befragung} sowie \textbf{Nutzungs-Metadaten} (Zeit auf der Seite, Klick- und Scroll-Verhalten) zur statistischen Auswertung des Forschungs\-projekts.
+  \item Optional und nur bei Ihrer ausdrücklichen Zustimmung: Ihre \textbf{E-Mail-Adresse} (für Informations\-material, Veranstaltungs\-einladung oder Hotline-Kontakt) sowie Ihre \textbf{Position im Unternehmen}.
+\end{itemize}
+
+\section*{Zwecke der Verarbeitung}
+
+Wir verarbeiten die personenbezogenen Daten zur wissenschaftlichen Durchführung und Evaluation des Forschungsprojekts.
+
+\section*{Rechtsgrundlagen}
+
+Rechtsgrundlagen der Datenverarbeitung sind:
+
+\begin{itemize}
+  \item \textbf{Art.~6 Abs.~1 lit.~a DS-GVO} --- Ihre Einwilligung, die Sie durch das Anklicken des personalisierten Studien-Links im an Sie versandten Anschreiben erteilen, sowie Ihre gesonderte Einwilligung für die optionale Weitergabe Ihrer E-Mail-Adresse an das Klimareferat;
+  \item \textbf{Art.~6 Abs.~1 lit.~f DS-GVO} --- berechtigtes Interesse zur wissenschaftlichen Durchführung und Evaluation eines Forschungs\-projekts.
+\end{itemize}
+
+\section*{Empfänger / Übermittlung}
+
+Die personenbezogenen Daten werden ausschließlich am FLEX der Goethe-Universität Frankfurt verarbeitet.
+
+Die \textbf{Versendung der Studien-Anschreiben} (E-Mail bzw.\ Brief) erfolgt im Auftrag und unter Weisung des FLEX durch das \textbf{ZEW -- Leibniz-Zentrum für Europäische Wirtschafts\-forschung GmbH Mannheim} (L7,~1, 68161 Mannheim) als Auftragsverarbeiter im Sinne von Art.~28 DS-GVO. Eine darüber hinausgehende Verarbeitung Ihrer Daten durch das ZEW erfolgt nicht.
+
+Eine \textbf{Weitergabe an weitere Dritte erfolgt grundsätzlich nicht}. Eine Ausnahme bildet die Weiterleitung Ihrer E-Mail-Adresse an das \textbf{Klimareferat der Stadt Frankfurt}, sofern Sie dieser Weiterleitung in der Befragung \textbf{ausdrücklich zugestimmt} haben (z.\,B.\ um eine Einladung zur Informations\-veranstaltung zu erhalten).
+
+Die Daten werden ausschließlich in Deutschland und in der EU verarbeitet.
+
+\section*{Pseudonymisierung und wissenschaftliche Auswertung}
+
+Alle Daten werden unmittelbar nach Erhebung pseudonymisiert gespeichert und anschließend statistisch ausgewertet. Aus den Ergebnissen lassen sich \textbf{keine Rückschlüsse auf Sie als Person} ziehen. Wissenschaftliche Veröffentlichungen erfolgen ausschließlich in \textbf{aggregierter Form}.
+
+\section*{Löschung Ihrer Daten / Speicherdauer}
+
+Identifizierbare Kontaktdaten (E-Mail-Adresse) werden \textbf{unverzüglich nach Projektende gelöscht}.
+
+Pseudonymisierte Forschungsdaten werden gemäß den Leitlinien guter wissenschaftlicher Praxis für \textbf{maximal 10 Jahre nach Projektende} aufbewahrt und anschließend gelöscht --- es sei denn, Sie haben Ihre Einwilligung zur Speicherung bereits vorher widerrufen oder gesetzliche Aufbewahrungs\-pflichten stehen einer Löschung entgegen.
+
+\section*{Ihre Rechte}
+
+Sie haben jederzeit das Recht auf
+
+\begin{itemize}
+  \item \textbf{Auskunft} über Ihre bei uns gespeicherten Daten (Art.~15 DS-GVO);
+  \item \textbf{Berichtigung} Ihrer bei uns gespeicherten Daten (Art.~16 DS-GVO);
+  \item \textbf{Löschung} (Art.~17 DS-GVO);
+  \item \textbf{Einschränkung der Verarbeitung} (Art.~18 DS-GVO);
+  \item \textbf{Datenübertragbarkeit} (Art.~20 DS-GVO);
+  \item \textbf{Widerspruch} gegen die Verarbeitung (Art.~21 DS-GVO).
+\end{itemize}
+
+Eine erteilte Einwilligung können Sie jederzeit ohne Angabe von Gründen mit Wirkung für die Zukunft widerrufen. Zudem steht Ihnen das Recht auf Beschwerde beim Hessischen Beauftragten für Datenschutz und Informations\-freiheit zu (Gustav-Stresemann-Ring~1, 65189 Wiesbaden).
+
+\section*{Kontakt}
+
+Für alle Fragen zur Studie und zur Verarbeitung Ihrer Daten erreichen Sie uns unter:
+
+E-Mail: \href{mailto:klimabonus-studie@flex.uni-frankfurt.de}{klimabonus-studie@flex.uni-frankfurt.de}
+
+\end{document}

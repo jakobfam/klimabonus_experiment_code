@@ -200,9 +200,9 @@
                     förderfähigen Kosten<span class="tooltip-icon" aria-hidden="true">?</span>
                 </button>
                 <span id="tip-foerderfaehig" class="tooltip-content" role="tooltip">
-                    Förderfähige Kosten umfassen alle direkten Aufwendungen
-                    der Maßnahme — <strong>von der Planung bis zur
-                    Abnahme</strong>.
+                    Förderfähige Kosten umfassen alle direkten
+                    Aufwendungen der Maßnahme <strong>von der Planung
+                    bis zur Abnahme</strong>.
                 </span>
             </span>:
         </p>
@@ -221,8 +221,9 @@
                                 <span class="tooltip-icon" aria-hidden="true">?</span>
                             </button>
                             <span id="tip-solaranlagen" class="tooltip-content" role="tooltip">
-                                PV oder Solarthermie, auch
-                                Erweiterungen und Erneuerungen.
+                                Photovoltaik- oder Solarthermie-Anlagen.
+                                Auch Erweiterungen und Erneuerungen
+                                bestehender Anlagen.
                             </span>
                         </span>
                     </th>
@@ -410,29 +411,11 @@
     </div>
 </div>
 
-{# ============= COOKIE CONSENT BANNER (delayed 8s) ============= #}
-
-<div id="consent-banner" class="consent-banner" role="dialog"
-     aria-labelledby="consent-title" aria-describedby="consent-desc"
-     hidden>
-    <div class="consent-banner-inner">
-        <div class="consent-text">
-            <strong id="consent-title">Hinweis zur Datenverarbeitung</strong>
-            <p id="consent-desc">
-                Diese Webseite wird von der Goethe-Universität Frankfurt im
-                Rahmen eines Forschungsprojekts zum Klimabonus betrieben.
-                Wir erfassen pseudonymisiert, wie Sie diese Seite nutzen,
-                um das Informationsangebot für Frankfurter Unternehmen zu
-                verbessern. Ihre Angaben werden nicht an Dritte
-                weitergegeben.
-            </p>
-        </div>
-        <div class="consent-actions">
-            <button type="button" class="btn btn-ghost" id="consent-decline">Ablehnen</button>
-            <button type="button" class="btn btn-primary" id="consent-accept">Akzeptieren</button>
-        </div>
-    </div>
-</div>
+{# Cookie-Banner entfernt (Direktive 2026-06-19): Consent wird durch
+   den Klick auf den personalisierten Studien-Link aus dem Anschreiben
+   erteilt — explizit im Datenschutzhinweis dokumentiert. Nutzungs-
+   Metadaten werden weiter erfasst (Rechtsgrundlage Art. 6 Abs. 1
+   lit. f DS-GVO + lit. a via Link-Klick). #}
 
 {# Hidden fields submitted with the form (only timing/scroll — the
    remaining consent/click/accordion events are sent immediately via
@@ -489,20 +472,9 @@
         if (acc.open) fireEvent({ event: 'process_expand', ts: nowSec() });
     });
 
-    // ---- Cookie banner (delayed 8s) ----
-    const banner = document.getElementById('consent-banner');
-    const accept = document.getElementById('consent-accept');
-    const decline = document.getElementById('consent-decline');
-
-    // Delayed 8 s so the treatment block above the fold is read first.
-    setTimeout(() => { banner.hidden = false; }, 8000);
-
-    function recordConsent(value) {
-        fireEvent({ event: 'consent_analytics', value: value, ts: nowSec() });
-        banner.hidden = true;
-    }
-    accept.addEventListener('click', () => recordConsent(true));
-    decline.addEventListener('click', () => recordConsent(false));
+    // Cookie-Banner-JS entfernt (Direktive 2026-06-19). Consent erfolgt
+    // jetzt durch Link-Klick aus dem Anschreiben (siehe Datenschutz-Popup
+    // im Footer + PDF Datenschutzhinweis_Klimabonus.pdf).
 
     // ---------- Direct-to-Antrag click tracking ----------
     // Two-track persistence (belt + suspenders):
