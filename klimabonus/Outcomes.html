@@ -338,6 +338,26 @@
         });
     }
 
+    // ---- Consent MUST be a fresh active opt-in (DSGVO / Planet49) ----
+    // oTree's preserve_unsubmitted_inputs.js restores form state from
+    // sessionStorage, keyed by page-INDEX (not participant code). In a
+    // shared browser that means a previous participant's consent tick can
+    // be restored and appear pre-checked. For a consent checkbox that is
+    // never acceptable. We therefore force it unchecked on every load and
+    // purge its preserve-key. window.load runs AFTER preserve's
+    // DOMContentLoaded handler, so this reliably wins.
+    window.addEventListener('load', function () {
+        const cb = document.getElementById('consent_research_cb');
+        if (!cb) return;
+        cb.checked = false;
+        document.getElementById('consent_research_ts').value = '';
+        try {
+            const parts = window.location.pathname.split('/').filter(Boolean);
+            const pageNum = parts[parts.length - 1];
+            sessionStorage.removeItem('input-' + pageNum + '-consent_research');
+        } catch (e) { /* private mode — nothing to purge */ }
+    });
+
     // ---- Randomize checkbox display order; record the chosen order ----
     function shuffleChildren(container) {
         const items = Array.from(container.children);
