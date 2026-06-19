@@ -385,6 +385,36 @@
            {% if view.preserve_unsubmitted_inputs %}…{% endif %}
        Wir machen das hier in unserer Custom-Page.html identisch. #}
     {% if view.preserve_unsubmitted_inputs %}
+        {# WICHTIG (Daten-Integrität): oTrees preserve_unsubmitted_inputs.js
+           schlüsselt den sessionStorage NUR nach Page-INDEX
+           (`input-<pageindex>-<feldname>`), NICHT nach participant_code.
+           Folge: Werden im selben Browser mehrere Teilnehmer-Links
+           geöffnet (z.B. beim Testen, oder ein geteilter Rechner im
+           Feld), würden die Antworten von Teilnehmer A bei Teilnehmer B
+           wiederhergestellt → vorausgewählte Substanz-Antworten,
+           Anchoring-Risiko.
+
+           Dieses Inline-Script läuft SYNCHRON beim Parsen — also VOR dem
+           DOMContentLoaded-Handler von preserve_unsubmitted_inputs.js.
+           Es erkennt einen Teilnehmer-Wechsel im selben Browser und löscht
+           dann alle `input-*`-Keys, bevor irgendetwas restauriert wird.
+           So gilt: Restore NUR innerhalb desselben Teilnehmers (gewollt:
+           Reload / Back-Button / Validation-Error), niemals über
+           Teilnehmer hinweg. (Direktive 2026-06-19.) #}
+        <script>
+        (function () {
+            try {
+                var pcode = "{{ participant.code }}";
+                if (!pcode) return;
+                if (sessionStorage.getItem('_kb_pcode') !== pcode) {
+                    Object.keys(sessionStorage)
+                        .filter(function (k) { return k.indexOf('input-') === 0; })
+                        .forEach(function (k) { sessionStorage.removeItem(k); });
+                    sessionStorage.setItem('_kb_pcode', pcode);
+                }
+            } catch (e) { /* private mode — preserve simply won't persist */ }
+        })();
+        </script>
         <script src="{% static 'otree/js/preserve_unsubmitted_inputs.js' %}"></script>
     {% endif %}
 
