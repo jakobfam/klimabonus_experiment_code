@@ -1,10 +1,17 @@
 """
 Peer profiles for the T2 (Peer) treatment arm.
 
-There are 6 peer firms in the pool. Each T2 participant is assigned a
-peer_id (1-6) in the assignment CSV, based on offline matching by industry
-and firm size (done in R/Stata at the time of label generation, NOT in
-this app). The Landing template renders the matching peer's profile.
+There are exactly 3 peer firms in the pool — one per firm-size class
+(Direktive Jakob 2026-06-19: nur 3 echte Zitate vorhanden, daher nur
+3 Peers). Each T2 participant is assigned a peer_id (1, 2 or 3) in the
+assignment CSV, based on offline size matching (done in R/Stata at the
+time of label generation, NOT in this app):
+
+    peer_id 1 → Nassauische Heimstätte (Wohnungswirtschaft, GROSS)
+    peer_id 2 → Carl Friederichs GmbH  (Fahrzeugbau,        MITTEL)
+    peer_id 3 → Wilhelm Roth GmbH      (Handwerk,           KLEIN)
+
+The Landing template renders the matching peer's profile.
 
 Design note (post-2026-05-16 review): the T2 arm shows the SAME official
 Stadt-Frankfurt averages as T1 (96 % / 15 Min / 8.776,97 €). The peer's
@@ -13,13 +20,15 @@ experience report — that humanises the same numerical facts. The peer
 quotes should therefore NOT contradict the city averages with their own
 numbers; they should add colour, context, or narrative.
 
-ALL CONTENT IN THIS FILE IS PLACEHOLDER ("Firma 1" through "Firma 6")
-and must be replaced with real peer content before fielding:
-- name, firma, branche, size_label, photo: real peer firm data
-- quote: real peer testimonial (qualitative, ideally in the peer's own
-  words). Each peer should have a slightly different angle so the
-  within-T2 variation is natural.
+IMPORTANT: the assignment CSV must only ever use peer_id in {1, 2, 3}.
+Any other value is rejected at load time (see load_assignment in
+__init__.py) so a mis-coded T2 row can never silently degrade to a
+control-like page.
 """
+
+# Single source of truth for how many peers exist. Used for validation
+# in __init__.load_assignment().
+VALID_PEER_IDS = (1, 2, 3)
 
 PEERS = {
     1: dict(
@@ -76,45 +85,9 @@ PEERS = {
             'nur empfehlen.'
         ),
     ),
-    4: dict(
-        name='[Vorname Nachname Firma 4]',
-        position='Geschäftsführung',
-        firma='Firma 4',
-        branche='[Branche Firma 4]',
-        size_label='[Mitarbeitendenzahl Firma 4]',
-        photo=None,
-        quote=(
-            'Wir hatten die Förderung gar nicht auf dem Schirm. Mit dem '
-            'Klimabonus konnten wir unsere Maßnahme deutlich schneller '
-            'umsetzen als ursprünglich geplant.'
-        ),
-    ),
-    5: dict(
-        name='[Vorname Nachname Firma 5]',
-        position='Geschäftsführung',
-        firma='Firma 5',
-        branche='[Branche Firma 5]',
-        size_label='[Mitarbeitendenzahl Firma 5]',
-        photo=None,
-        quote=(
-            'Die Förderung hat für uns den entscheidenden Anstoß '
-            'gegeben, mit der Maßnahme jetzt zu starten – und nicht '
-            'erst in ein paar Jahren.'
-        ),
-    ),
-    6: dict(
-        name='[Vorname Nachname Firma 6]',
-        position='Geschäftsführung',
-        firma='Firma 6',
-        branche='[Branche Firma 6]',
-        size_label='[Mitarbeitendenzahl Firma 6]',
-        photo=None,
-        quote=(
-            'Was uns positiv überrascht hat: Der gesamte Ablauf läuft '
-            'online und ist klar strukturiert. Wer den Antrag einmal '
-            'beim Mittagessen ausfüllt, ist fertig.'
-        ),
-    ),
+    # NOTE: Peers 4-6 wurden 2026-06-19 entfernt — es gibt nur 3 echte
+    # Zitate. Falls später weitere Peers dazukommen: hier ergänzen UND
+    # peers.VALID_PEER_IDS oben erweitern.
 }
 
 
@@ -130,7 +103,7 @@ _PEER_DEFAULTS = {
 
 
 def get_peer(peer_id):
-    """Return the peer dict for a peer_id (1-6), or None if invalid/unset.
+    """Return the peer dict for a peer_id (1, 2 or 3), or None if invalid/unset.
 
     Merges _PEER_DEFAULTS so the Landing/EndPage templates can render
     {{ peer.position }} unconditionally even if a peer dict in PEERS

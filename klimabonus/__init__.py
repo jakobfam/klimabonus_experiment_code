@@ -18,7 +18,7 @@ from otree.api import (
     Page, models, ExtraModel,
 )
 
-from .peers import PEERS, get_peer
+from .peers import PEERS, get_peer, VALID_PEER_IDS
 
 
 # ------------------------------------------------------------------ #
@@ -58,7 +58,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # ---- Treatment & validity ----
     treatment = models.IntegerField(blank=True)  # 1=C, 2=T1, 3=T2
-    peer_id = models.IntegerField(blank=True)    # 1-6 for T2; None for C/T1
+    peer_id = models.IntegerField(blank=True)    # 1-3 for T2; None for C/T1
     label_valid = models.BooleanField(blank=True)
     stratum = models.StringField(blank=True)  # optional, copied from CSV
 
@@ -281,12 +281,21 @@ def load_assignment():
 
     Required columns: participant_label, treatment.
     Optional columns: stratum, peer_id.
-    peer_id (1-6) is only meaningful for treatment=3 (T2 Peer arm) and is
-    determined offline by industry/size matching at letter generation time.
+    peer_id must be in peers.VALID_PEER_IDS (currently {1, 2, 3}) and is
+    only meaningful for treatment=3 (T2 Peer arm). It is determined offline
+    by firm-size matching at label generation time.
+
+    Validation (Direktive 2026-06-19, nur 3 Peers): a T2 row whose peer_id
+    is missing or outside VALID_PEER_IDS is a data error — without a valid
+    peer the T2 page would silently render like Control, contaminating the
+    arm. Such rows are DROPPED (the label then surfaces as InvalidLink, a
+    loud signal) and a warning is printed to the server log so the
+    miscoding is caught before/while fielding.
     """
     if not os.path.exists(C.ASSIGNMENT_CSV):
         return {}
     out = {}
+    bad_peer_rows = []
     with open(C.ASSIGNMENT_CSV, 'r', encoding='utf-8-sig', newline='') as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -304,11 +313,23 @@ def load_assignment():
                 peer = int(peer_raw) if peer_raw else None
             except ValueError:
                 peer = None
+            # T2 requires a valid peer_id; reject the row otherwise.
+            if t == 3 and peer not in VALID_PEER_IDS:
+                bad_peer_rows.append((label, peer_raw))
+                continue
             out[label] = {
                 'treatment': t,
                 'stratum': (row.get('stratum') or '').strip(),
                 'peer_id': peer,
             }
+    if bad_peer_rows:
+        valid = ', '.join(str(p) for p in VALID_PEER_IDS)
+        print(
+            f'[klimabonus] WARNUNG: {len(bad_peer_rows)} T2-Zeile(n) in '
+            f'assignment.csv haben eine ungültige peer_id (erlaubt: {valid}) '
+            f'und wurden VERWORFEN. Betroffene Labels (Auszug): '
+            + ', '.join(f'{lbl}=peer_id:{pid!r}' for lbl, pid in bad_peer_rows[:10])
+        )
     return out
 
 
