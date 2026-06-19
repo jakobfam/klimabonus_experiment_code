@@ -16,43 +16,38 @@
 @page {
     size: A4;
     margin: 22mm 22mm 20mm 22mm;
-    @bottom-left { content: "Stand: " counter(page); }
+    @bottom-center { content: "Seite " counter(page) " von " counter(pages); }
 }
 
+/* Print is the primary target: white everywhere, no shadows/margins. */
 html, body {
     margin: 0;
     padding: 0;
-    background: #f4f4f4;
+    background: #ffffff;
     color: var(--body-text);
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Segoe UI", "Lato", Arial, sans-serif;
     font-size: 10.5pt;
     line-height: 1.45;
 }
-
-/* Screen wrapper for preview (becomes invisible on print) */
 .page {
     background: #ffffff;
-    max-width: 210mm;
-    margin: 24px auto;
-    padding: 22mm 22mm 20mm 22mm;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    min-height: 297mm;
 }
 
-@media print {
-    body { background: white; }
+h2, h3, h4 { page-break-after: avoid; }
+p, li { orphans: 3; widows: 3; }
+
+/* Screen-only preview chrome: grey backdrop + paper shadow. These rules
+   do NOT apply when Chrome renders to PDF (print media), so the printed
+   document stays clean white edge-to-edge. */
+@media screen {
+    html, body { background: #f4f4f4; }
     .page {
-        background: white;
-        box-shadow: none;
-        margin: 0;
-        padding: 0;
-        max-width: none;
-        min-height: 0;
+        max-width: 210mm;
+        margin: 24px auto;
+        padding: 22mm 22mm 20mm 22mm;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        min-height: 297mm;
     }
-    .print-only { display: block; }
-    .screen-only { display: none; }
-    h2, h3, h4 { page-break-after: avoid; }
-    p, li { orphans: 3; widows: 3; }
 }
 
 .screen-only-controls {
