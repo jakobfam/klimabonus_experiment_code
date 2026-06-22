@@ -58,7 +58,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # ---- Treatment & validity ----
     treatment = models.IntegerField(blank=True)  # 1=C, 2=T1, 3=T2
-    peer_id = models.IntegerField(blank=True)    # 1-3 for T2; None for C/T1
+    peer_id = models.IntegerField(blank=True)    # 1-4 for T2; None for C/T1
     label_valid = models.BooleanField(blank=True)
     stratum = models.StringField(blank=True)  # optional, copied from CSV
 
@@ -281,11 +281,11 @@ def load_assignment():
 
     Required columns: participant_label, treatment.
     Optional columns: stratum, peer_id.
-    peer_id must be in peers.VALID_PEER_IDS (currently {1, 2, 3}) and is
+    peer_id must be in peers.VALID_PEER_IDS (currently {1, 2, 3, 4}) and is
     only meaningful for treatment=3 (T2 Peer arm). It is determined offline
     by firm-size matching at label generation time.
 
-    Validation (Direktive 2026-06-19, nur 3 Peers): a T2 row whose peer_id
+    Validation (nur gültige Peers): a T2 row whose peer_id
     is missing or outside VALID_PEER_IDS is a data error — without a valid
     peer the T2 page would silently render like Control, contaminating the
     arm. Such rows are DROPPED (the label then surfaces as InvalidLink, a

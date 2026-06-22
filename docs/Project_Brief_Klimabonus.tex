@@ -1,0 +1,143 @@
+% =====================================================================
+%  One-page project brief — Klimabonus field experiment
+%  Purpose: circulate to colleagues for feedback. The single ask:
+%  "What is the ONE question you would most want answered in a sample
+%   and design like this?"
+%
+%  Compiles with pdflatex (TeX Live / Overleaf). Standard packages only.
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,top=1.8cm,bottom=1.6cm,left=2.0cm,right=2.0cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{eurosym}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue]{hyperref}
+
+\definecolor{gublue}{HTML}{003C8F}
+\definecolor{gugrey}{HTML}{555555}
+
+% Compact section headings
+\titleformat{\section}{\sffamily\bfseries\color{gublue}\large}{}{0pt}{}
+\titlespacing*{\section}{0pt}{6pt}{2pt}
+
+% Tight lists
+\setlist[itemize]{leftmargin=1.3em,topsep=1pt,itemsep=1pt,parsep=0pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\pagestyle{empty}
+\sloppy
+
+\newcommand{\heading}[1]{{\sffamily\bfseries\color{gublue}#1}}
+
+\begin{document}
+
+% ---------- Title block ----------
+{\sffamily\bfseries\LARGE\color{gublue}
+Information Frictions and the Source of Information\\
+in Firms' Take-up of Environmental Subsidies}
+
+\vspace{2pt}
+{\sffamily\color{gugrey}A randomised field experiment with the City of Frankfurt}
+
+\vspace{4pt}
+{\small\color{gugrey}%
+[Author list — e.g. Guido Friebel, Jakob Famulok (Goethe University Frankfurt) and ZEW Mannheim] \quad\textbullet\quad Draft for feedback, \today}
+
+\vspace{2pt}
+{\color{gublue}\hrule height 1pt}
+\vspace{4pt}
+
+% ---------- Setting ----------
+\section*{Setting}
+The City of Frankfurt runs ``Klimabonus,'' a subsidy program co-funding
+firms' investments in energy-reducing and climate-adaptation measures
+(e.g.\ solar, green roofs, battery storage, fa\c{c}ade greening, rainwater
+storage). Despite attractive terms, take-up among local firms is well
+below administrative targets. We run the study in direct cooperation with
+the city's climate office (\textit{Klimareferat}), which provides the
+official program statistics and the administrative outcome data.
+
+% ---------- Goal ----------
+\section*{Goal of the study}
+We ask \textbf{why firm take-up of a generous environmental subsidy
+remains low}, and in particular whether the binding constraint is an
+\textbf{information friction} and how it interacts with the \textbf{source
+of information}. The design separates (i) the mere \emph{provision} of
+credible program statistics from (ii) the \emph{relatability / source} of
+that information, delivered through the experience of a comparable peer
+firm. Beyond the average effect, we are interested in how prior beliefs
+(success probability, time cost, expected award) move and whether belief
+updating predicts real take-up.
+
+% ---------- Treatment ----------
+\section*{Treatment}
+Contacted firms are randomised at the firm level into three arms that
+\textbf{hold core program content constant} and vary only the surrounding
+information:
+\begin{itemize}
+  \item \heading{Control:} a generic, neutral description of the program.
+  \item \heading{T1 -- Statistics:} the same description plus official
+        city statistics --- a \textbf{96\,\% approval rate}, \textbf{$\sim$25
+        minutes} to complete an application, and an \textbf{average award
+        of $\sim$\,\euro{}8{,}800} per measure.
+  \item \heading{T2 -- Statistics + Peer:} the identical statistics plus a
+        short testimonial (photo + quote) from a \textbf{size-matched peer
+        firm} that successfully used the program.
+\end{itemize}
+The numbers are constant across T1 and T2; only the peer element is added
+in T2, isolating the role of a relatable, same-type source.
+
+% ---------- Sample & Flow ----------
+\section*{Sample \& Flow}
+\begin{itemize}
+  \item \heading{Population:} $\sim$\,15{,}000 Frankfurt firms, identified
+        from a firm panel and stratified by industry $\times$ size.
+  \item \heading{Pure control:} a randomly selected group receives
+        \textbf{no outreach at all} and is observed only through
+        administrative records. It benchmarks the natural baseline take-up
+        and identifies the effect of being contacted at all. All remaining
+        (``contacted'') firms are randomised into the three arms above.
+  \item \heading{Outreach:} addressed to the firm head; first by
+        personalised business e-mail, then by postal letter to
+        non-respondents. Each firm is directed to a treatment-specific
+        landing page via a personalised link.
+  \item \heading{Elicitation:} a short, voluntary survey on the landing
+        page (see \textit{Outcomes}).
+\end{itemize}
+
+% ---------- Outcomes ----------
+\section*{Outcomes}
+\textbf{Primary:} actual engagement with the program --- application
+submission, recorded in the city's administrative system over a 12-month
+window and linked pseudonymously to the assigned arm.
+
+\textbf{Secondary --- in survey.} Posterior beliefs, elicited as the key
+mechanism: (i) the perceived \emph{approval probability}; (ii) the
+\emph{expected award} (\euro); (iii) the \emph{time and effort} to file an
+application and to claim the payout; and (iv) the expected \emph{processing
+time} and overall perceived \emph{burden}. We further record stated
+\emph{application intention} (0--10), the concrete \emph{measures} a firm
+considers, and the \emph{barriers} it perceives, plus the stated importance
+of climate action as a moderator.
+
+\textbf{Secondary --- behavioural.} Click-through to the application portal
+(tracked live on the landing page) and downstream technology adoption where
+observable.
+
+% ---------- The ask ----------
+\section*{We would value your feedback}
+If you could have us answer \textbf{one question} with a sample and design
+like this, \textbf{what would it be?} We are especially keen on questions we
+could still build in --- additional outcomes or belief items, a mechanism we
+should isolate, a moderator or sub-sample worth powering for, or a threat to
+identification we should pre-empt.
+
+\end{document}
