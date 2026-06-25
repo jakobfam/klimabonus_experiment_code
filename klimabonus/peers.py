@@ -30,6 +30,19 @@ control-like page.
 # in __init__.load_assignment().
 VALID_PEER_IDS = (1, 2, 3, 4)
 
+# Stratum (1-9, kodiert Größe × Branchen-Relevanz) → peer_id, rein nach
+# GRÖSSENKLASSE. Damit leitet load_assignment die T2-peer_id automatisch
+# aus dem Stratum ab — die Anlieferung braucht KEINE peer_id-Spalte.
+#   strata 1-3 = kleinst → peer 4 (Expertenspot)
+#   strata 4-6 = klein   → peer 3 (Wilhelm Roth)
+#   strata 7-9 = mittel  → peer 2 (Carl Friederichs)
+#   (groß wäre peer 1 Nassauische Heimstätte; aktuell kein Stratum-Code)
+STRATUM_TO_PEER = {
+    1: 4, 2: 4, 3: 4,
+    4: 3, 5: 3, 6: 3,
+    7: 2, 8: 2, 9: 2,
+}
+
 PEERS = {
     1: dict(
         # Nassauische Heimstätte — eines der größten Wohnungsunternehmen

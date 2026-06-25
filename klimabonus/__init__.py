@@ -7,8 +7,11 @@ Three-arm between-subject design:
   treatment 2 = T1 Stadt (Grundinfo + official statistics)
   treatment 3 = T2 Peer  (Grundinfo + peer testimonial)
 
-Assignment is loaded from klimabonus/data/assignment.csv at session creation.
-Each row: participant_label, treatment[, stratum, ...optional columns...]
+Assignment is loaded at session creation from the first existing file in
+klimabonus/data/ (C.ASSIGNMENT_FILES): frakeys.xlsx | frakeys.csv |
+assignment.csv. The frakey delivery (columns frakey | strata | treat) can
+be dropped in AS-IS — pure-control rows are ignored and the T2 peer_id is
+derived from the stratum. See load_assignment() for the full mapping.
 """
 
 import csv
@@ -18,7 +21,7 @@ from otree.api import (
     Page, models, ExtraModel,
 )
 
-from .peers import PEERS, get_peer, VALID_PEER_IDS
+from .peers import PEERS, get_peer, VALID_PEER_IDS, STRATUM_TO_PEER
 
 
 # ------------------------------------------------------------------ #
@@ -30,17 +33,26 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
+    # Treatment 1 = der KONTAKTIERTE Baseline-Arm (generische Landing-Page).
+    # NICHT zu verwechseln mit der Pure Control (Elisas "Control"-Gruppe),
+    # die gar keinen Link bekommt und NIE in dieser App auftaucht — die
+    # lebt nur in den Admin-Daten. Daher Label 'Baseline', damit der
+    # Export nicht mit der Pure Control kollidiert (Direktive 2026-06-25).
     TREATMENT_LABELS = {
-        1: 'Control',
+        1: 'Baseline',
         2: 'T1_Stadt',
         3: 'T2_Peer',
     }
 
-    ASSIGNMENT_CSV = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        'data',
-        'assignment.csv',
-    )
+    # Zuteilungsdatei liegt in klimabonus/data/. NUR CSV — bewusst kein
+    # xlsx in Produktion (Direktive 2026-06-25: möglichst fehlerarm; CSV
+    # via stdlib ist bombensicher, xlsx-Parsing wäre fragil). Die
+    # frakeys.xlsx-Lieferung wird LOKAL mit tools/build_assignment.py
+    # validiert und nach frakeys.csv konvertiert — der Converter fängt
+    # Datenfehler ab, bevor irgendetwas live geht.
+    # Erste existierende Datei gewinnt.
+    DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+    ASSIGNMENT_FILES = ('frakeys.csv', 'assignment.csv')
 
 
 # ------------------------------------------------------------------ #
@@ -276,60 +288,117 @@ class Player(BasePlayer):
 # Helpers
 # ------------------------------------------------------------------ #
 
+# Treatment-String (frakey-Lieferung) → App-Integer.
+# 'control' fehlt absichtlich: das ist die PURE CONTROL, die keinen Link
+# bekommt und hier still ignoriert wird (siehe _DROP_TREAT).
+_TREAT_MAP = {'baseline': 1, 't1': 2, 't2': 3}
+_DROP_TREAT = {'control'}
+
+
+def _resolve_assignment_path():
+    """Erste existierende Datei aus C.ASSIGNMENT_FILES, oder None."""
+    for name in C.ASSIGNMENT_FILES:
+        p = os.path.join(C.DATA_DIR, name)
+        if os.path.exists(p):
+            return p
+    return None
+
+
+def _read_rows(path):
+    """CSV-Datei → Liste von dicts (Header→Wert). Nur CSV (stdlib,
+    bombensicher). xlsx wird bewusst NICHT in Produktion geparst — siehe
+    C.ASSIGNMENT_FILES."""
+    with open(path, 'r', encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
 def load_assignment():
-    """Read assignment.csv into a dict: label -> {treatment, stratum, peer_id}.
+    """Lade die Zuteilung → dict: label -> {treatment, stratum, peer_id}.
 
-    Required columns: participant_label, treatment.
-    Optional columns: stratum, peer_id.
-    peer_id must be in peers.VALID_PEER_IDS (currently {1, 2, 3, 4}) and is
-    only meaningful for treatment=3 (T2 Peer arm). It is determined offline
-    by firm-size matching at label generation time.
+    Liest die CSV und akzeptiert ZWEI Spalten-Schemata:
 
-    Validation (nur gültige Peers): a T2 row whose peer_id
-    is missing or outside VALID_PEER_IDS is a data error — without a valid
-    peer the T2 page would silently render like Control, contaminating the
-    arm. Such rows are DROPPED (the label then surfaces as InvalidLink, a
-    loud signal) and a warning is printed to the server log so the
-    miscoding is caught before/while fielding.
+      A) frakey-Lieferung: frakey | strata | treat
+         - treat='Control'  → PURE CONTROL, wird IGNORIERT (kein Link).
+         - treat='Baseline' → 1, 'T1' → 2, 'T2' → 3
+         - peer_id wird aus dem Stratum abgeleitet (STRATUM_TO_PEER) —
+           es ist KEINE peer_id-Spalte nötig.
+
+      B) Converter-/Legacy-Output: participant_label | treatment(1/2/3) |
+         stratum | peer_id
+
+    Empfohlener Weg (möglichst fehlerarm): die gelieferte frakeys.xlsx
+    lokal mit tools/build_assignment.py validieren und nach frakeys.csv
+    konvertieren. Der Converter prüft Eindeutigkeit, treat-Werte und
+    Peer-Ableitung und VERWEIGERT bei Fehlern — Probleme werden so
+    LOKAL vor dem Deploy sichtbar, nicht erst bei der Session-Erstellung.
+
+    Validierung auch hier: eine T2-Zeile ohne gültige peer_id (1-4) wird
+    VERWORFEN (Label → InvalidLink) und im Server-Log gewarnt.
     """
-    if not os.path.exists(C.ASSIGNMENT_CSV):
+    path = _resolve_assignment_path()
+    if not path:
         return {}
+    try:
+        rows = _read_rows(path)
+    except Exception as e:  # noqa: BLE001 — robust gegen kaputte Datei
+        print(f'[klimabonus] FEHLER beim Lesen von {os.path.basename(path)}: '
+              f'{e!r} — keine Zuteilung geladen (alle Labels → InvalidLink).')
+        return {}
+
     out = {}
     bad_peer_rows = []
-    with open(C.ASSIGNMENT_CSV, 'r', encoding='utf-8-sig', newline='') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            label = (row.get('participant_label') or '').strip()
-            if not label:
-                continue
+    dropped_control = 0
+    for row in rows:
+        d = {(k or '').strip().lower(): ('' if v is None else str(v))
+             for k, v in row.items()}
+        label = (d.get('frakey') or d.get('participant_label') or '').strip()
+        if not label:
+            continue
+        stratum = (d.get('strata') or d.get('stratum') or '').strip()
+        treat_raw = (d.get('treat') or d.get('control') or d.get('treatment') or '').strip()
+
+        # Treatment-Integer bestimmen (String-Label ODER Zahl).
+        low = treat_raw.lower()
+        if low in _DROP_TREAT:
+            dropped_control += 1
+            continue
+        if low in _TREAT_MAP:
+            t = _TREAT_MAP[low]
+        else:
             try:
-                t = int(row.get('treatment', '').strip())
-            except (ValueError, AttributeError):
+                t = int(treat_raw)
+            except (ValueError, TypeError):
                 continue
-            if t not in (1, 2, 3):
-                continue
-            peer_raw = (row.get('peer_id') or '').strip()
+        if t not in (1, 2, 3):
+            continue
+
+        # peer_id: explizite Spalte hat Vorrang, sonst aus Stratum ableiten.
+        peer = None
+        peer_explicit = (d.get('peer_id') or '').strip()
+        if peer_explicit:
             try:
-                peer = int(peer_raw) if peer_raw else None
+                peer = int(peer_explicit)
             except ValueError:
                 peer = None
-            # T2 requires a valid peer_id; reject the row otherwise.
-            if t == 3 and peer not in VALID_PEER_IDS:
-                bad_peer_rows.append((label, peer_raw))
-                continue
-            out[label] = {
-                'treatment': t,
-                'stratum': (row.get('stratum') or '').strip(),
-                'peer_id': peer,
-            }
+        if t == 3 and peer is None:
+            try:
+                peer = STRATUM_TO_PEER.get(int(stratum))
+            except (ValueError, TypeError):
+                peer = None
+
+        if t == 3 and peer not in VALID_PEER_IDS:
+            bad_peer_rows.append((label, stratum))
+            continue
+
+        out[label] = {'treatment': t, 'stratum': stratum, 'peer_id': peer}
+
     if bad_peer_rows:
-        valid = ', '.join(str(p) for p in VALID_PEER_IDS)
-        print(
-            f'[klimabonus] WARNUNG: {len(bad_peer_rows)} T2-Zeile(n) in '
-            f'assignment.csv haben eine ungültige peer_id (erlaubt: {valid}) '
-            f'und wurden VERWORFEN. Betroffene Labels (Auszug): '
-            + ', '.join(f'{lbl}=peer_id:{pid!r}' for lbl, pid in bad_peer_rows[:10])
-        )
+        print(f'[klimabonus] WARNUNG: {len(bad_peer_rows)} T2-Zeile(n) in '
+              f'{os.path.basename(path)} ohne gültige peer_id (Stratum nicht '
+              f'1-9 / nicht ableitbar) — VERWORFEN. Auszug: '
+              + ', '.join(f'{lbl}(strata:{s!r})' for lbl, s in bad_peer_rows[:10]))
+    print(f'[klimabonus] Zuteilung geladen aus {os.path.basename(path)}: '
+          f'{len(out)} Links aktiv, {dropped_control} Pure-Control ignoriert.')
     return out
 
 
