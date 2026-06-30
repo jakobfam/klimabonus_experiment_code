@@ -405,13 +405,24 @@
     // ---- Conditional text field: "Sonstiges" barriers ----
     const otherCb = document.getElementById('barrier_other_cb');
     const otherWrap = document.getElementById('barrier_other_wrap');
-    otherCb.addEventListener('change', () => { otherWrap.hidden = !otherCb.checked; });
+    function applyBarrierOther() { otherWrap.hidden = !otherCb.checked; }
+    otherCb.addEventListener('change', applyBarrierOther);
+    applyBarrierOther();
 
     // ---- Conditional text field: "Sonstiges" measures ----
     const measureOtherCb = document.getElementById('measure_other_cb');
     const measureOtherWrap = document.getElementById('measure_other_wrap');
-    measureOtherCb.addEventListener('change', () => {
-        measureOtherWrap.hidden = !measureOtherCb.checked;
+    function applyMeasureOther() { measureOtherWrap.hidden = !measureOtherCb.checked; }
+    measureOtherCb.addEventListener('change', applyMeasureOther);
+    applyMeasureOther();
+
+    // ---- Nach preserve_unsubmitted_inputs.js (DOMContentLoaded, ohne
+    // change-Event) die "Sonstiges"-Freitextfelder erneut auswerten, sonst
+    // bliebe ein wiederhergestelltes Häkchen ohne sein Textfeld. window.load
+    // feuert nach preserve. ----
+    window.addEventListener('load', function () {
+        applyBarrierOther();
+        applyMeasureOther();
     });
 })();
 </script>

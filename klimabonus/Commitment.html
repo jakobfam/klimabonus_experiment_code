@@ -275,18 +275,48 @@
     // Apply on load (BUG D5).
     updateConsentVisibility();
 
+    // ---- KRITISCH: nach preserve_unsubmitted_inputs.js erneut auswerten.
+    // Dieses Inline-Script läuft synchron beim Parsen, also BEVOR
+    // preserve (auf DOMContentLoaded) die Radios aus dem sessionStorage
+    // wiederherstellt — und preserve setzt .checked OHNE change-Event.
+    // Ohne diesen window.load-Hook bliebe nach einem Validierungsfehler /
+    // Reload / Back ein wiederhergestelltes "Ja" sichtbar, aber das
+    // E-Mail-Feld (und die Consent-Section) versteckt → Teilnehmer:in
+    // kann keine E-Mail eingeben und nicht weiter. window.load feuert
+    // nach preserve, daher greift hier der korrekte Zustand. ----
     // Timestamp setzen beim Anklicken des Consent-Checkbox
     consentCb.addEventListener('change', () => {
         document.getElementById('consent_contact_ts').value =
             consentCb.checked ? (Date.now() / 1000).toFixed(2) : '';
     });
 
-    // Conditional reveal for "Sonstige Position" text input
+    // Conditional reveal for "Sonstige Position" text input. Wie beim
+    // E-Mail-Feld: applyPosOther() muss auch nach dem preserve-Restore
+    // laufen (sonst bliebe ein wiederhergestelltes "Sonstiges" ohne das
+    // Freitext-Feld).
     const posOtherWrap = document.getElementById('position_other_wrap');
+    function applyPosOther() {
+        const sel = document.querySelector('input[name="respondent_position"]:checked');
+        posOtherWrap.hidden = !(sel && sel.value === 'sonstiges');
+    }
     document.querySelectorAll('input[name="respondent_position"]').forEach(el => {
-        el.addEventListener('change', () => {
-            posOtherWrap.hidden = (el.value !== 'sonstiges' || !el.checked);
-        });
+        el.addEventListener('change', applyPosOther);
+    });
+    applyPosOther();
+
+    // ---- KRITISCH: alle bedingten Felder nach preserve_unsubmitted_inputs.js
+    // erneut auswerten. Dieses Inline-Script läuft synchron beim Parsen, also
+    // BEVOR preserve (auf DOMContentLoaded) die Eingaben aus dem sessionStorage
+    // wiederherstellt — und preserve setzt .checked OHNE change-Event. Ohne
+    // diesen window.load-Hook bliebe nach einem Validierungsfehler / Reload /
+    // Back ein wiederhergestelltes "Ja" bzw. "Sonstiges" sichtbar, aber das
+    // zugehörige Feld (E-Mail / Consent / Freitext) versteckt → Teilnehmer:in
+    // kann nichts eingeben und nicht weiter. window.load feuert nach preserve,
+    // daher greift hier der korrekte Zustand. ----
+    window.addEventListener('load', function () {
+        updateEmailVisibility();
+        updateConsentVisibility();
+        applyPosOther();
     });
 })();
 </script>
