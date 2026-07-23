@@ -10,6 +10,42 @@
     </div>
 </section>
 
+{# ============= VERLOSUNG =============
+   Freiwillige E-Mail-Eingabe für die Amazon-Gutschein-Verlosung. Bewusst
+   VOR dem Feedback und weit vor der Antrag-CTA (die einen neuen Tab
+   öffnet und Teilnehmer:innen sonst wegführt). Feld ist optional (kein
+   required) — die Befragung ist ohne E-Mail vollständig. type="email"
+   validiert nur das Format, falls etwas eingegeben wird.
+   Datenschutz-Wording bewusst als operative Zusage formuliert ("nur für
+   die Verlosung, danach gelöscht, nicht für die Auswertung"), NICHT als
+   technische Unverknüpfbarkeits-Garantie — die E-Mail liegt in derselben
+   Teilnehmer-Zeile wie die Antworten und muss vor der Analyse getrennt/
+   gelöscht werden (siehe __init__.raffle_email + Datenschutzhinweis). #}
+<section class="content-block content-block-light">
+    <div class="content-inner form-section">
+        <h2>Verlosung: 5&nbsp;×&nbsp;100&nbsp;€ Amazon-Gutschein</h2>
+        <p class="muted">
+            Als Dankeschön verlosen wir unter allen, die die Befragung
+            abschließen, fünf Amazon-Gutscheine im Wert von je 100&nbsp;€.
+            Wenn Sie an der Verlosung teilnehmen möchten, tragen Sie hier
+            Ihre E-Mail-Adresse ein - wir benachrichtigen die
+            Gewinnerinnen und Gewinner darüber.
+        </p>
+        <label for="raffle_email" class="field-label">
+            Ihre E-Mail-Adresse für die Verlosung
+        </label>
+        <input type="email" name="raffle_email" id="raffle_email"
+               maxlength="200" class="text-input"
+               placeholder="name@unternehmen.de">
+        <p class="muted field-hint">
+            Die Angabe ist freiwillig. Ihre E-Mail-Adresse wird
+            ausschließlich für die Verlosung verwendet, nach der Ziehung
+            gelöscht und nicht für die wissenschaftliche Auswertung
+            genutzt.
+        </p>
+    </div>
+</section>
+
 {# Reihenfolge geändert (Direktive Jakob 2026-06-08): erst Feedback,
    dann Antrag-CTA. So sieht der/die Teilnehmer:in das Feedback-Feld
    bevor er/sie zum Antrag-Tab gewechselt. #}

@@ -280,8 +280,24 @@ class Player(BasePlayer):
     clicked_portal_endpage = models.BooleanField(blank=True, initial=False)
     clicked_portal_endpage_ts = models.FloatField(blank=True)
 
+    # Survey-Einstiegspunkt: welcher CTA hat die Befragung gestartet?
+    # Werte: 'q1' (Weiter-Button unter Frage 1), 'sticky' (Sticky-Leiste),
+    # 'bottom' (CTA-Sektion nach dem Process-Akkordeon), 'prompt' (Popup).
+    # Leer, wenn kein Einstiegspunkt gesetzt wurde.
+    entry_cta = models.StringField(blank=True)
+
     # ---- Final free-text feedback (Abschluss page) ----
     feedback_subsidies = models.LongStringField(blank=True)
+
+    # ---- Verlosung: E-Mail-Adresse für die Gutschein-Verlosung ----
+    # Freiwillige persönliche E-Mail-Adresse für die Amazon-Gutschein-
+    # Verlosung (5× 100 €) unter allen, die die Befragung abschließen.
+    # WICHTIG: personenbezogen → de-pseudonymisiert die Zeile. Vor der
+    # wissenschaftlichen Auswertung getrennt exportieren, Verlosung
+    # offline ziehen, dann diese Spalte aus dem Analyse-Datensatz löschen
+    # (siehe Datenschutzhinweis-Ergänzung). Ausschließlich für die
+    # Verlosung, nicht für die Analyse.
+    raffle_email = models.StringField(blank=True)
 
 
 # ------------------------------------------------------------------ #
@@ -441,15 +457,26 @@ class Landing(Page):
     immediately on the visitor's first content page (above-the-fold), so
     the manipulation gets maximum salience and pre-treatment exposure is
     minimised.
+
+    Frage 1 (application_likelihood, 0-10) sitzt direkt unter dem
+    Treatment-Block (identisch in allen drei Armen, Treatment-Inhalte
+    unverändert); die weiteren Fragen folgen auf den Folgeseiten.
+    Zusätzliche Einstiege in die Befragung: Survey-Prompt-Popup und
+    Sticky-Leiste "Zur Befragung". entry_cta protokolliert den genutzten
+    Einstiegspunkt.
     """
     form_model = 'player'
-    # NOTE: only the two passive fields are saved via form submit.
-    # All click / consent / accordion events go through live_method below
+    # NOTE: click / consent / accordion events go through live_method below
     # so they persist immediately even if the participant never submits
     # the Landing page (e.g. clicks "Direkt zum Antrag" and never comes
     # back). Putting them in form_fields would risk overwriting the
     # live-saved values with empty defaults on form submit.
+    # application_likelihood ist serverseitig Pflicht (IntegerField ohne
+    # blank=True) — ohne Antwort auf Frage 1 kommt niemand in die Befragung.
+    preserve_unsubmitted_inputs = True  # Reload-/Validation-Survival (Frage 1)
     form_fields = [
+        'application_likelihood',
+        'entry_cta',
         'time_landing', 'scroll_landing',
     ]
 
@@ -535,7 +562,8 @@ class Outcomes(Page):
         'screening_similar_done',
         # G1 Klimaschutz-Wichtigkeit (covariate / moderator)
         'respondent_climate_importance',
-        'application_likelihood',
+        # application_likelihood ist Frage 1 auf der Landing Page
+        # (siehe Landing.form_fields).
         'measure_solar', 'measure_solar_green_roof', 'measure_battery',
         'measure_greening',
         'measure_rainwater', 'measure_drinking_fountain',
@@ -633,6 +661,7 @@ class Abschluss(Page):
     # ohne "Abschließen" zu drücken. Daher NICHT mehr in form_fields.
     form_fields = [
         'feedback_subsidies',
+        'raffle_email',
         'time_abschluss',
     ]
 
@@ -745,6 +774,7 @@ def custom_export(players):
         'time_commitment', 'time_abschluss',
         'scroll_landing', 'expanded_process',
         'prompt_shown_ts', 'prompt_used', 'prompt_dismissed_ts',
+        'entry_cta',
         'screening_similar_done',
         'respondent_climate_importance',
         'application_likelihood',
@@ -767,6 +797,7 @@ def custom_export(players):
         'wants_event',
         'wants_hotline',
         'feedback_subsidies',
+        'raffle_email',
         'clicked_portal_landing', 'clicked_portal_landing_ts',
         'clicked_application_portal', 'clicked_application_portal_ts',
         'clicked_portal_endpage', 'clicked_portal_endpage_ts',
@@ -796,6 +827,7 @@ def custom_export(players):
             p.field_maybe_none('prompt_shown_ts'),
             p.field_maybe_none('prompt_used'),
             p.field_maybe_none('prompt_dismissed_ts'),
+            p.field_maybe_none('entry_cta') or '',
             p.field_maybe_none('screening_similar_done'),
             p.field_maybe_none('respondent_climate_importance'),
             p.field_maybe_none('application_likelihood'),
@@ -828,6 +860,7 @@ def custom_export(players):
             p.field_maybe_none('wants_event'),
             p.field_maybe_none('wants_hotline'),
             p.field_maybe_none('feedback_subsidies') or '',
+            p.field_maybe_none('raffle_email') or '',
             p.clicked_portal_landing,
             p.field_maybe_none('clicked_portal_landing_ts'),
             p.clicked_application_portal,

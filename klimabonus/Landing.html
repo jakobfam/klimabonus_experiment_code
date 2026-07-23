@@ -148,6 +148,88 @@
    und T2 ist genau die Abwesenheit dieser Inhalte (Direktive Jakob
    2026-06-08, Pure-Control-Design). #}
 
+{# ============= FRAGE 1 =============
+   Die Intentionsfrage (application_likelihood) sitzt als Frage 1 direkt
+   unter dem Treatment-Block; "Weiter" führt in die restliche Befragung.
+   Identisch in allen drei Armen; Treatment-Inhalte unverändert. Die
+   Antwort wird serverseitig verlangt (IntegerField, nicht blank);
+   clientseitig sanfte Validierung via JS (Scroll + Highlight statt
+   Browser-Bubble). ============= #}
+
+<section class="content-block content-block-light" id="q1-section">
+    <div class="content-inner form-section">
+        <span class="kicker">Ihre Einschätzung</span>
+        <h2>Wie wahrscheinlich ist es, dass Ihr Unternehmen in den nächsten 12&nbsp;Monaten einen Antrag für den Klimabonus stellt?</h2>
+        <p class="muted">Bitte wählen Sie einen Wert von 0 (sehr unwahrscheinlich) bis 10 (sehr wahrscheinlich).</p>
+
+        <div class="button-scale" id="q1-scale" role="radiogroup"
+             aria-label="Antragswahrscheinlichkeit Skala 0 bis 10">
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="0">
+                <span>0</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="1">
+                <span>1</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="2">
+                <span>2</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="3">
+                <span>3</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="4">
+                <span>4</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="5">
+                <span>5</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="6">
+                <span>6</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="7">
+                <span>7</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="8">
+                <span>8</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="9">
+                <span>9</span>
+            </label>
+            <label class="button-scale-btn">
+                <input type="radio" name="application_likelihood" value="10">
+                <span>10</span>
+            </label>
+        </div>
+        <div class="button-scale-anchors">
+            <small>0 — sehr unwahrscheinlich</small>
+            <small>10 — sehr wahrscheinlich</small>
+        </div>
+        <p class="q1-hint" id="q1-hint" hidden>
+            Bitte wählen Sie zuerst einen Wert auf der Skala.
+        </p>
+
+        <div class="form-actions-single">
+            <button class="btn btn-primary btn-large" type="submit"
+                    data-entry="q1">
+                Weiter
+            </button>
+        </div>
+        <p class="consent-mini">
+            Teilnahme freiwillig · Auswertung pseudonymisiert ·
+            Details im Datenschutz (Fußzeile)
+        </p>
+    </div>
+</section>
+
 {# ============= WIRTSCHAFTLICHKEIT (identical across arms) ============= #}
 
 <section class="content-block">
@@ -330,12 +412,28 @@
             Frankfurt.
         </div>
 
-        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit">
+        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit"
+                data-entry="bottom">
             <span class="btn-text">Ihre Meinung ist uns wichtig</span>
             <span class="btn-subtitle">Dauert ca. 5&nbsp;Minuten</span>
         </button>
     </div>
 </section>
+
+{# ============= STICKY SURVEY BAR =============
+   Dauerhaft sichtbare, dezente Leiste am unteren Rand, sobald der/die
+   Besucher:in an Frage 1 vorbeigescrollt ist. Fängt Leser:innen in den
+   Info-Sektionen ab, ohne Inhalte zu verdrängen. Klick = Submit der
+   Landing-Form (bei unbeantworteter Frage 1 scrollt das JS stattdessen
+   zur Frage zurück). #}
+<div id="sticky-survey-bar" class="sticky-survey-bar" hidden>
+    <span class="sticky-survey-text">
+        Ihre Einschätzung zum Klimabonus - 5&nbsp;Minuten
+    </span>
+    <button class="btn btn-primary" type="submit" data-entry="sticky">
+        Zur Befragung
+    </button>
+</div>
 
 {# ============= CONTACT WITH TEAM PHOTO (identical) ============= #}
 
@@ -403,8 +501,12 @@
             dem Klimareferat dabei, das Förderangebot für Frankfurter
             Unternehmen weiter zu verbessern.
         </p>
+        <p class="survey-prompt-raffle">
+            Unter allen, die die Befragung abschließen, verlosen wir
+            <strong>5&nbsp;×&nbsp;einen 100&nbsp;€ Amazon-Gutschein</strong>.
+        </p>
         <button type="submit" class="btn btn-primary btn-large"
-                id="survey-prompt-submit">
+                id="survey-prompt-submit" data-entry="prompt">
             Zur Befragung
         </button>
         <p class="survey-prompt-meta">Dauert ca. 5&nbsp;Minuten</p>
@@ -422,6 +524,10 @@
    live_method, see scripts block). #}
 <input type="hidden" name="time_landing" id="time_landing" value="">
 <input type="hidden" name="scroll_landing" id="scroll_landing" value="">
+{# Welcher Einstiegspunkt hat die Befragung gestartet? (q1 | sticky |
+   bottom | prompt) — gesetzt vom JS beim Klick auf den jeweiligen
+   Submit-Button. #}
+<input type="hidden" name="entry_cta" id="entry_cta" value="">
 
 {% endblock %}
 
@@ -502,8 +608,9 @@
         } catch (_) {}
     });
 
-    // ---------- Survey-prompt modal (fires after 2 min on page) ----------
-    const PROMPT_DELAY_MS = 120 * 1000; // 2 minutes
+    // ---------- Survey-prompt modal ----------
+    // Erscheint nach 35 s auf der Seite.
+    const PROMPT_DELAY_MS = 35 * 1000;
     const promptModal    = document.getElementById('survey-prompt');
     const promptClose    = document.getElementById('survey-prompt-close');
     const promptBackdrop = document.getElementById('survey-prompt-backdrop');
@@ -546,6 +653,80 @@
     document.getElementById('form').addEventListener('submit', () => {
         clearTimeout(promptTimer);
     });
+
+    // ---------- Frage 1: Einstiegs-Tracking + sanfte Validierung ----------
+    // Alle Survey-Einstiege sind Submit-Buttons der Landing-Form.
+    // Zwei Aufgaben:
+    //  1. entry_cta stempeln (q1 | sticky | bottom | prompt) je nach
+    //     geklicktem Button.
+    //  2. Ohne beantwortete Frage 1 nicht abschicken — statt der nativen
+    //     Browser-Bubble (hässlich, funktioniert nicht durchs Modal):
+    //     Modal schließen, zur Frage scrollen, Hinweis + Highlight zeigen.
+    //     Serverseitig bleibt das Feld ohnehin Pflicht (IntegerField).
+    const q1Section = document.getElementById('q1-section');
+    const q1Hint    = document.getElementById('q1-hint');
+    const entryCta  = document.getElementById('entry_cta');
+
+    document.querySelectorAll('button[data-entry]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            entryCta.value = btn.dataset.entry;
+        });
+    });
+
+    function q1Answered() {
+        return !!document.querySelector('input[name="application_likelihood"]:checked');
+    }
+    document.getElementById('form').addEventListener('submit', (e) => {
+        if (q1Answered()) return;
+        e.preventDefault();
+        // Modal ggf. schließen, damit die Frage sichtbar wird.
+        if (!promptModal.hidden) promptModal.hidden = true;
+        q1Hint.hidden = false;
+        q1Section.classList.remove('q1-attention');
+        // Reflow erzwingen, damit die Animation erneut startet.
+        void q1Section.offsetWidth;
+        q1Section.classList.add('q1-attention');
+        // Bewusst OHNE behavior:'smooth' — instant scroll ist überall
+        // deterministisch (smooth hängt an requestAnimationFrame und
+        // kann in gedrosselten Tabs hängen bleiben); der rote Puls
+        // (q1-attention) übernimmt die Aufmerksamkeits-Führung.
+        q1Section.scrollIntoView({ block: 'center' });
+    });
+    // Hinweis ausblenden, sobald ein Wert gewählt wurde.
+    document.querySelectorAll('input[name="application_likelihood"]').forEach(el => {
+        el.addEventListener('change', () => { q1Hint.hidden = true; });
+    });
+
+    // ---------- Sticky Survey-Leiste ----------
+    // Erscheint, sobald Frage 1 nach oben aus dem Viewport gescrollt ist
+    // (wer weiterliest, behält den Einstieg in Sicht). Verschwindet,
+    // solange die Frage selbst sichtbar ist. Bewusst ein schlichter
+    // Scroll-Handler statt IntersectionObserver — deterministisch in
+    // jeder Umgebung, keine Observer-Throttling-Überraschungen
+    // (möglichst-fehlerarm-Prinzip, Direktive 2026-06-25).
+    const stickyBar = document.getElementById('sticky-survey-bar');
+    function updateStickyBar() {
+        // Q1 oben aus dem Viewport (bottom <= 0) → Leiste zeigen.
+        const show = q1Section.getBoundingClientRect().bottom <= 0;
+        stickyBar.hidden = !show;
+        // Puffer am Seitenende, damit die fixe Leiste den Footer
+        // (Datenschutz-/Kontakt-Links) nicht verdeckt. Die Klasse liefert
+        // den CSS-Grundwert; zusätzlich messen wir die tatsächliche
+        // Leistenhöhe und setzen den Puffer darauf + Luft — auf Mobil ist
+        // die Leiste höher (Button auf volle Breite), und der Footer soll
+        // in JEDER Breite frei anklickbar bleiben.
+        document.body.classList.toggle('sticky-bar-active', show);
+        if (show) {
+            const h = stickyBar.getBoundingClientRect().height;
+            document.body.style.paddingBottom =
+                Math.max(Math.round(h) + 32, 120) + 'px';
+        } else {
+            document.body.style.paddingBottom = '';
+        }
+    }
+    window.addEventListener('scroll', updateStickyBar, { passive: true });
+    window.addEventListener('resize', updateStickyBar, { passive: true });
+    updateStickyBar();
 
     // ---------- Tooltips (click-toggle, mobile-friendly) ----------
     const triggers = document.querySelectorAll('.tooltip-trigger');

@@ -174,7 +174,8 @@
 {# --------------------------------------------------------------------
    Allgemeine Fragen ZUM SCHLUSS der Seite (Reihenfolge per Direktive
    2026-06-08): erst die maßnahmen-/hindernisspezifischen Outcomes,
-   dann der breitere Kontext und die Wahrscheinlichkeit.
+   dann der breitere Kontext. Die Antragswahrscheinlichkeit ist Frage 1
+   auf der Landing Page.
    -------------------------------------------------------------------- #}
 
 {# B-Cluster Vorab-Screening #}
@@ -195,7 +196,9 @@
     </div>
 </section>
 
-{# G1 Klimaschutz-Wichtigkeit #}
+{# G1 Klimaschutz-Wichtigkeit — letzte Frage der Seite.
+   Die Antragswahrscheinlichkeit (A1+A4) ist Frage 1 auf der Landing
+   Page (direkt unter dem Treatment-Block). #}
 <section class="content-block content-block-light">
     <div class="content-inner form-section">
         <h2>Wie wichtig ist Klimaschutz für Ihr Unternehmen?</h2>
@@ -221,75 +224,12 @@
                 <span>Sehr wichtig</span>
             </label>
         </div>
-    </div>
-</section>
-
-{# A1+A4 Antragswahrscheinlichkeit — diskrete Buttons. Letzte Frage,
-   Submit-Button direkt darunter. #}
-<section class="content-block">
-    <div class="content-inner form-section">
-        <h2>Wie wahrscheinlich ist es, dass Ihr Unternehmen in den nächsten 12&nbsp;Monaten einen Antrag für den Klimabonus stellt?</h2>
-        <p class="muted">Bitte wählen Sie einen Wert von 0 (sehr unwahrscheinlich) bis 10 (sehr wahrscheinlich).</p>
-
-        <div class="button-scale" id="application_likelihood_scale" role="radiogroup"
-             aria-label="Antragswahrscheinlichkeit Skala 0 bis 10">
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="0" required>
-                <span>0</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="1">
-                <span>1</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="2">
-                <span>2</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="3">
-                <span>3</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="4">
-                <span>4</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="5">
-                <span>5</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="6">
-                <span>6</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="7">
-                <span>7</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="8">
-                <span>8</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="9">
-                <span>9</span>
-            </label>
-            <label class="button-scale-btn">
-                <input type="radio" name="application_likelihood" value="10">
-                <span>10</span>
-            </label>
-        </div>
-        <div class="button-scale-anchors">
-            <small>0 — sehr unwahrscheinlich</small>
-            <small>10 — sehr wahrscheinlich</small>
-        </div>
 
         {# DOM-Reihenfolge: Submit zuerst (damit Enter = Weiter und
            nicht Zurück); CSS-flex `order` kehrt die VISUELLE
            Reihenfolge um (Zurück links, Weiter rechts). Back-Button
            sendet name="back_button" (oTree-Konvention, siehe
-           otree.constants.back_button = "back_button"). Vorher hatten
-           wir fälschlich name="_back" → wurde server-seitig nicht
-           erkannt, der Klick zählte als regulärer Submit. #}
+           otree.constants.back_button = "back_button"). #}
         <div class="form-actions">
             <button class="btn btn-primary form-actions-next" type="submit">
                 Weiter
