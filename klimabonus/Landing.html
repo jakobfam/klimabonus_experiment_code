@@ -397,26 +397,22 @@
     </div>
 </section>
 
-{# ============= SURVEY CTA (NACH Process, VOR Contact) ============= #}
-{# Direktive Jakob 2026-06-08: Primary-CTA aus der Contact-Section in
-   eine eigene Section gezogen, damit Teilnehmer:innen schon nach dem
-   Process-Akkordeon (in dem die wichtigsten Detail-Infos stehen) zur
-   Befragung greifen können — bevor sie zur Kontakt-Sektion scrollen
-   müssen. Contact bleibt als sekundärer Pfad mit eigenem Alt-CTA. #}
-<section class="content-block content-block-light">
-    <div class="content-inner survey-cta-section">
-        <div class="next-step-hint" role="note">
-            <strong>Wie geht es weiter?</strong>
-            Auf den nächsten Seiten folgen ein paar kurze Fragen.
-            Anschließend kommen Sie direkt zum Antragsportal der Stadt
-            Frankfurt.
+{# "Direkt zum Antrag" direkt nach dem Process-Akkordeon (hoher Antrags-
+   Intent an dieser Stelle). Ghost-Style, damit die Survey-CTA dahinter
+   primär bleibt. Klick wird über #landing-portal-link getrackt. #}
+<section class="content-block">
+    <div class="content-inner">
+        <div class="alt-cta">
+            <span class="alt-cta-label">
+                Sie wissen schon, dass Sie beantragen möchten?
+            </span>
+            <a class="btn btn-ghost"
+               id="landing-portal-link"
+               href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
+               target="_blank" rel="noopener">
+                Direkt zum Antrag
+            </a>
         </div>
-
-        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit"
-                data-entry="bottom">
-            <span class="btn-text">Ihre Meinung ist uns wichtig</span>
-            <span class="btn-subtitle">Dauert ca. 5&nbsp;Minuten</span>
-        </button>
     </div>
 </section>
 
@@ -469,18 +465,24 @@
                 um den Klimabonus.
             </figcaption>
         </figure>
+    </div>
+</section>
 
-        <div class="alt-cta">
-            <span class="alt-cta-label">
-                Sie wissen schon, dass Sie beantragen möchten?
-            </span>
-            <a class="btn btn-ghost"
-               id="landing-portal-link"
-               href="https://formulare.ffm.de/f/QbaxPMQa66dM1VtC2BrgX9jTChPNF8gD"
-               target="_blank" rel="noopener">
-                Direkt zum Antrag
-            </a>
+{# ============= SURVEY CTA (nach Contact) ============= #}
+<section class="content-block content-block-light">
+    <div class="content-inner survey-cta-section">
+        <div class="next-step-hint" role="note">
+            <strong>Wie geht es weiter?</strong>
+            Auf den nächsten Seiten folgen ein paar kurze Fragen.
+            Anschließend kommen Sie direkt zum Antragsportal der Stadt
+            Frankfurt.
         </div>
+
+        <button class="btn btn-primary btn-large btn-with-subtitle" type="submit"
+                data-entry="bottom">
+            <span class="btn-text">Ihre Meinung ist uns wichtig</span>
+            <span class="btn-subtitle">Dauert ca. 5&nbsp;Minuten</span>
+        </button>
     </div>
 </section>
 
@@ -503,7 +505,7 @@
         </p>
         <p class="survey-prompt-raffle">
             Unter allen, die die Befragung abschließen, verlosen wir
-            <strong>5&nbsp;×&nbsp;einen 100&nbsp;€ Amazon-Gutschein</strong>.
+            <strong>5&nbsp;×&nbsp;100&nbsp;€ Amazon-Gutscheine</strong>.
         </p>
         <button type="submit" class="btn btn-primary btn-large"
                 id="survey-prompt-submit" data-entry="prompt">
